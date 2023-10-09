@@ -20,7 +20,7 @@ def get_audio_from_wav_file(file_path: Path) -> Audio:
     signal = np.frombuffer(signal_bytes, dtype=dtype)
 
     # Scale to [-1, 1]
-    max_value = 2 ** (bits_per_sample - 1)
+    max_value = 2 ** (bits_per_sample - 1) - 1
     signal = signal.astype(float) / max_value
 
     return Audio(signal, sample_rate)
