@@ -8,6 +8,14 @@ class Audio:
     signal: np.ndarray
     sample_rate: int
 
+    @property
+    def period(self) -> float:
+        return 1. / self.sample_rate
+
+    @period.setter
+    def period(self, period: float) -> None:
+        self.sample_rate = round(1. / period)
+
     def __eq__(self, other: 'Audio') -> bool:
         return np.allclose(self.signal, other.signal) and self.sample_rate == other.sample_rate
 
