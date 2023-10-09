@@ -1,4 +1,5 @@
 import subprocess
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -19,18 +20,21 @@ class PicoTTS(TTS):
     pico2wave_path: str = 'pico2wave'
     language: str = 'en-US'
 
+    temp_wav_file_prefix: str = 'voicebox-pico-tts-'
+    temp_wav_file_dir: str = None
+
     def get_speech(self, text: str) -> Audio:
-        audio_path = self._generate_speech_wav_file(text)
+        with tempfile.NamedTemporaryFile(
+            prefix=self.temp_wav_file_prefix,
+            suffix='.wav',
+            dir=self.temp_wav_file_dir,
+            delete=True,
+        ) as wav_file:
+            wav_path = Path(wav_file.name)
+            self._generate_speech_wav_file(text, wav_path)
+            return get_audio_from_wav_file(wav_path)
 
-        try:
-            return get_audio_from_wav_file(audio_path)
-        finally:
-            audio_path.unlink()
-
-    def _generate_speech_wav_file(self, text: str) -> Path:
-        # TODO use tempfile
-        wav_path = Path('temp.wav')
-
+    def _generate_speech_wav_file(self, text: str, wav_path: Path) -> None:
         subprocess.run(
             [
                 self.pico2wave_path,
@@ -40,5 +44,3 @@ class PicoTTS(TTS):
             ],
             check=True,
         )
-
-        return wav_path
