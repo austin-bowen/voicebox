@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from voicebox.types import Audio
+from voicebox.audio import Audio
 
 
 class Effect(ABC):

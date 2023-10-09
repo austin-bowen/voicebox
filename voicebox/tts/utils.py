@@ -3,7 +3,7 @@ from pathlib import Path
 
 import numpy as np
 
-from voicebox.types import Audio
+from voicebox.audio import Audio
 
 
 def get_audio_from_wav_file(file_path: Path) -> Audio:

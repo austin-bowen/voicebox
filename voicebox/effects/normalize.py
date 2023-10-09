@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from voicebox.effects.effect import Effect
-from voicebox.types import Audio
+from voicebox.audio import Audio
 
 
 @dataclass

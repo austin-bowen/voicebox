@@ -1,7 +1,7 @@
 import sounddevice as sd
 
 from voicebox.sinks.sink import Sink
-from voicebox.types import Audio
+from voicebox.audio import Audio
 
 
 class SoundDevice(Sink):

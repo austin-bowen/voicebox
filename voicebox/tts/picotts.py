@@ -5,7 +5,7 @@ from pathlib import Path
 
 from voicebox.tts.tts import TTS
 from voicebox.tts.utils import get_audio_from_wav_file
-from voicebox.types import Audio
+from voicebox.audio import Audio
 
 
 @dataclass

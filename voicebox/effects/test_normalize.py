@@ -4,7 +4,7 @@ import numpy as np
 from parameterized import parameterized
 
 from voicebox.effects.normalize import Normalize
-from voicebox.types import Audio
+from voicebox.audio import Audio
 
 
 class NormalizeTest(TestCase):
