@@ -1,16 +1,36 @@
-from dataclasses import dataclass
 from typing import List
 
 from voicebox.effects.effect import Effect
+from voicebox.effects.normalize import Normalize
 from voicebox.sinks.sink import Sink
+from voicebox.sinks.sounddevice import SoundDevice
 from voicebox.tts.tts import TTS
 
+Effects = List[Effect]
 
-@dataclass
+
 class Voicebox:
     tts: TTS
-    effects: List[Effect]
+    effects: Effects
     sink: Sink
+
+    def __init__(self, tts: TTS = None, effects: Effects = None, sink: Sink = None):
+        self.tts = tts if tts is not None else self._default_tts()
+        self.effects = effects if effects is not None else self._default_effects()
+        self.sink = sink if sink is not None else self._default_sink()
+
+    @staticmethod
+    def _default_tts() -> TTS:
+        # TODO
+        return ...
+
+    @staticmethod
+    def _default_effects() -> Effects:
+        return [Normalize()]
+
+    @staticmethod
+    def _default_sink() -> Sink:
+        return SoundDevice()
 
     def speak(self, text: str) -> None:
         audio = self.tts.get_speech(text)
