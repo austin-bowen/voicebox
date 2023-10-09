@@ -1,5 +1,6 @@
 from typing import List
 
+from voicebox.effects.dc_offset import RemoveDcOffset
 from voicebox.effects.effect import Effect
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks.sink import Sink
@@ -26,7 +27,10 @@ class Voicebox:
 
     @staticmethod
     def _default_effects() -> Effects:
-        return [Normalize()]
+        return [
+            RemoveDcOffset(),
+            Normalize(),
+        ]
 
     @staticmethod
     def _default_sink() -> Sink:
