@@ -4,6 +4,7 @@ from voicebox.effects.effect import Effect
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks.sink import Sink
 from voicebox.sinks.sounddevice import SoundDevice
+from voicebox.tts.picotts import PicoTTS
 from voicebox.tts.tts import TTS
 
 Effects = List[Effect]
@@ -21,8 +22,7 @@ class Voicebox:
 
     @staticmethod
     def _default_tts() -> TTS:
-        # TODO
-        return ...
+        return PicoTTS()
 
     @staticmethod
     def _default_effects() -> Effects:
