@@ -28,6 +28,7 @@ def _parse_args():
     # Effect args
     parser.add_argument('--scale-rate', type=float, help='Scale sample rate by this factor')
     parser.add_argument('--phaser', action='store_true', help='Add phaser effect')
+    parser.add_argument('--ring-mod', action='store_true', help='Add ring modulation effect')
     parser.add_argument('--glitch', action='store_true', help='Add glitch effect')
 
     return parser.parse_args()
@@ -47,6 +48,10 @@ def _get_effects(args):
     if args.phaser:
         from voicebox.effects.delay import Delay
         effects.append(Delay(time=0.005, repeats=2))
+
+    if args.ring_mod:
+        from voicebox.effects.modulation import RingMod
+        effects.append(RingMod())
 
     if args.glitch:
         from voicebox.effects.glitch import Glitch
