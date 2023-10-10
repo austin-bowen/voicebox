@@ -1,5 +1,6 @@
 # voicebox
-Python text-to-speech library with built-in voice effects
+
+Python text-to-speech library with built-in voice effects.
 
 ## Setup
 
@@ -11,3 +12,14 @@ Python text-to-speech library with built-in voice effects
    2. `pip install -r requirements.txt`
    3. For development:\
       `pip install -r requirements.test.txt`
+
+## Supported Text-to-Speech Engines
+
+### [Google Cloud Text-to-Speech](https://cloud.google.com/text-to-speech)
+- Class: [`GoogleCloudTTS`](./voicebox/tts/googlecloudtts.py)
+- Setup: `pip install -r requirements.google-cloud-tts.txt`
+
+### Pico TTS
+- Class: [`PicoTTS`](./voicebox/tts/picotts.py)
+- Setup:
+  - On Debian/Ubuntu: `apt install libttspico-utils`
