@@ -4,17 +4,20 @@ from voicebox.effects.dc_offset import RemoveDcOffset
 from voicebox.effects.normalize import Normalize
 from voicebox.tts.picotts import PicoTTS
 from voicebox.tts.tts import TTS
+from voicebox.types import SSML
 from voicebox.voicebox import Voicebox
 
 
 def main():
     args = _parse_args()
 
+    text = SSML(args.text) if args.ssml else args.text
+
     tts = _get_tts(args)
     effects = _get_effects(args)
 
     voicebox = Voicebox(tts, effects)
-    voicebox.speak(args.text)
+    voicebox.speak(text)
 
 
 def _parse_args():
@@ -24,6 +27,7 @@ def _parse_args():
 
     # TTS args
     parser.add_argument('--lang', default='en-US', help='Language code')
+    parser.add_argument('--ssml', action='store_true', help='Treat text as SSML')
 
     # Effect args
     parser.add_argument('--scale-rate', type=float, help='Scale sample rate by this factor')

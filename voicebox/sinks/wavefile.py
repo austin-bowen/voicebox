@@ -1,15 +1,12 @@
+import wave
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Union, IO
-import wave
 
 import numpy as np
 
 from voicebox.audio import Audio
 from voicebox.sinks.sink import Sink
-
-
-FileOrPath = Union[IO[bytes], str, Path]
+from voicebox.types import FileOrPath
 
 
 @dataclass

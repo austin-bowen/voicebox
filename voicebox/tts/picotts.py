@@ -6,6 +6,7 @@ from pathlib import Path
 from voicebox.tts.tts import TTS
 from voicebox.tts.utils import get_audio_from_wav_file
 from voicebox.audio import Audio
+from voicebox.types import StrOrSSML
 
 
 @dataclass
@@ -23,7 +24,7 @@ class PicoTTS(TTS):
     temp_wav_file_prefix: str = 'voicebox-pico-tts-'
     temp_wav_file_dir: str = None
 
-    def get_speech(self, text: str) -> Audio:
+    def get_speech(self, text: StrOrSSML) -> Audio:
         with tempfile.NamedTemporaryFile(
             prefix=self.temp_wav_file_prefix,
             suffix='.wav',

@@ -14,6 +14,7 @@ from google.cloud.texttospeech import (
 
 from voicebox.audio import Audio
 from voicebox.tts.tts import TTS
+from voicebox.types import StrOrSSML, SSML
 
 
 @dataclass
@@ -31,11 +32,11 @@ class GoogleCloudTTS(TTS):
 
     timeout: float = gapic_v1.method.DEFAULT
 
-    def get_speech(self, text: str) -> Audio:
+    def get_speech(self, text: StrOrSSML) -> Audio:
         self.audio_config.audio_encoding = AudioEncoding.LINEAR16
 
         response = self.client.synthesize_speech(
-            input=SynthesisInput(text=text),
+            input=SynthesisInput(ssml=text) if isinstance(text, SSML) else SynthesisInput(text=text),
             voice=self.voice_params,
             audio_config=self.audio_config,
             timeout=self.timeout,
