@@ -1,6 +1,6 @@
 # voicebox
 
-Python text-to-speech library with built-in voice effects.
+Python text-to-speech library with built-in voice effects and support for multiple TTS engines.
 
 ## Examples
 
@@ -46,7 +46,7 @@ voicebox.say('Hello, world!')
 
 ## Setup
 
-1. Setup virtual environment, e.g.
+1. Setup virtual environment if necessary, e.g.
    1. `python3 -m venv venv`
    2. `. venv/bin/activate`
 2. Install dependencies:
@@ -54,6 +54,7 @@ voicebox.say('Hello, world!')
    2. `pip install -r requirements/main.txt`
    3. For development:\
       `pip install -r requirements/test.txt`
+3. Install dependencies for whichever TTS engine(s) you want to use (see section below).
 
 ## Supported Text-to-Speech Engines
 
