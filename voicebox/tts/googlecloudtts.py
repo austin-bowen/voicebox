@@ -14,7 +14,8 @@ from google.cloud.texttospeech import (
 
 from voicebox.audio import Audio
 from voicebox.tts.tts import TTS
-from voicebox.types import StrOrSSML, SSML
+from voicebox.types import StrOrSSML
+from voicebox.ssml import SSML
 
 
 @dataclass

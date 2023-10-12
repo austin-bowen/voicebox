@@ -4,7 +4,7 @@ from voicebox.effects.dc_offset import RemoveDcOffset
 from voicebox.effects.normalize import Normalize
 from voicebox.tts.picotts import PicoTTS
 from voicebox.tts.tts import TTS
-from voicebox.types import SSML
+from voicebox.ssml import SSML
 from voicebox.voicebox import Voicebox
 
 
