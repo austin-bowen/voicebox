@@ -29,6 +29,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8
         pip install -r requirements/main.txt -r requirements/test.txt
+        sudo apt install -y libportaudio2
         pip install -r requirements/google-cloud-tts.txt
     - name: Lint with flake8
       run: |
