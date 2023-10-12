@@ -16,7 +16,7 @@ def main():
     effects = _get_effects(args)
 
     voicebox = Voicebox(tts, effects)
-    voicebox.speak(text)
+    voicebox.say(text)
 
 
 def _parse_args():

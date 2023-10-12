@@ -36,7 +36,7 @@ class Voicebox:
     def _default_sink() -> Sink:
         return SoundDevice()
 
-    def speak(self, text: str) -> None:
+    def say(self, text: str) -> None:
         audio = self.tts.get_speech(text)
 
         for effect in self.effects:
