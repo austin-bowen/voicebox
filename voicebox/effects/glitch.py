@@ -6,6 +6,8 @@ import numpy as np
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
 
+__all__ = ['Glitch']
+
 
 @dataclass
 class Glitch(Effect):

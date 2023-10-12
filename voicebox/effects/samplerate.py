@@ -4,6 +4,8 @@ from typing import Callable
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
 
+__all__ = ['ChangeSampleRate', 'Subsample']
+
 
 @dataclass
 class ChangeSampleRate(Effect):

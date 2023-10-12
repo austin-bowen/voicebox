@@ -44,7 +44,7 @@ def _parse_args():
 
 def _get_tts(args) -> TTS:
     if args.tts == 'espeak-ng':
-        from voicebox.tts.espeakng import ESpeakConfig, ESpeakNG
+        from voicebox.tts import ESpeakConfig, ESpeakNG
 
         return ESpeakNG(ESpeakConfig(
             voice=args.voice,
@@ -55,7 +55,7 @@ def _get_tts(args) -> TTS:
 
     elif args.tts == 'googlecloudtts':
         from google.cloud.texttospeech import AudioConfig, TextToSpeechClient, VoiceSelectionParams
-        from voicebox.tts.googlecloudtts import GoogleCloudTTS
+        from voicebox.tts import GoogleCloudTTS
 
         client = TextToSpeechClient()
         voice_params = VoiceSelectionParams(
@@ -74,7 +74,7 @@ def _get_tts(args) -> TTS:
         )
 
     elif args.tts == 'picotts':
-        from voicebox.tts.picotts import PicoTTS
+        from voicebox.tts import PicoTTS
         return PicoTTS(language=args.lang)
 
     else:
@@ -85,19 +85,19 @@ def _get_effects(args):
     effects = []
 
     if args.scale_rate is not None:
-        from voicebox.effects.samplerate import ChangeSampleRate
+        from voicebox.effects import ChangeSampleRate
         effects.append(ChangeSampleRate(lambda sr: sr * args.scale_rate))
 
     if args.phaser:
-        from voicebox.effects.delay import Delay
+        from voicebox.effects import Delay
         effects.append(Delay(time=0.005, repeats=2))
 
     if args.ring_mod:
-        from voicebox.effects.modulation import RingMod
+        from voicebox.effects import RingMod
         effects.append(RingMod())
 
     if args.glitch:
-        from voicebox.effects.glitch import Glitch
+        from voicebox.effects import Glitch
         effects.append(Glitch())
 
     effects.extend([

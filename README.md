@@ -17,14 +17,11 @@ voicebox.say('Hello, world!')
 
 ```python
 # Use eSpeak NG at 120 WPM and en-us voice as the TTS engine
-from voicebox.tts.espeakng import ESpeakConfig, ESpeakNG
+from voicebox.tts import ESpeakConfig, ESpeakNG
 tts = ESpeakNG(ESpeakConfig(speed=120, voice='en-us'))
 
 # Add some voice effects
-from voicebox.effects.delay import Delay
-from voicebox.effects.glitch import Glitch
-from voicebox.effects.dc_offset import RemoveDcOffset
-from voicebox.effects.normalize import Normalize
+from voicebox.effects import Delay, Glitch, RemoveDcOffset, Normalize
 effects = [
     Delay(time=0.005, repeats=2),   # A short delay makes a phaser effect
     Glitch(),                       # Randomly repeats small sections of audio
@@ -33,9 +30,7 @@ effects = [
 ]
 
 # Send audio to playback device, and save to speech.wav file
-from voicebox.sinks.distributor import Distributor
-from voicebox.sinks.sounddevice import SoundDevice
-from voicebox.sinks.wavefile import WaveFile
+from voicebox.sinks import Distributor, SoundDevice, WaveFile
 sink = Distributor([
     SoundDevice(),
     WaveFile('speech.wav'),

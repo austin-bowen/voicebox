@@ -2,8 +2,10 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from voicebox.effects.effect import Effect
 from voicebox.audio import Audio
+from voicebox.effects.effect import Effect
+
+__all__ = ['Normalize']
 
 
 @dataclass
