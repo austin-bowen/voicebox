@@ -52,7 +52,9 @@ voicebox.say('Hello, world!')
 2. Install dependencies:
    1. `pip install -U pip`
    2. `pip install -r requirements/main.txt`
-   3. For development:\
+   3. Install the `PortAudio` library for the `sounddevice` dependency:
+      - On Debian/Ubuntu: `sudo apt install libportaudio2`
+   4. For development:\
       `pip install -r requirements/test.txt`
 3. Install dependencies for whichever TTS engine(s) you want to use (see section below).
 
