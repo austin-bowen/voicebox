@@ -4,6 +4,8 @@ Python text-to-speech library with built-in voice effects and support for multip
 
 ## Examples
 
+Find audio samples here: [`./samples`](./samples)
+
 ### Basic
 
 ```python
@@ -42,6 +44,13 @@ voicebox = Voicebox(tts, effects, sink)
 
 # eSpeak NG is used to say "Hello, world!" with a phaser-y, glitched robot voice
 voicebox.say('Hello, world!')
+```
+
+### Command Line Demo
+
+```commandline
+python -m voicebox -h               # Print command help
+python -m voicebox "Hello, world!"  # Basic usage
 ```
 
 ## Setup
