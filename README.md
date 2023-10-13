@@ -1,5 +1,7 @@
 # voicebox
 
+![python-package](https://github.com/austin-bowen/voicebox/actions/workflows/python-package.yml/badge.svg)
+
 Python text-to-speech library with built-in voice effects and support for multiple TTS engines.
 
 ## Examples
