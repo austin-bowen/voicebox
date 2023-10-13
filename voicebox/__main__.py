@@ -2,6 +2,7 @@ import argparse
 
 from voicebox.effects.dc_offset import RemoveDcOffset
 from voicebox.effects.normalize import Normalize
+from voicebox.sinks import WaveFile, SoundDevice
 from voicebox.ssml import SSML
 from voicebox.tts.tts import TTS
 from voicebox.voicebox import Voicebox
@@ -14,8 +15,9 @@ def main():
 
     tts = _get_tts(args)
     effects = _get_effects(args)
+    sink = _get_sink(args)
 
-    voicebox = Voicebox(tts, effects)
+    voicebox = Voicebox(tts, effects, sink)
     voicebox.say(text)
 
 
@@ -38,6 +40,9 @@ def _parse_args():
     parser.add_argument('--phaser', action='store_true', help='Add phaser effect')
     parser.add_argument('--ring-mod', action='store_true', help='Add ring modulation effect')
     parser.add_argument('--glitch', action='store_true', help='Add glitch effect')
+
+    # Output
+    parser.add_argument('--wave', help='Save as wave file')
 
     return parser.parse_args()
 
@@ -106,6 +111,10 @@ def _get_effects(args):
     ])
 
     return effects
+
+
+def _get_sink(args):
+    return WaveFile(args.wave) if args.wave is not None else SoundDevice()
 
 
 if __name__ == '__main__':
