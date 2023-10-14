@@ -6,7 +6,10 @@ import numpy as np
 @dataclass
 class Audio:
     signal: np.ndarray
+    """Audio signal represented as a 1D array of samples, each in the range [-1, 1]."""
+
     sample_rate: int
+    """Number of samples per second."""
 
     @property
     def period(self) -> float:
