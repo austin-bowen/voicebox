@@ -73,7 +73,7 @@ python -m voicebox "Hello, world!"  # Basic usage
 
 Classes for supported TTS engines are located in the [`voicebox.tts.*`](./voicebox/tts/) modules.
 
-### eSpeak NG [🔗](https://github.com/espeak-ng/espeak-ng)
+### eSpeak NG [🌐](https://github.com/espeak-ng/espeak-ng)
 
 Offline TTS engine with a good number of options.
 
@@ -81,12 +81,21 @@ Offline TTS engine with a good number of options.
 - Setup:
   - On Debian/Ubuntu: `sudo apt install espeak-ng`
 
-### Google Cloud Text-to-Speech [🔗](https://cloud.google.com/text-to-speech)
+### Google Cloud Text-to-Speech [🌐](https://cloud.google.com/text-to-speech)
 
 Powerful online TTS engine offered by Google Cloud.
 
 - Class: [`voicebox.tts.googlecloudtts.GoogleCloudTTS`](./voicebox/tts/googlecloudtts.py)
 - Setup: `pip install -r requirements/google-cloud-tts.txt`
+
+### gTTS [🌐](https://github.com/pndurette/gTTS)
+
+Online TTS engine used by Google Translate.
+
+- Class: [`voicebox.tts.gtts.gTTS`](./voicebox/tts/gtts.py)
+- Setup:
+  1. `pip install -r requirements/gtts.txt`
+  2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
 
 ### Pico TTS
 

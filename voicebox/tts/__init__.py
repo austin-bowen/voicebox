@@ -5,4 +5,9 @@ try:
 except ImportError:
     pass
 
+try:
+    from voicebox.tts.gtts import gTTS
+except ImportError:
+    pass
+
 from voicebox.tts.picotts import PicoTTS

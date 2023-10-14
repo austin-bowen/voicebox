@@ -1,0 +1,3 @@
+# Requirements for gTTS
+gTTS
+pydub

@@ -27,7 +27,7 @@ def _parse_args():
     parser.add_argument('text', help='Text to speak')
 
     # TTS args
-    parser.add_argument('--tts', choices=('espeak-ng', 'googlecloudtts', 'picotts'), default='picotts',
+    parser.add_argument('--tts', choices=('espeak-ng', 'googlecloudtts', 'gtts', 'picotts'), default='picotts',
                         help='Which TTS engine to use. Default: picotts')
     parser.add_argument('--lang', help='Language code')
     parser.add_argument('--voice', help='Voice name')
@@ -77,6 +77,10 @@ def _get_tts(args) -> TTS:
             voice_params,
             audio_config=audio_config,
         )
+
+    elif args.tts == 'gtts':
+        from voicebox.tts import gTTS
+        return gTTS(lang=args.lang) if args.lang is not None else gTTS()
 
     elif args.tts == 'picotts':
         from voicebox.tts import PicoTTS
