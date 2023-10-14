@@ -40,6 +40,7 @@ def _parse_args():
     parser.add_argument('--phaser', action='store_true', help='Add phaser effect')
     parser.add_argument('--ring-mod', action='store_true', help='Add ring modulation effect')
     parser.add_argument('--glitch', action='store_true', help='Add glitch effect')
+    parser.add_argument('--vocoder', action='store_true', help='Add vocoder effect')
 
     # Output
     parser.add_argument('--wave', help='Save as wave file')
@@ -108,6 +109,13 @@ def _get_effects(args):
     if args.glitch:
         from voicebox.effects import Glitch
         effects.append(Glitch())
+
+    if args.vocoder:
+        from voicebox.effects import Vocoder
+        effects.append(
+            Vocoder.build(max_freq=5000, bands=20) if args.tts == 'picotts' else
+            Vocoder.build(max_freq=10000, bands=40)
+        )
 
     effects.extend([
         RemoveDcOffset(),
