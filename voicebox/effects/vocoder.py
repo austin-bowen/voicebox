@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from random import Random
 from typing import Callable, Sequence
 
 import numpy as np
@@ -23,6 +24,30 @@ class SawtoothWave:
     def __call__(self, times: np.ndarray) -> np.ndarray:
         radians = 2 * np.pi * self.freq * times
         return sawtooth_wave(radians)
+
+
+@dataclass
+class RandomSawtoothWave:
+    min_freq: float
+    max_freq: float
+    pitch_duration: float
+
+    rng: Random = field(default_factory=Random)
+
+    def __call__(self, times: np.ndarray) -> np.ndarray:
+        dt = times[1] - times[0]
+        chunk_size = round(self.pitch_duration / dt)
+
+        alpha = np.log2(self.max_freq / self.min_freq)
+
+        out = np.zeros_like(times)
+        for i in range(0, len(times), chunk_size):
+            f = self.min_freq * 2 ** (alpha * self.rng.random())
+            time_chunk = times[i:i + chunk_size]
+            radians = 2 * np.pi * f * time_chunk
+            out[i:i + chunk_size] = sawtooth_wave(radians)
+
+        return out
 
 
 class EnvelopeFollower(Effect):
