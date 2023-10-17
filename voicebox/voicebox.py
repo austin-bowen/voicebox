@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from queue import Queue, Empty
 from threading import Thread, Event
-from typing import List, Optional
+from typing import List, Optional, Iterable
 
 from voicebox.effects.dc_offset import RemoveDcOffset
 from voicebox.effects.effect import Effect
@@ -18,6 +18,10 @@ class BaseVoicebox(ABC):
     @abstractmethod
     def say(self, text: str) -> None:
         ...
+
+    def say_all(self, texts: Iterable[str]) -> None:
+        for text in texts:
+            self.say(text)
 
 
 class Voicebox(BaseVoicebox):

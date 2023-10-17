@@ -133,6 +133,7 @@ class Vocoder(Effect):
     def build(
             carrier_freq: float = 150.,
             carrier_wave_builder=SawtoothWave,
+            carrier_wave=None,
             min_freq: float = 100.,
             max_freq: float = 10_000.,
             bands: int = 40,
@@ -142,7 +143,7 @@ class Vocoder(Effect):
             envelope_follower_freq: float = 50.,
             envelope_follower_builder=EnvelopeFollower,
     ) -> 'Vocoder':
-        carrier_wave = carrier_wave_builder(carrier_freq)
+        carrier_wave = carrier_wave or carrier_wave_builder(carrier_freq)
 
         bandpass_filters = []
         alpha = np.log2(max_freq / min_freq)

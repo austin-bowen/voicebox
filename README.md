@@ -17,6 +17,16 @@ voicebox = Voicebox()
 voicebox.say('Hello, world!')
 ```
 
+### Pre-built
+
+Some pre-built voiceboxes are available in the [`voicebox.examples`](./voicebox/examples) package.
+They can be imported into your own code, and you can run them to demo:
+
+```bash
+# Voice of GLaDOS from the Portal video game series
+python -m voicebox.examples.glados
+```
+
 ### Advanced
 
 ```python
@@ -50,7 +60,7 @@ voicebox.say('Hello, world!')
 
 ### Command Line Demo
 
-```commandline
+```bash
 python -m voicebox -h               # Print command help
 python -m voicebox "Hello, world!"  # Basic usage
 ```
