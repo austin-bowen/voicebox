@@ -1,5 +1,7 @@
 """
 Voicebox emulating GLaDOS from the Portal video game series developed by Valve.
+
+Requires the gTTS engine.
 """
 
 from dataclasses import dataclass, field
