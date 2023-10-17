@@ -24,10 +24,10 @@ They can be imported into your own code, and you can run them to demo:
 
 ```bash
 # Voice of GLaDOS from the Portal video game series
-python -m voicebox.examples.glados
+python -m voicebox.examples.glados "optional message"
 
 # Voice of the OOM-9 command battle droid from Star Wars: Episode I
-python -m voicebox.examples.battle_droid
+python -m voicebox.examples.battle_droid "optional message"
 ```
 
 ### Advanced

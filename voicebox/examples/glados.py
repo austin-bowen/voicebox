@@ -69,15 +69,19 @@ class RandomSemitoneSawtoothWave:
 
 
 def main():
+    import sys
+
     glados = build_glados_voicebox()
 
-    glados.say_all([
+    messages = [sys.argv[1]] if len(sys.argv) > 1 else [
         'Hello and, again, welcome to the Aperture Science computer-aided enrichment center.',
         'We hope your brief detention in the relaxation vault has been a pleasant one.',
         'Your specimen has been processed and we are now ready to begin the test proper.',
         'Before we start, however, keep in mind that although fun and learning are the primary goals '
         'of all enrichment center activities, serious injuries may occur.',
-    ])
+    ]
+
+    glados.say_all(messages)
 
 
 if __name__ == '__main__':

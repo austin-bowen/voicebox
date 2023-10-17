@@ -55,15 +55,19 @@ def build_battle_droid_effects() -> Effects:
 
 
 def main():
+    import sys
+
     battle_droid = build_battle_droid_voicebox()
 
-    battle_droid.say_all([
+    messages = [sys.argv[1]] if len(sys.argv) > 1 else [
         'Roger roger.',
         "Yes Viceroy. If they're down here sir, we'll find them.",
         "Viceroy, we have captured the queen.",
         "My troops are in position to start searching the swamps for these rumored "
         "underwater villages. They will not stay hidden for long.",
-    ])
+    ]
+
+    battle_droid.say_all(messages)
 
 
 if __name__ == '__main__':
