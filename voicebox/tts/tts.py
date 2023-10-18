@@ -39,14 +39,40 @@ class FallbackTTS(TTS):
             try:
                 return tts(text)
             except BaseException as e:
-                if isinstance(e, self.exceptions_to_catch):
+                is_not_last_tts = i + 1 < len(self.ttss)
+                if is_not_last_tts and isinstance(e, self.exceptions_to_catch):
                     self.handle_exception(e, tts, i)
                 else:
                     raise
 
     def handle_exception(self, e: BaseException, tts: TTS, tts_index: int) -> None:
-        message = (
-            f'Exception occurred calling TTS={tts} (index {tts_index}): '
-            f'{e.__class__.__name__}: {e}'
-        )
-        self.log.error(message)
+        message = f'Exception occurred calling TTS={tts} (index {tts_index})'
+        self.log.exception(message, exc_info=e)
+
+
+@dataclass
+class RetryTTS(TTS):
+    """
+    If an exception occurs while getting speech from the given TTS,
+    retry until ``max_attempts`` is reached.
+    """
+
+    tts: TTS
+    max_attempts: int = 3
+
+    exceptions_to_catch: Tuple[Type[BaseException]] = (Exception,)
+    log: Logger = log
+
+    def get_speech(self, text: StrOrSSML) -> Audio:
+        for attempt in range(1, self.max_attempts + 1):
+            try:
+                return self.tts(text)
+            except BaseException as e:
+                if attempt < self.max_attempts and isinstance(e, self.exceptions_to_catch):
+                    self.handle_exception(e, attempt)
+                else:
+                    raise
+
+    def handle_exception(self, e: BaseException, attempt: int) -> None:
+        message = f'TTS attempt {attempt}/{self.max_attempts} failed'
+        self.log.exception(message, exc_info=e)
