@@ -39,10 +39,11 @@ class FallbackTTS(TTS):
             try:
                 return tts(text)
             except BaseException as e:
-                is_not_last_tts = i + 1 < len(self.ttss)
-                if is_not_last_tts and isinstance(e, self.exceptions_to_catch):
-                    self.handle_exception(e, tts, i)
-                else:
+                self.handle_exception(e, tts, i)
+
+                is_last = i + 1 >= len(self.ttss)
+                should_catch = isinstance(e, self.exceptions_to_catch)
+                if is_last or not should_catch:
                     raise
 
     def handle_exception(self, e: BaseException, tts: TTS, tts_index: int) -> None:
@@ -68,9 +69,11 @@ class RetryTTS(TTS):
             try:
                 return self.tts(text)
             except BaseException as e:
-                if attempt < self.max_attempts and isinstance(e, self.exceptions_to_catch):
-                    self.handle_exception(e, attempt)
-                else:
+                self.handle_exception(e, attempt)
+
+                is_last_attempt = attempt >= self.max_attempts
+                should_catch = isinstance(e, self.exceptions_to_catch)
+                if is_last_attempt or not should_catch:
                     raise
 
     def handle_exception(self, e: BaseException, attempt: int) -> None:
