@@ -50,12 +50,12 @@ class Voicebox(BaseVoicebox):
         return SoundDevice()
 
     def say(self, text: str) -> None:
-        audio = self.tts.get_speech(text)
+        audio = self.tts(text)
 
         for effect in self.effects:
-            audio = effect.apply(audio)
+            audio = effect(audio)
 
-        self.sink.play(audio)
+        self.sink(audio)
 
 
 class VoiceboxThread(Thread, BaseVoicebox):
