@@ -1,3 +1,4 @@
+from voicebox.effects.chain import *
 from voicebox.effects.dc_offset import *
 from voicebox.effects.delay import *
 from voicebox.effects.distortion import *
