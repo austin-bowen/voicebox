@@ -67,13 +67,13 @@ class VoiceboxThread(Thread, BaseVoicebox):
     ::
         voicebox = Voicebox(...)            # Build voicebox like normal
         voicebox = VoiceboxThread(voicebox) # Wrap voicebox in thread
-        voicebox.start()                    # Start the voicebox thread
         voicebox.say('Hello, world!')       # Does not block; speech handled by thread
         voicebox.say('How are you?')        # Does not block
         # Do stuff in main thread while speech is happening...
     """
 
     voicebox: BaseVoicebox
+    queue_get_timeout: float
 
     _say_queue: Queue
     _stop_event: Event
@@ -81,22 +81,32 @@ class VoiceboxThread(Thread, BaseVoicebox):
     def __init__(
             self,
             voicebox: BaseVoicebox,
+            start: bool = True,
+            queue_get_timeout: float = 1.,
             name: str = 'Voicebox',
             daemon: bool = True,
             **kwargs,
     ):
         """
         :param voicebox: The Voicebox instance that will be used to generate speech.
+        :param start: If ``True``, go ahead and start the thread.
+        :param queue_get_timeout: How long to wait for text to appear in the queue
+            of things to say between checks of the stop flag.
         :param name: Name of the thread.
         :param daemon: Whether the thread is daemonic (i.e. dies when the main thread exits).
         :param kwargs: Additional keyword args will get passed to the Thread constructor.
         """
 
         Thread.__init__(self, name=name, daemon=daemon, **kwargs)
+
         self.voicebox = voicebox
+        self.queue_get_timeout = queue_get_timeout
 
         self._say_queue = Queue()
         self._stop_event = Event()
+
+        if start:
+            self.start()
 
     def say(self, text: str) -> None:
         """Add text to the queue of things to say."""
@@ -125,6 +135,6 @@ class VoiceboxThread(Thread, BaseVoicebox):
 
     def _get_text(self) -> Optional[str]:
         try:
-            return self._say_queue.get(timeout=1.)
+            return self._say_queue.get(timeout=self.queue_get_timeout)
         except Empty:
             return None
