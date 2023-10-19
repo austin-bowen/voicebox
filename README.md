@@ -6,7 +6,7 @@ Python text-to-speech library with built-in voice effects and support for multip
 
 ## Examples
 
-Find audio samples here: [`./samples`](./samples)
+Listen to audio samples here: [Audio Samples](https://austin-bowen.github.io/voicebox/)
 
 ### Basic
 
