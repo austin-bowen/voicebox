@@ -3,6 +3,7 @@ from queue import Queue, Empty
 from threading import Thread, Event
 from typing import List, Optional, Iterable
 
+from voicebox.effects import SeriesChain
 from voicebox.effects.dc_offset import RemoveDcOffset
 from voicebox.effects.effect import Effect
 from voicebox.effects.normalize import Normalize
@@ -52,8 +53,8 @@ class Voicebox(BaseVoicebox):
     def say(self, text: str) -> None:
         audio = self.tts(text)
 
-        for effect in self.effects:
-            audio = effect(audio)
+        effects_chain = SeriesChain(*self.effects)
+        audio = effects_chain(audio)
 
         self.sink(audio)
 
