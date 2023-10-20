@@ -14,7 +14,11 @@ Available in module: [`voicebox.examples`](https://github.com/austin-bowen/voice
   <audio controls>
     <source src="https://github.com/austin-bowen/voicebox/raw/main/samples/glados.wav" type="audio/wav">
   </audio>
-  
+- `halo_spark` - Voicebox emulating 343 Guilty Spark from the Halo video game series
+  developed by Bungee and 343 Industries.<br>
+  <audio controls>
+    <source src="https://github.com/austin-bowen/voicebox/raw/main/samples/halo_spark.wav" type="audio/wav">
+  </audio>
 
 ## Different TTS Engines and Effects
 
