@@ -117,3 +117,36 @@ Very basic offline TTS engine.
 - Class: [`voicebox.tts.picotts.PicoTTS`](./voicebox/tts/picotts.py)
 - Setup:
   - On Debian/Ubuntu: `sudo apt install libttspico-utils`
+
+## Effects
+
+Built-in effect classes are located in the [`voicebox.effects`](./voicebox/effects/) module,
+and can be imported like:
+
+```python
+from voicebox.effects import CoolEffect
+```
+
+Here is a non-exhaustive list of fun effects:
+- [`Bitcrusher`](./voicebox/effects/distortion.py)
+- [`Delay`](./voicebox/effects/delay.py)
+- [`Flanger`](./voicebox/effects/flanger.py)
+- [`Glitch`](./voicebox/effects/glitch.py)
+- [`Vocoder`](./voicebox/effects/vocoder.py)
+
+There is also support for all the awesome audio plugins in
+[Spotify's `pedalboard` library](https://spotify.github.io/pedalboard/index.html)
+using the special [`PedalboardEffect`](./voicebox/effects/pedalboard.py) wrapper, e.g.:
+
+```python
+from voicebox import Voicebox
+from voicebox.effects import PedalboardEffect
+import pedalboard
+
+voicebox = Voicebox(
+    effects=[
+        PedalboardEffect(pedalboard.Reverb()),
+        ...,
+    ]
+)
+```
