@@ -13,19 +13,33 @@ class NormalizeTest(TestCase):
         self.assertEqual(1.0, normalize.max_amplitude)
 
     @parameterized.expand([
-        (1.0, np.array([0., .25, -.4, .5, -1., .1])),
-        (0.5, np.array([0., .125, -.2, .25, -.5, .05])),
-        (2, np.array([[0., .5, -.8, 1., -2, .2]])),
+        (1.0, 0., True),
+        (1.0, 0., False),
+        (1.0, 1., True),
+        (1.0, 1., False),
+        (2.0, 0., True),
+        (2.0, 0., False),
+        (2.0, 1., True),
+        (2.0, 1., False),
     ])
-    def test_apply(self, max_amplitude: float, expected_signal: np.ndarray):
-        normalize = Normalize(max_amplitude)
+    def test_apply(self, max_amplitude: float, dc_offset: float, remove_dc_offset: bool):
+        normalize = Normalize(max_amplitude=max_amplitude, remove_dc_offset=remove_dc_offset)
 
-        audio = Audio(signal=np.array([0., .5, -.8, 1., -2, .2]), sample_rate=44100)
+        signal = np.array([-1., -.5, 0., .5, 1.]) + dc_offset
+        audio = Audio(signal=signal, sample_rate=44100)
 
         result = normalize.apply(audio.copy())
 
-        expected = audio.copy(signal=expected_signal)
-        self.assertEqual(expected, result)
+        actual_max_amplitude = np.abs(result.signal).max()
+        self.assertAlmostEqual(max_amplitude, actual_max_amplitude)
+
+        actual_dc_offset = result.signal.mean()
+        if not dc_offset or remove_dc_offset:
+            self.assertAlmostEqual(0., actual_dc_offset)
+        elif dc_offset:
+            self.assertNotAlmostEquals(0., actual_dc_offset)
+
+        self.assertEqual(audio.sample_rate, result.sample_rate)
 
     def test_apply_to_zero_signal_returns_zero_signal(self):
         normalize = Normalize()
