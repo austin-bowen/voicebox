@@ -10,7 +10,7 @@ from random import Random
 import numpy as np
 
 from voicebox import Voicebox
-from voicebox.effects import Vocoder, RemoveDcOffset, Normalize
+from voicebox.effects import Vocoder, Normalize
 from voicebox.effects.vocoder import sawtooth_wave
 from voicebox.tts import gTTS
 from voicebox.voicebox import Effects
@@ -40,7 +40,6 @@ def build_glados_effects() -> Effects:
 
     return [
         vocoder,
-        RemoveDcOffset(),
         Normalize(),
     ]
 

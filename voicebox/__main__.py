@@ -1,6 +1,5 @@
 import argparse
 
-from voicebox.effects.dc_offset import RemoveDcOffset
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks import WaveFile, SoundDevice
 from voicebox.ssml import SSML
@@ -122,10 +121,7 @@ def _get_effects(args):
             Vocoder.build(max_freq=10000, bands=40)
         )
 
-    effects.extend([
-        RemoveDcOffset(),
-        Normalize(),
-    ])
+    effects.append(Normalize())
 
     return effects
 

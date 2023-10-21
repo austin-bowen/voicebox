@@ -8,7 +8,7 @@ Requires the Google Cloud TTS engine.
 from google.cloud.texttospeech import TextToSpeechClient, VoiceSelectionParams, AudioConfig
 
 from voicebox import Voicebox
-from voicebox.effects import RemoveDcOffset, Normalize, Flanger
+from voicebox.effects import Normalize, Flanger
 from voicebox.tts import GoogleCloudTTS
 from voicebox.tts.tts import TTS
 from voicebox.voicebox import Effects
@@ -41,7 +41,6 @@ def build_spark_tts(client: TextToSpeechClient) -> TTS:
 def build_spark_effects() -> Effects:
     return [
         Flanger(),
-        RemoveDcOffset(),
         Normalize(),
     ]
 

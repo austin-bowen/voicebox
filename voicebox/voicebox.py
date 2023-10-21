@@ -4,7 +4,6 @@ from threading import Thread, Event
 from typing import List, Optional, Iterable
 
 from voicebox.effects import SeriesChain
-from voicebox.effects.dc_offset import RemoveDcOffset
 from voicebox.effects.effect import Effect
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks.sink import Sink
@@ -42,7 +41,6 @@ class Voicebox(BaseVoicebox):
     @staticmethod
     def _default_effects() -> Effects:
         return [
-            RemoveDcOffset(),
             Normalize(),
         ]
 
