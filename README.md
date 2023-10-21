@@ -38,12 +38,11 @@ from voicebox.tts import ESpeakConfig, ESpeakNG
 tts = ESpeakNG(ESpeakConfig(speed=120, voice='en-us'))
 
 # Add some voice effects
-from voicebox.effects import Delay, Glitch, RemoveDcOffset, Normalize
+from voicebox.effects import Vocoder, Glitch, Normalize
 effects = [
-    Delay(time=0.005, repeats=2),   # A short delay makes a phaser effect
-    Glitch(),                       # Randomly repeats small sections of audio
-    RemoveDcOffset(),               # Just in case
-    Normalize(),                    # Make volume consistent
+    Vocoder.build(),    # Makes a very robotic, monotone voice
+    Glitch(),           # Randomly repeats small sections of audio
+    Normalize(),        # Remove DC and make volume consistent
 ]
 
 # Send audio to playback device, and save to speech.wav file
@@ -57,7 +56,7 @@ sink = Distributor([
 from voicebox import Voicebox
 voicebox = Voicebox(tts, effects, sink)
 
-# eSpeak NG is used to say "Hello, world!" with a phaser-y, glitched robot voice
+# eSpeak NG is used to say "Hello, world!" with a glitchy robot voice
 voicebox.say('Hello, world!')
 ```
 
