@@ -99,8 +99,9 @@ def _get_effects(args):
         effects.append(ChangeSampleRate(lambda sr: sr * args.scale_rate))
 
     if args.phaser:
-        from voicebox.effects import Delay
-        effects.append(Delay(time=0.005, repeats=2))
+        from voicebox.effects import PedalboardEffect
+        from pedalboard import Phaser
+        effects.append(PedalboardEffect(Phaser(rate_hz=.5, centre_frequency_hz=400)))
 
     if args.flanger:
         from voicebox.effects import Flanger
