@@ -110,6 +110,17 @@ def _get_effects(args):
         from voicebox.effects import ChangeSampleRate
         effects.append(ChangeSampleRate(lambda sr: sr * args.scale_rate))
 
+    if args.vocoder:
+        from voicebox.effects import Vocoder
+        effects.append(
+            Vocoder.build(max_freq=5000, bands=20) if args.tts == 'picotts' else
+            Vocoder.build(max_freq=10000, bands=40)
+        )
+
+    if args.ring_mod:
+        from voicebox.effects import RingMod
+        effects.append(RingMod())
+
     if args.phaser:
         from voicebox.effects import PedalboardEffect
         from pedalboard import Phaser
@@ -119,20 +130,9 @@ def _get_effects(args):
         from voicebox.effects import Flanger
         effects.append(Flanger())
 
-    if args.ring_mod:
-        from voicebox.effects import RingMod
-        effects.append(RingMod())
-
     if args.glitch:
         from voicebox.effects import Glitch
         effects.append(Glitch())
-
-    if args.vocoder:
-        from voicebox.effects import Vocoder
-        effects.append(
-            Vocoder.build(max_freq=5000, bands=20) if args.tts == 'picotts' else
-            Vocoder.build(max_freq=10000, bands=40)
-        )
 
     effects.append(Normalize())
 
