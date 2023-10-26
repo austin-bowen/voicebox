@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from voicebox.audio import Audio
 
@@ -10,3 +11,6 @@ class Effect(ABC):
     @abstractmethod
     def apply(self, audio: Audio) -> Audio:
         ...
+
+
+Effects = List[Effect]

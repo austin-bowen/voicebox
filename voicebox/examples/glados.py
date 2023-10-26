@@ -13,7 +13,7 @@ from voicebox import Voicebox
 from voicebox.effects import Vocoder, Normalize
 from voicebox.effects.vocoder import sawtooth_wave
 from voicebox.tts import gTTS
-from voicebox.voicebox import Effects
+from voicebox.effects.effect import Effects
 
 
 def build_glados_voicebox() -> Voicebox:

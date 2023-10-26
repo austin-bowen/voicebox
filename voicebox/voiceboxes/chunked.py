@@ -8,7 +8,16 @@ from voicebox.audio import Audio
 from voicebox.sinks.sink import Sink
 from voicebox.ssml import SSML
 from voicebox.tts import TTS
-from voicebox.voicebox import Voicebox, Effects
+from voicebox.voiceboxes.base import Voicebox
+from voicebox.effects.effect import Effects
+
+__all__ = [
+    'ChunkedVoicebox',
+    'ParallelChunkedVoicebox',
+    'Splitter',
+    'DelimiterSplitter',
+    'SentenceSplitter',
+]
 
 T = TypeVar('T')
 V = TypeVar('V')
@@ -61,7 +70,7 @@ class SentenceSplitter(DelimiterSplitter):
 class ChunkedVoicebox(Voicebox):
     """
     Decreases time-to-speech by splitting the message text into chunks
-    and saying each chunk individually.
+    (sentences by default) and saying each chunk individually.
     """
 
     splitter: Splitter
@@ -101,8 +110,8 @@ class ChunkedVoicebox(Voicebox):
 class ParallelChunkedVoicebox(ChunkedVoicebox):
     """
     Decreases time-to-speech by splitting the message text into chunks
-    and saying each chunk individually. While one chunk of audio is being spoken,
-    the next chunk is prepared in parallel.
+    (sentences by default) and saying each chunk individually. While one chunk
+    of audio is being spoken, the next chunk is prepared in parallel.
     """
 
     queue_size: int

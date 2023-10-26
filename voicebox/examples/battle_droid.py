@@ -10,7 +10,7 @@ from voicebox import Voicebox
 from voicebox.effects import Vocoder, Normalize, RingMod
 from voicebox.tts import GoogleCloudTTS
 from voicebox.tts.tts import TTS
-from voicebox.voicebox import Effects
+from voicebox.effects.effect import Effects
 
 
 def build_battle_droid_voicebox(gctts_client: TextToSpeechClient = None) -> Voicebox:

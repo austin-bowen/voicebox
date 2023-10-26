@@ -1,1 +1,1 @@
-from voicebox.voicebox import Voicebox
+from voicebox.voiceboxes import *
