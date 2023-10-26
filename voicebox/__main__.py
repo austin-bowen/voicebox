@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks import WaveFile, SoundDevice
@@ -10,7 +11,7 @@ from voicebox.voicebox import Voicebox
 def main():
     args = _parse_args()
 
-    text = SSML(args.text) if args.ssml else args.text
+    text = _get_text(args)
 
     tts = _get_tts(args)
     effects = _get_effects(args)
@@ -23,7 +24,7 @@ def main():
 def _parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('text', help='Text to speak')
+    parser.add_argument('text', nargs='?', help='Text to speak. If not given, text is read from stdin.')
 
     # TTS args
     parser.add_argument('--tts', choices=('espeak-ng', 'googlecloudtts', 'gtts', 'picotts'), default='picotts',
@@ -46,6 +47,17 @@ def _parse_args():
     parser.add_argument('--wave', help='Save as wave file')
 
     return parser.parse_args()
+
+
+def _get_text(args) -> str:
+    if args.text is not None:
+        text = args.text
+    else:
+        text = sys.stdin.read()
+
+    text = text.strip()
+
+    return SSML(text) if args.ssml else text
 
 
 def _get_tts(args) -> TTS:
