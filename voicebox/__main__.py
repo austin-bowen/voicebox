@@ -61,7 +61,7 @@ def _get_text(args) -> str:
 
 
 def _get_tts(args) -> TTS:
-    if args.tts == 'espeak-ng':
+    if args.tts == 'espeakng':
         from voicebox.tts import ESpeakConfig, ESpeakNG
 
         return ESpeakNG(ESpeakConfig(
@@ -77,7 +77,7 @@ def _get_tts(args) -> TTS:
 
         client = TextToSpeechClient()
         voice_params = VoiceSelectionParams(
-            language_code=args.lang,
+            language_code=args.lang or 'en-US',
             name=args.voice,
         )
         audio_config = AudioConfig(
