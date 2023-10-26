@@ -5,7 +5,7 @@ from voicebox.effects.normalize import Normalize
 from voicebox.sinks import WaveFile, SoundDevice
 from voicebox.ssml import SSML
 from voicebox.tts.tts import TTS
-from voicebox.voicebox import Voicebox
+from voicebox.voiceboxes.chunked import ParallelChunkedVoicebox
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
     effects = _get_effects(args)
     sink = _get_sink(args)
 
-    voicebox = Voicebox(tts, effects, sink)
+    voicebox = ParallelChunkedVoicebox(tts, effects, sink)
     voicebox.say(text)
 
 

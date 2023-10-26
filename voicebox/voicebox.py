@@ -3,6 +3,7 @@ from queue import Queue, Empty
 from threading import Thread, Event
 from typing import List, Optional, Iterable
 
+from voicebox.audio import Audio
 from voicebox.effects import SeriesChain
 from voicebox.effects.effect import Effect
 from voicebox.effects.normalize import Normalize
@@ -49,12 +50,16 @@ class Voicebox(BaseVoicebox):
         return SoundDevice()
 
     def say(self, text: str) -> None:
-        audio = self.tts(text)
+        audio = self._get_tts_audio_with_effects(text)
+        self.sink(audio)
+
+    def _get_tts_audio_with_effects(self, text: str) -> Audio:
+        audio = self.tts.get_speech(text)
 
         effects_chain = SeriesChain(*self.effects)
         audio = effects_chain(audio)
 
-        self.sink(audio)
+        return audio
 
 
 class VoiceboxThread(Thread, BaseVoicebox):
