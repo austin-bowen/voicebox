@@ -1,13 +1,14 @@
 import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Iterable, Union, Dict, Any
+from typing import Iterable, Union
 
 import nltk
 import nltk.data
 from nltk.tokenize.api import TokenizerI
 
 from voicebox.ssml import SSML
+from voicebox.types import KWArgs
 
 
 class Splitter(ABC):
@@ -49,7 +50,7 @@ class SimpleSentenceSplitter(RegexSplitter):
     """Splits text on sentence punctuation '.', '!', and '?'."""
 
     def __init__(self):
-        super().__init__(r'([.!?]+\s+|$)')
+        super().__init__(r'([.!?]+(?:\s+|$))')
 
 
 @dataclass
@@ -69,46 +70,36 @@ class PunktSentenceSplitter(NltkTokenizerSplitter):
     instances of mid-sentence punctuation very well; e.g. "Mr. Jones went to
     see Dr. Sherman" would be correctly split into only one sentence.
 
-    Requires that the Punkt NLTK resource be located on disk, e.g. by downloading via:
+    This requires that the Punkt NLTK resources be located on disk,
+    e.g. by downloading via one of these methods:
 
-    >>> import nltk; nltk.download('punkt')
+        >>> PunktSentenceSplitter.download_resources()
 
-    If the resource does not exist when an instance of this class is created,
-    and ``download`` is set to ``True``, then this class will attempt to
-    download the resource automatically using the above method.
+    or
+
+        >>> import nltk; nltk.download('punkt')
+
+    or
+
+        $ python -m nltk.downloader punkt
+
+    See here for all NLTK Data installation methods:
+    https://www.nltk.org/data.html
     """
 
-    def __init__(
-            self,
-            language: str = 'english',
-            download: bool = False,
-            download_kwargs: Dict[str, Any] = None,
-            load_kwargs: Dict[str, Any] = None,
-    ):
-        tokenizer = self._download_and_load_tokenizer(language, download, download_kwargs, load_kwargs)
+    def __init__(self, language: str = 'english', **kwargs):
+        tokenizer = self._load_tokenizer(language, kwargs)
         super().__init__(tokenizer)
 
-    def _download_and_load_tokenizer(
-            self,
-            language: str = 'english',
-            download: bool = False,
-            download_kwargs: Dict[str, Any] = None,
-            load_kwargs: Dict[str, Any] = None,
-    ) -> TokenizerI:
-        try:
-            return self._load_tokenizer(language, load_kwargs)
-        except LookupError:
-            if download:
-                nltk.download('punkt', **(download_kwargs or {}))
-                return self._load_tokenizer(language, load_kwargs)
-            else:
-                raise LookupError('You can fix this error by setting the constructor arg `download=True`.')
-
-    def _load_tokenizer(self, language: str, load_kwargs: Dict[str, Any] = None) -> TokenizerI:
+    def _load_tokenizer(self, language: str, kwargs: KWArgs) -> TokenizerI:
         return nltk.data.load(
             self._get_punkt_resource_url(language),
-            **(load_kwargs or {}),
+            **kwargs,
         )
 
     def _get_punkt_resource_url(self, language: str) -> str:
         return f'tokenizers/punkt/{language}.pickle'
+
+    @staticmethod
+    def download_resources(**kwargs):
+        nltk.download('punkt', **kwargs)

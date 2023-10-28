@@ -77,8 +77,9 @@ python -m voicebox "Hello, world!"  # Basic usage
    2. `pip install -r requirements/main.txt`
    3. Install the `PortAudio` library for the `sounddevice` dependency:
       - On Debian/Ubuntu: `sudo apt install libportaudio2`
-   4. For development:\
-      `pip install -r requirements/test.txt`
+   4. For development:
+      - `pip install -r requirements/test.txt`
+      - `python -m nltk.downloader punkt -d ./venv/nltk_data`
 3. Install dependencies for whichever TTS engine(s) you want to use (see section below).
 
 ## Supported Text-to-Speech Engines

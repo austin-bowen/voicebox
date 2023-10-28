@@ -1,5 +1,4 @@
 from io import BytesIO
-from typing import Dict, Any
 
 import numpy as np
 from gtts import gTTS as gTTS_
@@ -7,7 +6,7 @@ from pydub import AudioSegment
 
 from voicebox.audio import Audio
 from voicebox.tts.tts import TTS
-from voicebox.types import StrOrSSML
+from voicebox.types import KWArgs, StrOrSSML
 
 
 class gTTS(TTS):
@@ -15,9 +14,9 @@ class gTTS(TTS):
     Online TTS engine used by Google Translate.
     """
 
-    gtts_kwargs: Dict[str, Any]
+    gtts_kwargs: KWArgs
 
-    def __init__(self, **gtts_kwargs: Dict[str, Any]):
+    def __init__(self, **gtts_kwargs: KWArgs):
         """
         :param gtts_kwargs: These will be passed to the ``gtts.gTTS`` constructor.
             See the docs for options: https://gtts.readthedocs.io/en/latest/module.html#module-gtts.tts

@@ -37,7 +37,7 @@ class NormalizeTest(TestCase):
         if not dc_offset or remove_dc_offset:
             self.assertAlmostEqual(0., actual_dc_offset)
         elif dc_offset:
-            self.assertNotAlmostEquals(0., actual_dc_offset)
+            self.assertNotAlmostEqual(0., actual_dc_offset)
 
         self.assertEqual(audio.sample_rate, result.sample_rate)
 
