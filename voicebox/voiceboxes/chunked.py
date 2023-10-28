@@ -1,22 +1,26 @@
 import re
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from queue import Queue
 from threading import Thread
-from typing import Iterable, Callable, TypeVar, Any
+from typing import Iterable, Callable, TypeVar, Any, Union, Dict
+
+import nltk.tokenize
+from nltk.tokenize.api import TokenizerI
 
 from voicebox.audio import Audio
+from voicebox.effects.effect import Effects
 from voicebox.sinks.sink import Sink
 from voicebox.ssml import SSML
 from voicebox.tts import TTS
 from voicebox.voiceboxes.base import Voicebox
-from voicebox.effects.effect import Effects
 
 __all__ = [
     'ChunkedVoicebox',
     'ParallelChunkedVoicebox',
     'Splitter',
-    'DelimiterSplitter',
-    'SentenceSplitter',
+    'RegexSplitter',
+    'SimpleSentenceSplitter',
 ]
 
 T = TypeVar('T')
@@ -31,40 +35,100 @@ class Splitter(ABC):
         ...
 
 
-class DelimiterSplitter(Splitter):
-    """Splits text on delimiter characters."""
+class RegexSplitter(Splitter):
+    """Splits text on regex pattern."""
 
-    _delimiters: str
-    _delimiter_pattern: re.Pattern
+    pattern: re.Pattern
+    join_split_group: bool
 
-    def __init__(self, delimiters: str):
-        self.delimiters = delimiters
-
-    @property
-    def delimiters(self) -> str:
-        return self._delimiters
-
-    @delimiters.setter
-    def delimiters(self, delimiters: str) -> None:
-        self._delimiters = delimiters
-        self._delimiter_pattern = re.compile(rf'([{delimiters}]+)')
+    def __init__(self, pattern: Union[str, re.Pattern], join_split_group: bool = True):
+        self.pattern = pattern if isinstance(pattern, re.Pattern) else re.compile(pattern)
+        self.join_split_group = join_split_group
 
     def split(self, text: str) -> Iterable[str]:
         # Do not split SSML
         if isinstance(text, SSML):
             return text
 
-        result = self._delimiter_pattern.split(text)
-        result = zip(result[0::2], result[1::2])
-        result = (''.join(pair).strip() for pair in result)
+        result = self.pattern.split(text)
+        result = map(str.strip, result)
+        result = filter(bool, result)
+
+        if self.join_split_group:
+            result = list(result)
+            pairs = zip(result[0::2], result[1::2])
+            result = (''.join(pair) for pair in pairs)
+
         return result
 
 
-class SentenceSplitter(DelimiterSplitter):
-    """Splits text on sentence delimiters '.', '!', and '?'."""
+class SimpleSentenceSplitter(RegexSplitter):
+    """Splits text on sentence punctuation '.', '!', and '?'."""
 
     def __init__(self):
-        super().__init__(delimiters='.!?')
+        super().__init__(r'([.!?]+\s+|$)')
+
+
+@dataclass
+class NltkTokenizerSplitter(Splitter):
+    """Uses an NLTK tokenizer to split text."""
+
+    tokenizer: TokenizerI
+
+    def split(self, text: str) -> Iterable[str]:
+        return self.tokenizer.tokenize(text)
+
+
+class PunktSentenceSplitter(NltkTokenizerSplitter):
+    """
+    Uses the Punkt sentence tokenizer from NLTK to split text into sentences
+    more intelligently than a simple pattern-based splitter. It can handle
+    instances of mid-sentence punctuation very well; e.g. "Mr. Jones went to
+    see Dr. Sherman" would be correctly split into only one sentence.
+
+    Requires that the Punkt NLTK resource be located on disk, e.g. by downloading via:
+
+    >>> import nltk; nltk.download('punkt')
+
+    If the resource does not exist when an instance of this class is created,
+    and ``download`` is set to ``True``, then this class will attempt to
+    download the resource automatically using the above method.
+    """
+
+    def __init__(
+            self,
+            language: str = 'english',
+            download: bool = False,
+            download_kwargs: Dict[str, Any] = None,
+            load_kwargs: Dict[str, Any] = None,
+    ):
+        tokenizer = self._download_and_load_tokenizer(language, download, download_kwargs, load_kwargs)
+        super().__init__(tokenizer)
+
+    def _download_and_load_tokenizer(
+            self,
+            language: str = 'english',
+            download: bool = False,
+            download_kwargs: Dict[str, Any] = None,
+            load_kwargs: Dict[str, Any] = None,
+    ) -> TokenizerI:
+        try:
+            return self._load_tokenizer(language, load_kwargs)
+        except LookupError:
+            if download:
+                nltk.download('punkt', **(download_kwargs or {}))
+                return self._load_tokenizer(language, load_kwargs)
+            else:
+                raise LookupError('You can fix this error by setting the constructor arg `download=True`.')
+
+    def _load_tokenizer(self, language: str, load_kwargs: Dict[str, Any] = None) -> TokenizerI:
+        return nltk.data.load(
+            self._get_punkt_resource_url(language),
+            **(load_kwargs or {}),
+        )
+
+    def _get_punkt_resource_url(self, language: str) -> str:
+        return f'tokenizers/punkt/{language}.pickle'
 
 
 class ChunkedVoicebox(Voicebox):
@@ -87,7 +151,7 @@ class ChunkedVoicebox(Voicebox):
 
     @staticmethod
     def _default_splitter() -> Splitter:
-        return SentenceSplitter()
+        return SimpleSentenceSplitter()
 
     def say(self, text: str) -> None:
         text_chunks = self._get_text_chunks(text)
