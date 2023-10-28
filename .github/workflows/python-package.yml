@@ -31,6 +31,7 @@ jobs:
         pip install -r requirements/main.txt -r requirements/test.txt
         sudo apt install -y libportaudio2
         pip install -r requirements/google-cloud-tts.txt
+        python -m nltk.downloader punkt
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
