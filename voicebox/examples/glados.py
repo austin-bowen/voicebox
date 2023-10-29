@@ -26,9 +26,9 @@ def build_glados_voicebox() -> Voicebox:
 
 def build_glados_effects() -> Effects:
     carrier_wave = RandomSemitoneSawtoothWave(
-        min_freq=160.,
+        min_freq=170.,
         max_semitones=6,
-        pitch_duration=0.3,
+        pitch_duration=0.4,
     )
 
     vocoder = Vocoder.build(
