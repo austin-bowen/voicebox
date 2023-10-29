@@ -9,9 +9,10 @@ from google.cloud.texttospeech import TextToSpeechClient, VoiceSelectionParams, 
 
 from voicebox import Voicebox
 from voicebox.effects import Normalize, Flanger
+from voicebox.effects.effect import Effects
+from voicebox.examples.demo import demo
 from voicebox.tts import GoogleCloudTTS
 from voicebox.tts.tts import TTS
-from voicebox.effects.effect import Effects
 
 
 def build_spark_voicebox(gctts_client: TextToSpeechClient = None) -> Voicebox:
@@ -45,19 +46,13 @@ def build_spark_effects() -> Effects:
     ]
 
 
-def main():
-    import sys
-
-    spark = build_spark_voicebox()
-
-    messages = [sys.argv[1]] if len(sys.argv) > 1 else [
-        'Greetings. I am the Monitor of Installation zero 4. I am 3 4 3, Guilty Spark.',
-        'Someone has released The Flood. '
-        'My function is to prevent it from leaving this Installation. But I require your assistance.'
-    ]
-
-    spark.say_all(messages)
-
-
 if __name__ == '__main__':
-    main()
+    demo(
+        description=__doc__,
+        voicebox=build_spark_voicebox(),
+        default_messages=[
+            'Greetings. I am the Monitor of Installation zero 4. I am 3 4 3, Guilty Spark.',
+            'Someone has released The Flood. '
+            'My function is to prevent it from leaving this Installation. But I require your assistance.'
+        ],
+    )

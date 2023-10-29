@@ -8,9 +8,10 @@ from google.cloud.texttospeech import TextToSpeechClient, VoiceSelectionParams, 
 
 from voicebox import Voicebox
 from voicebox.effects import Vocoder, Normalize, RingMod
+from voicebox.effects.effect import Effects
+from voicebox.examples.demo import demo
 from voicebox.tts import GoogleCloudTTS
 from voicebox.tts.tts import TTS
-from voicebox.effects.effect import Effects
 
 
 def build_battle_droid_voicebox(gctts_client: TextToSpeechClient = None) -> Voicebox:
@@ -53,21 +54,15 @@ def build_battle_droid_effects() -> Effects:
     ]
 
 
-def main():
-    import sys
-
-    battle_droid = build_battle_droid_voicebox()
-
-    messages = [sys.argv[1]] if len(sys.argv) > 1 else [
-        'Roger roger.',
-        "Yes Viceroy. If they're down here sir, we'll find them.",
-        "Viceroy, we have captured the queen.",
-        "My troops are in position to start searching the swamps for these rumored "
-        "underwater villages. They will not stay hidden for long.",
-    ]
-
-    battle_droid.say_all(messages)
-
-
 if __name__ == '__main__':
-    main()
+    demo(
+        description=__doc__,
+        voicebox=build_battle_droid_voicebox(),
+        default_messages=[
+            'Roger roger.',
+            "Yes Viceroy. If they're down here sir, we'll find them.",
+            "Viceroy, we have captured the queen.",
+            "My troops are in position to start searching the swamps for these rumored "
+            "underwater villages. They will not stay hidden for long.",
+        ],
+    )
