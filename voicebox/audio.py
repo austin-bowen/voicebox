@@ -3,11 +3,6 @@ from dataclasses import dataclass
 import numpy as np
 
 
-def db(db: float) -> float:
-    """Decibels to gain. db(0) --> 1; db(-6) --> 0.501; db(+6) --> 1.995."""
-    return 10 ** (db / 20)
-
-
 @dataclass
 class Audio:
     signal: np.ndarray
