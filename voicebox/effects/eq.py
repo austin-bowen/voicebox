@@ -1,13 +1,17 @@
 from abc import abstractmethod
 from dataclasses import dataclass
+from typing import Union, Tuple, Literal
 
 from scipy.signal import lfilter, butter
 
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
+from voicebox.effects.utils import CallCache
 
 __all__ = [
+    'ButterworthFilter',
     'BandPassFilter',
+    'BandStopFilter',
     'HighPassFilter',
     'LowPassFilter',
 ]
@@ -24,33 +28,67 @@ class Filter(Effect):
         ...
 
 
-class BandPassFilter(Filter):
-    """Band-pass Butterworth filter."""
+@dataclass
+class ButterworthFilter(Filter):
+    """Butterworth filter."""
 
-    low_freq: float
-    high_freq: float
+    btype: Literal['lowpass', 'highpass', 'bandpass', 'bandstop']
+    freq: Union[float, Tuple[float, float]]
     order: int
 
-    def __init__(self, low_freq: float, high_freq: float, order: int = 1):
-        self.low_freq = low_freq
-        self.high_freq = high_freq
+    def __init__(self, btype, freq, order: int = 1):
+        self.btype = btype
+        self.freq = freq
         self.order = order
 
-        self._prev_filter_args = None
-        self._filter_params = None
+        self._build_filter_params = CallCache(self._build_filter_params)
+
+    def _get_filter_params(self, audio: Audio):
+        return self._build_filter_params(
+            audio.sample_rate,
+            self.freq,
+            self.order,
+            self.btype,
+        )
 
     @staticmethod
-    def from_center(center_freq: float, bandwidth: float, order: int = 1) -> 'BandPassFilter':
-        bandwidth /= 2
-        return BandPassFilter(
-            low_freq=center_freq - bandwidth,
-            high_freq=center_freq + bandwidth,
-            order=order,
-        )
+    def _build_filter_params(sample_rate, freq, order, btype):
+        freq = ButterworthFilter._convert_freq(sample_rate, freq)
+        return butter(order, freq, btype=btype)
+
+    @staticmethod
+    def _convert_freq(sample_rate, freq):
+        nyquist = .5 * sample_rate
+
+        if isinstance(freq, (int, float)):
+            return freq / nyquist
+        else:
+            low, high = freq
+            return low / nyquist, high / nyquist
+
+
+class BandFilterMixin:
+    freq: Tuple[float, float]
+
+    @property
+    def low_freq(self) -> float:
+        return self.freq[0]
+
+    @low_freq.setter
+    def low_freq(self, low_freq) -> None:
+        self.freq = (low_freq, self.high_freq)
+
+    @property
+    def high_freq(self) -> float:
+        return self.freq[1]
+
+    @high_freq.setter
+    def high_freq(self, high_freq: float) -> None:
+        self.freq = (self.low_freq, high_freq)
 
     @property
     def center_freq(self) -> float:
-        return self.low_freq + self.bandwidth / 2
+        return sum(self.freq) / 2
 
     @center_freq.setter
     def center_freq(self, center_freq: float) -> None:
@@ -69,39 +107,48 @@ class BandPassFilter(Filter):
         self.low_freq = center_freq - bandwidth
         self.high_freq = center_freq + bandwidth
 
-    def _get_filter_params(self, audio: Audio):
-        nyquist = .5 * audio.sample_rate
-        low_freq = self.low_freq / nyquist
-        high_freq = self.high_freq / nyquist
-        filter_args = (self.order, (low_freq, high_freq))
 
-        if filter_args != self._prev_filter_args:
-            self._filter_params = butter(*filter_args, btype='band', analog=False, output='ba')
+class BandPassFilter(ButterworthFilter, BandFilterMixin):
+    """Band-pass Butterworth filter."""
 
-        return self._filter_params
+    def __init__(self, low_freq: float, high_freq: float, order: int = 1):
+        super().__init__('bandpass', (low_freq, high_freq), order=order)
+
+    @staticmethod
+    def from_center(center_freq: float, bandwidth: float, order: int = 1) -> 'BandPassFilter':
+        bandwidth /= 2
+        return BandPassFilter(
+            low_freq=center_freq - bandwidth,
+            high_freq=center_freq + bandwidth,
+            order=order,
+        )
 
 
-@dataclass
-class HighPassFilter(Filter):
+class BandStopFilter(ButterworthFilter, BandFilterMixin):
+    """Band-stop Butterworth filter."""
+
+    def __init__(self, low_freq: float, high_freq: float, order: int = 1):
+        super().__init__('bandstop', (low_freq, high_freq), order=order)
+
+    @staticmethod
+    def from_center(center_freq: float, bandwidth: float, order: int = 1) -> 'BandStopFilter':
+        bandwidth /= 2
+        return BandStopFilter(
+            low_freq=center_freq - bandwidth,
+            high_freq=center_freq + bandwidth,
+            order=order,
+        )
+
+
+class HighPassFilter(ButterworthFilter):
     """High-pass Butterworth filter."""
 
-    freq: float
-    order: int = 1
-
-    def _get_filter_params(self, audio: Audio) -> tuple:
-        nyquist = .5 * audio.sample_rate
-        freq = self.freq / nyquist
-        return butter(self.order, freq, btype='high', analog=False)
+    def __init__(self, freq: float, order: int = 1):
+        super().__init__('highpass', freq, order=order)
 
 
-@dataclass
-class LowPassFilter(Filter):
+class LowPassFilter(ButterworthFilter):
     """Low-pass Butterworth filter."""
 
-    freq: float
-    order: int = 1
-
-    def _get_filter_params(self, audio: Audio) -> tuple:
-        nyquist = .5 * audio.sample_rate
-        freq = self.freq / nyquist
-        return butter(self.order, freq, btype='low', analog=False)
+    def __init__(self, freq: float, order: int = 1):
+        super().__init__('lowpass', freq, order=order)
