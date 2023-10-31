@@ -7,6 +7,7 @@ from scipy.signal import butter, lfilter
 
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
+from voicebox.effects.eq import BandPassFilter
 
 __all__ = ['Vocoder']
 
@@ -82,50 +83,12 @@ class EnvelopeFollower(Effect):
         return self._lpf_params
 
 
-class BandpassFilter(Effect):
-    center_freq: float
-    bandwidth: float
-    order: int
-
-    def __init__(self, center_freq: float, bandwidth: float, order: int = 1):
-        self.center_freq = center_freq
-        self.bandwidth = bandwidth
-        self.order = order
-
-        self._prev_filter_args = None
-        self._filter_params = None
-
-    @property
-    def low_freq(self) -> float:
-        return self.center_freq - self.bandwidth / 2
-
-    @property
-    def high_freq(self) -> float:
-        return self.center_freq + self.bandwidth / 2
-
-    def apply(self, audio: Audio) -> Audio:
-        filter_params = self._get_filter_params(audio)
-        new_signal = lfilter(*filter_params, audio.signal)
-        return audio.copy(signal=new_signal)
-
-    def _get_filter_params(self, audio: Audio):
-        nyquist = .5 * audio.sample_rate
-        low_freq = self.low_freq / nyquist
-        high_freq = self.high_freq / nyquist
-        filter_args = (self.order, (low_freq, high_freq))
-
-        if filter_args != self._prev_filter_args:
-            self._filter_params = butter(*filter_args, btype='band', analog=False, output='ba')
-
-        return self._filter_params
-
-
 @dataclass
 class Vocoder(Effect):
     carrier_wave: Callable[[np.ndarray], np.ndarray]
     """Takes in an array of sample times and outputs corresponding wave samples."""
 
-    bandpass_filters: Sequence[BandpassFilter]
+    bandpass_filters: Sequence[BandPassFilter]
 
     envelope_follower: EnvelopeFollower
 
@@ -138,7 +101,7 @@ class Vocoder(Effect):
             max_freq: float = 10_000.,
             bands: int = 40,
             bandwidth: float = 0.5,
-            bandpass_filter_builder=BandpassFilter,
+            bandpass_filter_builder=BandPassFilter.from_center,
             bandpass_filter_order: int = 3,
             envelope_follower_freq: float = 50.,
             envelope_follower_builder=EnvelopeFollower,
@@ -177,7 +140,7 @@ class Vocoder(Effect):
         carrier = self.carrier_wave(t)
         return audio.copy(signal=carrier)
 
-    def _get_carrier_signal_for_band(self, modulator: Audio, carrier: Audio, bpf: BandpassFilter) -> np.ndarray:
+    def _get_carrier_signal_for_band(self, modulator: Audio, carrier: Audio, bpf: BandPassFilter) -> np.ndarray:
         filtered_modulator = bpf(modulator.copy())
         modulator_level = self.envelope_follower(filtered_modulator).signal
 
