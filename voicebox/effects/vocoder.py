@@ -7,9 +7,11 @@ from scipy.signal import butter, lfilter
 
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
-from voicebox.effects.eq import BandPassFilter
+from voicebox.effects.eq import Filter, center_to_band
 
 __all__ = ['Vocoder']
+
+from voicebox.types import KWArgs
 
 
 def sawtooth_wave(radians: np.ndarray) -> np.ndarray:
@@ -88,7 +90,7 @@ class Vocoder(Effect):
     carrier_wave: Callable[[np.ndarray], np.ndarray]
     """Takes in an array of sample times and outputs corresponding wave samples."""
 
-    bandpass_filters: Sequence[BandPassFilter]
+    bandpass_filters: Sequence[Filter]
 
     envelope_follower: EnvelopeFollower
 
@@ -101,8 +103,8 @@ class Vocoder(Effect):
             max_freq: float = 10_000.,
             bands: int = 40,
             bandwidth: float = 0.5,
-            bandpass_filter_builder=BandPassFilter.from_center,
             bandpass_filter_order: int = 3,
+            bandpass_filter_kwargs: KWArgs = None,
             envelope_follower_freq: float = 50.,
             envelope_follower_builder=EnvelopeFollower,
     ) -> 'Vocoder':
@@ -116,7 +118,12 @@ class Vocoder(Effect):
             width = bandwidth * (f_next - f)
 
             bandpass_filters.append(
-                bandpass_filter_builder(f, width, bandpass_filter_order)
+                Filter.build(
+                    'bandpass',
+                    freq=center_to_band(f, width),
+                    order=bandpass_filter_order,
+                    **(bandpass_filter_kwargs or {}),
+                )
             )
 
         envelope_follower = envelope_follower_builder(envelope_follower_freq)
@@ -140,7 +147,7 @@ class Vocoder(Effect):
         carrier = self.carrier_wave(t)
         return audio.copy(signal=carrier)
 
-    def _get_carrier_signal_for_band(self, modulator: Audio, carrier: Audio, bpf: BandPassFilter) -> np.ndarray:
+    def _get_carrier_signal_for_band(self, modulator: Audio, carrier: Audio, bpf: Filter) -> np.ndarray:
         filtered_modulator = bpf(modulator.copy())
         modulator_level = self.envelope_follower(filtered_modulator).signal
 

@@ -1,154 +1,117 @@
+"""
+Equalization effects module.
+
+See ``Filter.build()`` for building basic filter effects.
+
+Simple example:
+    >>> from voicebox.effects import Filter
+    >>> filter = Filter.build('highpass', 200)
+    >>> filter = Filter.build('bandpass', (100, 10000))
+"""
+
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Union, Tuple, Literal
+from functools import lru_cache
+from typing import Union, Tuple, Literal, Optional
 
-from scipy.signal import lfilter, butter
+import numpy as np
+from scipy.signal import sosfilt, iirfilter
 
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
-from voicebox.effects.utils import CallCache
 
 __all__ = [
-    'ButterworthFilter',
-    'BandPassFilter',
-    'BandStopFilter',
-    'HighPassFilter',
-    'LowPassFilter',
+    'center_to_band',
+    'Filter',
+    'FilterParamBuilder',
+    'IIRFilterParamBuilder',
 ]
 
+BType = Literal['lowpass', 'highpass', 'bandpass', 'bandstop']
+FType = Literal['butter', 'cheby1', 'cheby2', 'ellip', 'bessel']
+Freq = Union[int, float]
+Band = Tuple[Freq, Freq]
+FreqOrBand = Union[Freq, Band]
+SosFilterParam = np.ndarray
 
-class Filter(Effect):
-    def apply(self, audio: Audio) -> Audio:
-        filter_params = self._get_filter_params(audio)
-        new_signal = lfilter(*filter_params, audio.signal)
-        return audio.copy(signal=new_signal)
+# Cache filter parameter building function
+iirfilter = lru_cache(iirfilter)
 
+
+def center_to_band(freq: Freq, bandwidth: Freq) -> Band:
+    """Converts a center frequency with bandwidth to a frequency band."""
+    bandwidth /= 2
+    return freq - bandwidth, freq + bandwidth
+
+
+class FilterParamBuilder:
     @abstractmethod
-    def _get_filter_params(self, audio: Audio) -> tuple:
-        ...
+    def build(self, sample_rate: float) -> SosFilterParam:
+        """Returns filter parameters in ``sos`` format."""
 
 
 @dataclass
-class ButterworthFilter(Filter):
-    """Butterworth filter."""
-
-    btype: Literal['lowpass', 'highpass', 'bandpass', 'bandstop']
-    freq: Union[float, Tuple[float, float]]
+class IIRFilterParamBuilder(FilterParamBuilder):
     order: int
+    freq: FreqOrBand
+    rp: Optional[float]
+    rs: Optional[float]
+    btype: BType
+    ftype: FType
 
-    def __init__(self, btype, freq, order: int = 1):
-        self.btype = btype
-        self.freq = freq
-        self.order = order
-
-        self._build_filter_params = CallCache(self._build_filter_params)
-
-    def _get_filter_params(self, audio: Audio):
-        return self._build_filter_params(
-            audio.sample_rate,
-            self.freq,
+    def build(self, sample_rate: float) -> SosFilterParam:
+        return iirfilter(
             self.order,
-            self.btype,
-        )
-
-    @staticmethod
-    def _build_filter_params(sample_rate, freq, order, btype):
-        freq = ButterworthFilter._convert_freq(sample_rate, freq)
-        return butter(order, freq, btype=btype)
-
-    @staticmethod
-    def _convert_freq(sample_rate, freq):
-        nyquist = .5 * sample_rate
-
-        if isinstance(freq, (int, float)):
-            return freq / nyquist
-        else:
-            low, high = freq
-            return low / nyquist, high / nyquist
-
-
-class BandFilterMixin:
-    freq: Tuple[float, float]
-
-    @property
-    def low_freq(self) -> float:
-        return self.freq[0]
-
-    @low_freq.setter
-    def low_freq(self, low_freq) -> None:
-        self.freq = (low_freq, self.high_freq)
-
-    @property
-    def high_freq(self) -> float:
-        return self.freq[1]
-
-    @high_freq.setter
-    def high_freq(self, high_freq: float) -> None:
-        self.freq = (self.low_freq, high_freq)
-
-    @property
-    def center_freq(self) -> float:
-        return sum(self.freq) / 2
-
-    @center_freq.setter
-    def center_freq(self, center_freq: float) -> None:
-        bandwidth = self.bandwidth / 2
-        self.low_freq = center_freq - bandwidth
-        self.high_freq = center_freq + bandwidth
-
-    @property
-    def bandwidth(self) -> float:
-        return self.high_freq - self.low_freq
-
-    @bandwidth.setter
-    def bandwidth(self, bandwidth: float) -> None:
-        center_freq = self.center_freq
-        bandwidth /= 2
-        self.low_freq = center_freq - bandwidth
-        self.high_freq = center_freq + bandwidth
-
-
-class BandPassFilter(ButterworthFilter, BandFilterMixin):
-    """Band-pass Butterworth filter."""
-
-    def __init__(self, low_freq: float, high_freq: float, order: int = 1):
-        super().__init__('bandpass', (low_freq, high_freq), order=order)
-
-    @staticmethod
-    def from_center(center_freq: float, bandwidth: float, order: int = 1) -> 'BandPassFilter':
-        bandwidth /= 2
-        return BandPassFilter(
-            low_freq=center_freq - bandwidth,
-            high_freq=center_freq + bandwidth,
-            order=order,
+            self.freq,
+            rp=self.rp,
+            rs=self.rs,
+            btype=self.btype,
+            analog=False,
+            ftype=self.ftype,
+            output='sos',
+            fs=sample_rate,
         )
 
 
-class BandStopFilter(ButterworthFilter, BandFilterMixin):
-    """Band-stop Butterworth filter."""
-
-    def __init__(self, low_freq: float, high_freq: float, order: int = 1):
-        super().__init__('bandstop', (low_freq, high_freq), order=order)
+@dataclass
+class Filter(Effect):
+    filter_param_builder: FilterParamBuilder
 
     @staticmethod
-    def from_center(center_freq: float, bandwidth: float, order: int = 1) -> 'BandStopFilter':
-        bandwidth /= 2
-        return BandStopFilter(
-            low_freq=center_freq - bandwidth,
-            high_freq=center_freq + bandwidth,
-            order=order,
-        )
+    def build(
+            btype: BType,
+            freq: FreqOrBand,
+            order: int = 1,
+            rp: float = None,
+            rs: float = None,
+            ftype: FType = 'butter',
+    ) -> 'Filter':
+        """
+        Builds a filter using ``scipy.signal.iirfilter``.
 
+        See here for details:
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.iirfilter.html
 
-class HighPassFilter(ButterworthFilter):
-    """High-pass Butterworth filter."""
+        :param btype: The type of filter. One of 'lowpass', 'highpass', 'bandpass', or 'bandstop'.
+        :param freq: The filter frequency in Hz. Should be a single number for lowpass/highpass,
+            or a frequency band as a sequence ``(low_freq, high_freq)`` for bandpass/bandstop.
+            See the ``center_to_band()`` function for easy converting from a center freq with
+            bandwidth to a frequency band.
+        :param order: The order of the filter. Defaults to 1. Higher orders will have faster dropoffs.
+        :param rp: For Chebyshev and elliptic filters, provides the maximum ripple in the passband. (dB)
+        :param rs: For Chebyshev and elliptic filters, provides the minimum attenuation in the stop band. (dB)
+        :param ftype: The type of IIR filter to design. Defaults to 'butter'. Should be one of:
+            - 'butter' (Butterworth)
+            - 'cheby1' (Chebychev I)
+            - 'cheby2' (Chebychev II)
+            - 'ellip' (Cauer/elliptic)
+            - 'bessel' (Bessel/Thomson)
+        """
 
-    def __init__(self, freq: float, order: int = 1):
-        super().__init__('highpass', freq, order=order)
+        param_builder = IIRFilterParamBuilder(order, freq, rp, rs, btype, ftype)
+        return Filter(param_builder)
 
-
-class LowPassFilter(ButterworthFilter):
-    """Low-pass Butterworth filter."""
-
-    def __init__(self, freq: float, order: int = 1):
-        super().__init__('lowpass', freq, order=order)
+    def apply(self, audio: Audio) -> Audio:
+        filter_params = self.filter_param_builder.build(audio.sample_rate)
+        new_signal = sosfilt(filter_params, audio.signal)
+        return audio.copy(signal=new_signal)
