@@ -7,10 +7,9 @@ import numpy as np
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
 from voicebox.effects.eq import Filter, center_to_band
+from voicebox.types import KWArgs
 
 __all__ = ['Vocoder']
-
-from voicebox.types import KWArgs
 
 
 def sawtooth_wave(radians: np.ndarray) -> np.ndarray:
