@@ -9,6 +9,7 @@ from voicebox.voiceboxes.splitter import SimpleSentenceSplitter, PunktSentenceSp
 commonly_handled_sentences = [
     ('', []),
     ('Hello, world!', ['Hello, world!']),
+    ('this has no punctuation', ['this has no punctuation']),
     # Handles all three basic English punctuations
     ('First sentence. Second sentence! Third sentence?', ['First sentence.', 'Second sentence!', 'Third sentence?']),
     # Handles decimal numbers

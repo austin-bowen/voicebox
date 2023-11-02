@@ -39,7 +39,7 @@ class RegexSplitter(Splitter):
         result = filter(bool, result)
 
         if self.join_split_group:
-            result = list(result)
+            result = list(result) + ['']
             pairs = zip(result[0::2], result[1::2])
             result = (''.join(pair) for pair in pairs)
 
