@@ -1,11 +1,11 @@
 import argparse
 import sys
 
+from voicebox import ParallelChunkedVoicebox
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks import WaveFile, SoundDevice
 from voicebox.ssml import SSML
 from voicebox.tts.tts import TTS
-from voicebox import ParallelChunkedVoicebox
 
 
 def main():
@@ -18,7 +18,11 @@ def main():
     sink = _get_sink(args)
 
     voicebox = ParallelChunkedVoicebox(tts, effects, sink)
-    voicebox.say(text)
+
+    try:
+        voicebox.say(text)
+    except KeyboardInterrupt:
+        pass
 
 
 def _parse_args():

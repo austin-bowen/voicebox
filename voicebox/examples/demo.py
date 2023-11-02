@@ -8,7 +8,11 @@ from voicebox import BaseVoicebox
 def demo(description: str, voicebox: BaseVoicebox, default_messages: Iterable[str]) -> None:
     args = _parse_args(description)
     messages = _get_messages(args, default_messages)
-    voicebox.say_all(messages)
+
+    try:
+        voicebox.say_all(messages)
+    except KeyboardInterrupt:
+        pass
 
 
 def _parse_args(description: str):
