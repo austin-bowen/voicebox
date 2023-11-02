@@ -3,7 +3,6 @@ from random import Random
 from typing import Callable, Sequence
 
 import numpy as np
-from scipy.signal import butter, lfilter
 
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
@@ -53,36 +52,23 @@ class RandomSawtoothWave:
         return out
 
 
+@dataclass
 class EnvelopeFollower(Effect):
     """
-    Basic envelope follower that rectifies the input signal and applies a Butterworth LPF.
+    Basic envelope follower that rectifies the input signal and applies a low-pass filter.
     """
 
-    freq: float
-    order: int
+    lpf: Filter
 
-    def __init__(self, freq: float = 50, order: int = 1):
-        self.freq = freq
-        self.order = order
-
-        self._prev_filter_args = None
-        self._lpf_params = None
+    @staticmethod
+    def build(freq: float = 50, order: int = 1, **filter_kwargs) -> 'EnvelopeFollower':
+        lpf = Filter.build('lowpass', freq, order=order, **filter_kwargs)
+        return EnvelopeFollower(lpf)
 
     def apply(self, audio: Audio) -> Audio:
-        lpf_params = self._get_lpf_params(audio)
-        new_signal = np.abs(audio.signal)
-        new_signal = lfilter(*lpf_params, new_signal)
-        return audio.copy(signal=new_signal)
-
-    def _get_lpf_params(self, audio: Audio):
-        nyquist = .5 * audio.sample_rate
-        f = self.freq / nyquist
-        filter_args = (self.order, f)
-
-        if filter_args != self._prev_filter_args:
-            self._lpf_params = butter(*filter_args, btype='low', analog=False, output='ba')
-
-        return self._lpf_params
+        audio = audio.copy(signal=np.abs(audio.signal))
+        audio = self.lpf(audio)
+        return audio
 
 
 @dataclass
@@ -106,7 +92,7 @@ class Vocoder(Effect):
             bandpass_filter_order: int = 3,
             bandpass_filter_kwargs: KWArgs = None,
             envelope_follower_freq: float = 50.,
-            envelope_follower_builder=EnvelopeFollower,
+            envelope_follower_kwargs: KWArgs = None,
     ) -> 'Vocoder':
         carrier_wave = carrier_wave or carrier_wave_builder(carrier_freq)
 
@@ -126,7 +112,10 @@ class Vocoder(Effect):
                 )
             )
 
-        envelope_follower = envelope_follower_builder(envelope_follower_freq)
+        envelope_follower = EnvelopeFollower.build(
+            envelope_follower_freq,
+            **(envelope_follower_kwargs or {}),
+        )
 
         return Vocoder(carrier_wave, bandpass_filters, envelope_follower)
 
