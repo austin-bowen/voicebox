@@ -42,5 +42,6 @@ def _get_audio_from_audio_segment(audio_segment: AudioSegment) -> Audio:
 
     signal = np.array(audio_segment.get_array_of_samples(), dtype=float)
     signal /= max_value
+    signal = signal.astype(np.float32)
 
     return Audio(signal, sample_rate=audio_segment.frame_rate)

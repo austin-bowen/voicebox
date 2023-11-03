@@ -26,5 +26,6 @@ def get_audio_from_wav_file(file_or_path: FileOrPath) -> Audio:
     # Scale to [-1, 1]
     max_value = 2 ** (bits_per_sample - 1)
     signal = signal.astype(float) / max_value
+    signal = signal.astype(np.float32)
 
     return Audio(signal, sample_rate)
