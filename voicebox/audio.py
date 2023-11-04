@@ -12,6 +12,16 @@ class Audio:
     """Number of samples per second."""
 
     @property
+    def len_bytes(self) -> int:
+        """Length of audio signal in bytes."""
+        return self.signal.nbytes
+
+    @property
+    def len_seconds(self) -> float:
+        """Length of audio signal in seconds."""
+        return len(self) / self.sample_rate
+
+    @property
     def period(self) -> float:
         return 1. / self.sample_rate
 

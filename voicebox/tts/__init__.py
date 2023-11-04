@@ -1,4 +1,5 @@
 from voicebox.tts.tts import TTS, FallbackTTS, RetryTTS
+from voicebox.tts.cache import CachedTTS
 from voicebox.tts.espeakng import ESpeakConfig, ESpeakNG
 
 try:
