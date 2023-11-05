@@ -3,6 +3,11 @@ from voicebox.tts.cache import CachedTTS
 from voicebox.tts.espeakng import ESpeakConfig, ESpeakNG
 
 try:
+    from voicebox.tts.elevenlabs import ElevenLabs
+except ImportError:
+    pass
+
+try:
     from voicebox.tts.googlecloudtts import GoogleCloudTTS
 except ImportError:
     pass

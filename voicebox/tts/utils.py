@@ -6,6 +6,23 @@ import numpy as np
 from voicebox.audio import Audio
 from voicebox.types import FileOrPath
 
+try:
+    import pydub
+    from pydub import AudioSegment
+except ImportError:
+    pydub = None
+
+if pydub:
+    def get_audio_from_audio_segment(audio_segment: AudioSegment) -> Audio:
+        bits_per_sample = 8 * audio_segment.frame_width
+        max_value = 2 ** (bits_per_sample - 1)
+
+        signal = np.array(audio_segment.get_array_of_samples(), dtype=float)
+        signal /= max_value
+        signal = signal.astype(np.float32)
+
+        return Audio(signal, sample_rate=audio_segment.frame_rate)
+
 
 def get_audio_from_wav_file(file_or_path: FileOrPath) -> Audio:
     if isinstance(file_or_path, Path):

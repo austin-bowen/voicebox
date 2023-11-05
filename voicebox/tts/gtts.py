@@ -1,11 +1,11 @@
 from io import BytesIO
 
-import numpy as np
 from gtts import gTTS as gTTS_
 from pydub import AudioSegment
 
 from voicebox.audio import Audio
 from voicebox.tts.tts import TTS
+from voicebox.tts.utils import get_audio_from_audio_segment
 from voicebox.types import KWArgs, StrOrSSML
 
 
@@ -33,15 +33,4 @@ class gTTS(TTS):
 
         audio_segment = AudioSegment.from_mp3(mp3_file)
 
-        return _get_audio_from_audio_segment(audio_segment)
-
-
-def _get_audio_from_audio_segment(audio_segment: AudioSegment) -> Audio:
-    bits_per_sample = 8 * audio_segment.frame_width
-    max_value = 2 ** (bits_per_sample - 1)
-
-    signal = np.array(audio_segment.get_array_of_samples(), dtype=float)
-    signal /= max_value
-    signal = signal.astype(np.float32)
-
-    return Audio(signal, sample_rate=audio_segment.frame_rate)
+        return get_audio_from_audio_segment(audio_segment)
