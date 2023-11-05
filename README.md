@@ -86,11 +86,25 @@ python -m voicebox "Hello, world!"  # Basic usage
 
 Classes for supported TTS engines are located in the [`voicebox.tts.*`](./voicebox/tts/) modules.
 
+### ElevenLabs [🌐](https://elevenlabs.io/)
+
+Online TTS engine with very realistic voices and support for voice cloning.
+
+- Class: [`voicebox.tts.ElevenLabs`](./voicebox/tts/elevenlabs.py)
+- Setup:
+  1. `pip install -r requirements/elevenlabs.txt`
+  2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
+  3. Get an [API key](https://elevenlabs.io/docs/api-reference/authentication)
+     and do one of the following:
+     - Set environment variable `ELEVEN_API_KEY=<api-key>`; or
+     - Set with `import elevenlabs; elevenlabs.set_api_key('<api_key>')`; or
+     - Pass as parameter to class: `voicebox.tts.ElevenLabs(api_key='<api_key>')`
+
 ### eSpeak NG [🌐](https://github.com/espeak-ng/espeak-ng)
 
 Offline TTS engine with a good number of options.
 
-- Class: [`voicebox.tts.espeakng.ESpeakNG`](./voicebox/tts/espeakng.py)
+- Class: [`voicebox.tts.ESpeakNG`](./voicebox/tts/espeakng.py)
 - Setup:
   - On Debian/Ubuntu: `sudo apt install espeak-ng`
 
@@ -98,14 +112,14 @@ Offline TTS engine with a good number of options.
 
 Powerful online TTS engine offered by Google Cloud.
 
-- Class: [`voicebox.tts.googlecloudtts.GoogleCloudTTS`](./voicebox/tts/googlecloudtts.py)
+- Class: [`voicebox.tts.GoogleCloudTTS`](./voicebox/tts/googlecloudtts.py)
 - Setup: `pip install -r requirements/google-cloud-tts.txt`
 
 ### gTTS [🌐](https://github.com/pndurette/gTTS)
 
 Online TTS engine used by Google Translate.
 
-- Class: [`voicebox.tts.gtts.gTTS`](./voicebox/tts/gtts.py)
+- Class: [`voicebox.tts.gTTS`](./voicebox/tts/gtts.py)
 - Setup:
   1. `pip install -r requirements/gtts.txt`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
@@ -114,7 +128,7 @@ Online TTS engine used by Google Translate.
 
 Very basic offline TTS engine.
 
-- Class: [`voicebox.tts.picotts.PicoTTS`](./voicebox/tts/picotts.py)
+- Class: [`voicebox.tts.PicoTTS`](./voicebox/tts/picotts.py)
 - Setup:
   - On Debian/Ubuntu: `sudo apt install libttspico-utils`
 
