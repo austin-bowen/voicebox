@@ -86,6 +86,13 @@ python -m voicebox "Hello, world!"  # Basic usage
 
 Classes for supported TTS engines are located in the [`voicebox.tts.*`](./voicebox/tts/) modules.
 
+### Amazon Polly [🌐](https://aws.amazon.com/polly/)
+
+Online TTS engine from AWS.
+
+- Class: [`voicebox.tts.AmazonPolly`](./voicebox/tts/amazonpolly.py)
+- Setup: `pip install -r requirements/amazon-polly.txt`
+
 ### ElevenLabs [🌐](https://elevenlabs.io/)
 
 Online TTS engine with very realistic voices and support for voice cloning.

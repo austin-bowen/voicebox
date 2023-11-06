@@ -1,5 +1,6 @@
 import wave
 from pathlib import Path
+from typing import TypeVar, Iterable, Optional, Tuple
 
 import numpy as np
 
@@ -11,6 +12,9 @@ try:
     from pydub import AudioSegment
 except ImportError:
     pydub = None
+
+K = TypeVar('K')
+V = TypeVar('V')
 
 if pydub:
     def get_audio_from_audio_segment(audio_segment: AudioSegment) -> Audio:
@@ -46,3 +50,9 @@ def get_audio_from_wav_file(file_or_path: FileOrPath) -> Audio:
     signal = signal.astype(np.float32)
 
     return Audio(signal, sample_rate)
+
+
+def add_optional_items(d: dict, items: Iterable[Tuple[K, Optional[V]]]) -> None:
+    for k, v in items:
+        if v is not None:
+            d[k] = v

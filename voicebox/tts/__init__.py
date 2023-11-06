@@ -1,4 +1,10 @@
 from voicebox.tts.tts import TTS, FallbackTTS, RetryTTS
+
+try:
+    from voicebox.tts.amazonpolly import AmazonPolly
+except ImportError:
+    pass
+
 from voicebox.tts.cache import CachedTTS
 from voicebox.tts.espeakng import ESpeakConfig, ESpeakNG
 
