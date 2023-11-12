@@ -4,6 +4,7 @@ from typing import Sequence, Mapping
 from unittest.mock import Mock, call, patch
 
 import numpy as np
+from parameterized import parameterized
 
 import voicebox.tts.cache
 from voicebox.audio import Audio
@@ -54,7 +55,8 @@ class PrerecordedTTSTest(unittest.TestCase):
         self.assertIs(tts.get_speech('bar'), self.bar_audio)
         self.assertRaises(KeyError, tts.get_speech, 'baz')
 
-    def test_from_tts(self):
+    @parameterized.expand([True, False])
+    def test_from_tts(self, use_as_fallback: bool):
         self.setup_fallback_tts({
             'foo': self.foo_audio,
             'bar': self.bar_audio,
@@ -64,6 +66,7 @@ class PrerecordedTTSTest(unittest.TestCase):
         tts = PrerecordedTTS.from_tts(
             self.fallback_tts,
             texts=['foo', 'baz'],
+            use_as_fallback=use_as_fallback,
         )
 
         self.assertDictEqual(
@@ -71,7 +74,10 @@ class PrerecordedTTSTest(unittest.TestCase):
             tts.texts_to_audios
         )
 
-        self.assertIs(tts.fallback_tts, self.fallback_tts)
+        if use_as_fallback:
+            self.assertIs(tts.fallback_tts, self.fallback_tts)
+        else:
+            self.assertIsNone(tts.fallback_tts)
 
         self.assert_called_with_exactly(
             self.fallback_tts.get_speech,
