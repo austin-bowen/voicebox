@@ -59,10 +59,15 @@ class EnvelopeFollower(Effect):
 
     lpf: Filter
 
-    @staticmethod
-    def build(freq: float = 50, order: int = 1, **filter_kwargs) -> 'EnvelopeFollower':
+    @classmethod
+    def build(
+            cls,
+            freq: float = 50,
+            order: int = 1,
+            **filter_kwargs,
+    ) -> 'EnvelopeFollower':
         lpf = Filter.build('lowpass', freq, order=order, **filter_kwargs)
-        return EnvelopeFollower(lpf)
+        return cls(lpf)
 
     def apply(self, audio: Audio) -> Audio:
         audio = audio.copy(signal=np.abs(audio.signal))
@@ -79,8 +84,9 @@ class Vocoder(Effect):
 
     envelope_follower: EnvelopeFollower
 
-    @staticmethod
+    @classmethod
     def build(
+            cls,
             carrier_freq: float = 150.,
             carrier_wave_builder=SawtoothWave,
             carrier_wave=None,
@@ -116,7 +122,7 @@ class Vocoder(Effect):
             **(envelope_follower_kwargs or {}),
         )
 
-        return Vocoder(carrier_wave, bandpass_filters, envelope_follower)
+        return cls(carrier_wave, bandpass_filters, envelope_follower)
 
     def apply(self, audio: Audio) -> Audio:
         carrier = self._get_carrier(audio)

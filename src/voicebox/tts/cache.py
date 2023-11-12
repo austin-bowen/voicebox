@@ -21,8 +21,9 @@ class CachedTTS(TTS):
     tts: TTS
     cache: MutableMapping
 
-    @staticmethod
+    @classmethod
     def build(
+            cls,
             tts: TTS,
             max_size: Size = 60,
             size_func: Union[Literal['bytes', 'count', 'seconds'], SizeFunc] = 'seconds',
@@ -62,7 +63,7 @@ class CachedTTS(TTS):
 
         cache = cache_class(maxsize=max_size, getsizeof=size_func)
 
-        return CachedTTS(tts, cache)
+        return cls(tts, cache)
 
     def get_speech(self, text: StrOrSSML) -> Audio:
         try:

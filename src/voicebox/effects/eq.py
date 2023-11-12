@@ -77,8 +77,9 @@ class IIRFilterParamBuilder(FilterParamBuilder):
 class Filter(Effect):
     filter_param_builder: FilterParamBuilder
 
-    @staticmethod
+    @classmethod
     def build(
+            cls,
             btype: BType,
             freq: FreqOrBand,
             order: int = 1,
@@ -109,7 +110,7 @@ class Filter(Effect):
         """
 
         param_builder = IIRFilterParamBuilder(order, freq, rp, rs, btype, ftype)
-        return Filter(param_builder)
+        return cls(param_builder)
 
     def apply(self, audio: Audio) -> Audio:
         filter_params = self.filter_param_builder.build(audio.sample_rate)
