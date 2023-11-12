@@ -120,7 +120,7 @@ class PrerecordedTTS(TTS):
             )
         """
 
-        texts = {text: tts(text) for text in texts}
+        texts = {text: tts.get_speech(text) for text in texts}
         return cls(texts, fallback_tts=tts if use_as_fallback else None)
 
     @classmethod
@@ -146,7 +146,7 @@ class PrerecordedTTS(TTS):
 
         messages = {
             text: get_audio_from_wav_file(file)
-            for text, file in texts_to_files.values()
+            for text, file in texts_to_files.items()
         }
 
         return cls(messages, fallback_tts=fallback_tts)

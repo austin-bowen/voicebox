@@ -5,7 +5,7 @@ try:
 except ImportError:
     pass
 
-from voicebox.tts.cache import CachedTTS
+from voicebox.tts.cache import CachedTTS, PrerecordedTTS
 from voicebox.tts.espeakng import ESpeakConfig, ESpeakNG
 
 try:
