@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from typing import Type, Union, Literal, Callable, Any
+from typing import Type, Union, Literal, Callable, Any, Mapping, Iterable
 
 from cachetools import Cache, LRUCache
 
 from voicebox.audio import Audio
 from voicebox.tts import TTS
-from voicebox.types import StrOrSSML
+from voicebox.tts.utils import get_audio_from_wav_file
+from voicebox.types import StrOrSSML, FileOrPath
 
 Size = Union[int, float]
 
@@ -78,3 +79,53 @@ class CachedTTS(TTS):
                 raise
 
         return audio
+
+
+@dataclass
+class PrerecordedTTS(TTS):
+    """
+    Returns audio from a map of message texts to ``Audio`` instances.
+    Useful for playing back pre-recorded messages. Also supports an
+    optional fallback ``TTS`` instance for messages not in the map.
+    """
+
+    texts_to_audios: Mapping[StrOrSSML, Audio]
+    """Mapping of message texts to ``Audio`` instances."""
+
+    fallback_tts: TTS = None
+    """
+    Optional fallback ``TTS`` instance that will be used if a text is not found
+    in ``messages``.
+    """
+
+    @classmethod
+    def from_tts(
+            cls,
+            tts: TTS,
+            texts: Iterable[StrOrSSML],
+            use_as_fallback: bool = True,
+    ) -> 'PrerecordedTTS':
+        texts = {text: tts(text) for text in texts}
+        return cls(texts, fallback_tts=tts if use_as_fallback else None)
+
+    @classmethod
+    def from_wav_files(
+            cls,
+            texts_to_files: Mapping[StrOrSSML, FileOrPath],
+            fallback_tts: TTS = None
+    ) -> 'PrerecordedTTS':
+        messages = {
+            text: get_audio_from_wav_file(file)
+            for text, file in texts_to_files.values()
+        }
+
+        return cls(messages, fallback_tts=fallback_tts)
+
+    def get_speech(self, text: StrOrSSML) -> Audio:
+        try:
+            return self.texts_to_audios[text]
+        except KeyError:
+            if self.fallback_tts is not None:
+                return self.fallback_tts.get_speech(text)
+            else:
+                raise
