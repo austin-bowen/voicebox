@@ -37,7 +37,7 @@ class FallbackTTS(TTS):
     def get_speech(self, text: StrOrSSML) -> Audio:
         for i, tts in enumerate(self.ttss):
             try:
-                return tts(text)
+                return tts.get_speech(text)
             except BaseException as e:
                 self.handle_exception(e, tts, i)
 

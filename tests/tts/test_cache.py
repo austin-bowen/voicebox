@@ -1,12 +1,13 @@
 import importlib
 import unittest
-from typing import Sequence, Mapping
+from typing import Mapping
 from unittest.mock import Mock, call, patch
 
 import numpy as np
 from parameterized import parameterized
 
 import voicebox.tts.cache
+from utils import assert_called_with_exactly
 from voicebox.audio import Audio
 from voicebox.tts.cache import PrerecordedTTS
 
@@ -38,7 +39,7 @@ class PrerecordedTTSTest(unittest.TestCase):
         self.assertIs(tts.get_speech('bar'), self.bar_audio)
         self.assertIs(tts.get_speech('baz'), self.baz_audio)
 
-        self.assert_called_with_exactly(
+        assert_called_with_exactly(
             self.fallback_tts.get_speech,
             [call('baz')]
         )
@@ -79,7 +80,7 @@ class PrerecordedTTSTest(unittest.TestCase):
         else:
             self.assertIsNone(tts.fallback_tts)
 
-        self.assert_called_with_exactly(
+        assert_called_with_exactly(
             self.fallback_tts.get_speech,
             [call('foo'), call('baz')],
         )
@@ -108,13 +109,10 @@ class PrerecordedTTSTest(unittest.TestCase):
 
         self.assertIs(tts.fallback_tts, self.fallback_tts)
 
-        self.assert_called_with_exactly(
+        assert_called_with_exactly(
             get_audio_from_wav_file,
             [call('foo.wav'), call('bar.wav')],
         )
-
-    def assert_called_with_exactly(self, mock: Mock, calls: Sequence['call']) -> None:
-        self.assertSequenceEqual(calls, mock.mock_calls)
 
     def setup_fallback_tts(self, texts_to_audios: Mapping[str, Audio]) -> None:
         self.fallback_tts.get_speech.side_effect = lambda text: texts_to_audios[text]
