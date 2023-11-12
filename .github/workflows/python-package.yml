@@ -44,4 +44,4 @@ jobs:
         coverage run -m unittest discover voicebox_test
     - name: Generate coverage report
       run: |
-        coverage report
+        coverage report --omit=test/*
