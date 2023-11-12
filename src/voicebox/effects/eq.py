@@ -4,7 +4,7 @@ Equalization effects module.
 See ``Filter.build()`` for building basic filter effects.
 
 Simple example:
-    >>> from voicebox import Filter
+    >>> from voicebox.effects import Filter
     >>> filter = Filter.build('highpass', 200)
     >>> filter = Filter.build('bandpass', (100, 10000))
 """
