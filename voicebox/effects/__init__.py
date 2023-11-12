@@ -8,5 +8,4 @@ from voicebox.effects.glitch import *
 from voicebox.effects.modulation import *
 from voicebox.effects.normalize import *
 from voicebox.effects.pedalboard import *
-from voicebox.effects.samplerate import *
 from voicebox.effects.vocoder import *
