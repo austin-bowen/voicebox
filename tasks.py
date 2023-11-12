@@ -1,6 +1,10 @@
 """Run with: ``invoke <task> [task ...]``"""
 
+import os
+
 from invoke import task
+
+os.environ['PYTHONPATH'] = 'src:test:' + os.environ.get('PYTHONPATH', '')
 
 
 @task
