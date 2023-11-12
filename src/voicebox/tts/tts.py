@@ -46,6 +46,8 @@ class FallbackTTS(TTS):
                 if is_last or not should_catch:
                     raise
 
+        raise ValueError('self.ttss is empty')
+
     def handle_exception(self, e: BaseException, tts: TTS, tts_index: int) -> None:
         message = f'Exception occurred calling TTS={tts} (index {tts_index})'
         self.log.exception(message, exc_info=e)
@@ -75,6 +77,9 @@ class RetryTTS(TTS):
                 should_catch = isinstance(e, self.exceptions_to_catch)
                 if is_last_attempt or not should_catch:
                     raise
+
+        raise ValueError(f'self.max_attempts must be > 0; '
+                         f'max_attempts={self.max_attempts}')
 
     def handle_exception(self, e: BaseException, attempt: int) -> None:
         message = f'TTS attempt {attempt}/{self.max_attempts} failed'

@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import Mock, call
 
+from parameterized import parameterized
+
 from utils import assert_called_with_exactly, build_audio
 from voicebox.tts import TTS, FallbackTTS, RetryTTS
 
@@ -27,6 +29,21 @@ class FallbackTTSTest(unittest.TestCase):
             assert_called_with_exactly(mock_tts.get_speech, [call('foo')])
 
         good_tts_2.get_speech.assert_not_called()
+
+    def test_get_speech_raises_exception_if_all_ttss_fail(self):
+        bad_tts_1 = build_bad_tts()
+        bad_tts_2 = build_bad_tts()
+
+        tts = FallbackTTS([bad_tts_1, bad_tts_2])
+
+        self.assertRaises(Exception, tts.get_speech, 'foo')
+
+        assert_called_with_exactly(bad_tts_1.get_speech, [call('foo')])
+        assert_called_with_exactly(bad_tts_2.get_speech, [call('foo')])
+
+    def test_get_speech_with_empty_ttss_raises_ValueError(self):
+        tts = FallbackTTS([])
+        self.assertRaises(ValueError, tts.get_speech, 'foo')
 
 
 class RetryTTSTest(unittest.TestCase):
@@ -68,6 +85,14 @@ class RetryTTSTest(unittest.TestCase):
 
         calls = [call('foo')] * tts.max_attempts
         assert_called_with_exactly(mock_tts.get_speech, calls)
+
+    @parameterized.expand([0, -1])
+    def test_get_speech_with_non_positive_max_attempts_raises_ValueError(
+            self,
+            max_attempts: int,
+    ):
+        tts = RetryTTS(tts=Mock(), max_attempts=max_attempts)
+        self.assertRaises(ValueError, tts.get_speech, 'foo')
 
 
 def build_bad_tts() -> TTS:

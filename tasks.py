@@ -16,4 +16,4 @@ def test(c):
 @task
 def cov(c):
     """Generate coverage report."""
-    c.run('coverage report')
+    c.run('coverage report -m')
