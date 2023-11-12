@@ -1,3 +1,5 @@
+"""Run with: ``invoke <task> [task ...]``"""
+
 from invoke import task
 
 
