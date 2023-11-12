@@ -40,7 +40,6 @@ def _parse_args():
     parser.add_argument('--speed', help='Voice speed')
 
     # Effect args
-    parser.add_argument('--scale-rate', type=float, help='Scale sample rate by this factor')
     parser.add_argument('--phaser', action='store_true', help='Add phaser effect')
     parser.add_argument('--flanger', action='store_true', help='Add flanger effect')
     parser.add_argument('--ring-mod', action='store_true', help='Add ring modulation effect')
@@ -109,10 +108,6 @@ def _get_tts(args) -> TTS:
 
 def _get_effects(args):
     effects = []
-
-    if args.scale_rate is not None:
-        from voicebox.effects import ChangeSampleRate
-        effects.append(ChangeSampleRate(lambda sr: sr * args.scale_rate))
 
     if args.vocoder:
         from voicebox.effects import Vocoder
