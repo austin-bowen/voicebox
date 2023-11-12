@@ -3,11 +3,10 @@ import unittest
 from typing import Mapping
 from unittest.mock import Mock, call, patch
 
-import numpy as np
 from parameterized import parameterized
 
 import voicebox.tts.cache
-from utils import assert_called_with_exactly
+from utils import assert_called_with_exactly, build_audio
 from voicebox.audio import Audio
 from voicebox.tts.cache import PrerecordedTTS
 
@@ -116,10 +115,6 @@ class PrerecordedTTSTest(unittest.TestCase):
 
     def setup_fallback_tts(self, texts_to_audios: Mapping[str, Audio]) -> None:
         self.fallback_tts.get_speech.side_effect = lambda text: texts_to_audios[text]
-
-
-def build_audio(sample_rate: int) -> Audio:
-    return Audio(signal=np.zeros(1), sample_rate=sample_rate)
 
 
 def reload_tts_cache_module() -> None:

@@ -67,7 +67,7 @@ class RetryTTS(TTS):
     def get_speech(self, text: StrOrSSML) -> Audio:
         for attempt in range(1, self.max_attempts + 1):
             try:
-                return self.tts(text)
+                return self.tts.get_speech(text)
             except BaseException as e:
                 self.handle_exception(e, attempt)
 
