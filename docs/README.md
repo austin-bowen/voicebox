@@ -4,7 +4,7 @@ Repo: [`austin-bowen/voicebox`](https://github.com/austin-bowen/voicebox/)
 
 ## Example Voices
 
-Available in module: [`voicebox.examples`](https://github.com/austin-bowen/voicebox/tree/main/voicebox/examples)
+Available in module: [`voicebox.examples`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/examples)
 
 - `battle_droid` - Voicebox emulating the OOM-9 command battle droid from Star Wars: Episode I.<br>
   <audio controls>

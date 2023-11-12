@@ -11,6 +11,7 @@ from voicebox.effects import Vocoder, Normalize, RingMod
 from voicebox.effects.effect import Effects
 from voicebox.examples.demo import demo
 from voicebox.tts import GoogleCloudTTS
+from voicebox.tts.cache import CachedTTS
 from voicebox.tts.tts import TTS
 
 
@@ -25,7 +26,7 @@ def build_battle_droid_tts(client: TextToSpeechClient) -> TTS:
     if not client:
         client = TextToSpeechClient()
 
-    return GoogleCloudTTS(
+    tts = GoogleCloudTTS(
         client=client,
         voice_params=VoiceSelectionParams(
             language_code='en-US',
@@ -36,6 +37,8 @@ def build_battle_droid_tts(client: TextToSpeechClient) -> TTS:
             pitch=0.0,
         ),
     )
+
+    return CachedTTS.build(tts)
 
 
 def build_battle_droid_effects() -> Effects:

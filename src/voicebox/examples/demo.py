@@ -2,11 +2,12 @@ import argparse
 import sys
 from typing import Iterable
 
-from voicebox import BaseVoicebox
+from voicebox import BaseVoicebox, ParallelChunkedVoicebox
 
 
 def demo(description: str, voicebox: BaseVoicebox, default_messages: Iterable[str]) -> None:
     args = _parse_args(description)
+    voicebox = ParallelChunkedVoicebox(voicebox.tts, voicebox.effects, voicebox.sink)
     messages = _get_messages(args, default_messages)
 
     try:

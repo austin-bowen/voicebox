@@ -19,7 +19,7 @@ voicebox.say('Hello, world!')
 
 ### Pre-built
 
-Some pre-built voiceboxes are available in the [`voicebox.examples`](./voicebox/examples) package.
+Some pre-built voiceboxes are available in the [`voicebox.examples`](src/voicebox/examples) package.
 They can be imported into your own code, and you can run them to demo:
 
 ```bash
@@ -34,19 +34,22 @@ python -m voicebox.examples.battle_droid "optional message"
 
 ```python
 # Use eSpeak NG at 120 WPM and en-us voice as the TTS engine
-from voicebox.tts import ESpeakConfig, ESpeakNG
+from voicebox import ESpeakConfig, ESpeakNG
+
 tts = ESpeakNG(ESpeakConfig(speed=120, voice='en-us'))
 
 # Add some voice effects
-from voicebox.effects import Vocoder, Glitch, Normalize
+from voicebox import Vocoder, Glitch, Normalize
+
 effects = [
-    Vocoder.build(),    # Makes a very robotic, monotone voice
-    Glitch(),           # Randomly repeats small sections of audio
-    Normalize(),        # Remove DC and make volume consistent
+    Vocoder.build(),  # Makes a very robotic, monotone voice
+    Glitch(),  # Randomly repeats small sections of audio
+    Normalize(),  # Remove DC and make volume consistent
 ]
 
 # Send audio to playback device, and save to speech.wav file
-from voicebox.sinks import Distributor, SoundDevice, WaveFile
+from voicebox import Distributor, SoundDevice, WaveFile
+
 sink = Distributor([
     SoundDevice(),
     WaveFile('speech.wav'),
@@ -54,6 +57,7 @@ sink = Distributor([
 
 # Build the voicebox
 from voicebox import Voicebox
+
 voicebox = Voicebox(tts, effects, sink)
 
 # eSpeak NG is used to say "Hello, world!" with a glitchy robot voice
@@ -84,20 +88,20 @@ python -m voicebox "Hello, world!"  # Basic usage
 
 ## Supported Text-to-Speech Engines
 
-Classes for supported TTS engines are located in the [`voicebox.tts.*`](./voicebox/tts/) modules.
+Classes for supported TTS engines are located in the [`voicebox.tts.*`](src/voicebox/tts) modules.
 
 ### Amazon Polly [🌐](https://aws.amazon.com/polly/)
 
 Online TTS engine from AWS.
 
-- Class: [`voicebox.tts.AmazonPolly`](./voicebox/tts/amazonpolly.py)
+- Class: [`voicebox.tts.AmazonPolly`](src/voicebox/tts/amazonpolly.py)
 - Setup: `pip install -r requirements/amazon-polly.txt`
 
 ### ElevenLabs [🌐](https://elevenlabs.io/)
 
 Online TTS engine with very realistic voices and support for voice cloning.
 
-- Class: [`voicebox.tts.ElevenLabs`](./voicebox/tts/elevenlabs.py)
+- Class: [`voicebox.tts.ElevenLabs`](src/voicebox/tts/elevenlabs.py)
 - Setup:
   1. `pip install -r requirements/elevenlabs.txt`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
@@ -111,7 +115,7 @@ Online TTS engine with very realistic voices and support for voice cloning.
 
 Offline TTS engine with a good number of options.
 
-- Class: [`voicebox.tts.ESpeakNG`](./voicebox/tts/espeakng.py)
+- Class: [`voicebox.tts.ESpeakNG`](src/voicebox/tts/espeakng.py)
 - Setup:
   - On Debian/Ubuntu: `sudo apt install espeak-ng`
 
@@ -119,14 +123,14 @@ Offline TTS engine with a good number of options.
 
 Powerful online TTS engine offered by Google Cloud.
 
-- Class: [`voicebox.tts.GoogleCloudTTS`](./voicebox/tts/googlecloudtts.py)
+- Class: [`voicebox.tts.GoogleCloudTTS`](src/voicebox/tts/googlecloudtts.py)
 - Setup: `pip install -r requirements/google-cloud-tts.txt`
 
 ### gTTS [🌐](https://github.com/pndurette/gTTS)
 
 Online TTS engine used by Google Translate.
 
-- Class: [`voicebox.tts.gTTS`](./voicebox/tts/gtts.py)
+- Class: [`voicebox.tts.gTTS`](src/voicebox/tts/gtts.py)
 - Setup:
   1. `pip install -r requirements/gtts.txt`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
@@ -135,29 +139,30 @@ Online TTS engine used by Google Translate.
 
 Very basic offline TTS engine.
 
-- Class: [`voicebox.tts.PicoTTS`](./voicebox/tts/picotts.py)
+- Class: [`voicebox.tts.PicoTTS`](src/voicebox/tts/picotts.py)
 - Setup:
   - On Debian/Ubuntu: `sudo apt install libttspico-utils`
 
 ## Effects
 
-Built-in effect classes are located in the [`voicebox.effects`](./voicebox/effects/) module,
+Built-in effect classes are located in the [`voicebox.effects`](src/voicebox/effects) module,
 and can be imported like:
 
 ```python
-from voicebox.effects import CoolEffect
+from voicebox import CoolEffect
 ```
 
 Here is a non-exhaustive list of fun effects:
-- [`Bitcrusher`](./voicebox/effects/distortion.py)
-- [`Delay`](./voicebox/effects/delay.py)
-- [`Flanger`](./voicebox/effects/flanger.py)
-- [`Glitch`](./voicebox/effects/glitch.py)
-- [`Vocoder`](./voicebox/effects/vocoder.py)
+- [`Bitcrusher`](src/voicebox/effects/distortion.py)
+- [`Delay`](src/voicebox/effects/delay.py)
+- [`Flanger`](src/voicebox/effects/flanger.py)
+- [`Glitch`](src/voicebox/effects/glitch.py)
+- [`RingMod`](src/voicebox/effects/modulation.py)
+- [`Vocoder`](src/voicebox/effects/vocoder.py)
 
 There is also support for all the awesome audio plugins in
 [Spotify's `pedalboard` library](https://spotify.github.io/pedalboard/index.html)
-using the special [`PedalboardEffect`](./voicebox/effects/pedalboard.py) wrapper, e.g.:
+using the special [`PedalboardEffect`](src/voicebox/effects/pedalboard.py) wrapper, e.g.:
 
 ```python
 from voicebox import Voicebox
