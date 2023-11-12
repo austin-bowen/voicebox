@@ -4,16 +4,13 @@ import os
 
 from invoke import task
 
-os.environ['PYTHONPATH'] = 'src:test:' + os.environ.get('PYTHONPATH', '')
+os.environ['PYTHONPATH'] = 'src:' + os.environ.get('PYTHONPATH', '')
 
 
 @task
 def test(c):
     """Run tests with coverage."""
-    c.run('coverage run '
-          '--branch '
-          '--source=src '
-          '-m unittest discover voicebox_test')
+    c.run('coverage run --branch --source=src -m unittest')
 
 
 @task
