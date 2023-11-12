@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Type, Union, Literal, Callable, Any, Mapping, Iterable
+from typing import Any, Callable, Iterable, Literal, Mapping, MutableMapping, Type, Union
 
 from cachetools import Cache, LRUCache
 
@@ -19,7 +19,7 @@ class CachedTTS(TTS):
     """Wraps a ``TTS`` instance in a cache to reduce calls to the ``TTS``."""
 
     tts: TTS
-    cache: Cache
+    cache: MutableMapping
 
     @staticmethod
     def build(
