@@ -4,6 +4,7 @@ from unittest import TestCase
 
 from parameterized import parameterized
 
+from voicebox.ssml import SSML
 from voicebox.voiceboxes.splitter import SimpleSentenceSplitter, PunktSentenceSplitter
 
 commonly_handled_sentences = [
@@ -14,6 +15,8 @@ commonly_handled_sentences = [
     ('First sentence. Second sentence! Third sentence?', ['First sentence.', 'Second sentence!', 'Third sentence?']),
     # Handles decimal numbers
     ('pi = 3.14. Do you want some pie?', ['pi = 3.14.', 'Do you want some pie?']),
+    # Does not split SSML
+    (SSML('<speak>This is SSML. Do not split.</speak>'), [SSML('<speak>This is SSML. Do not split.</speak>')]),
 ]
 
 

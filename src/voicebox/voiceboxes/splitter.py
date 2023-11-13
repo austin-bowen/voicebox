@@ -8,14 +8,14 @@ import nltk.data
 from nltk.tokenize.api import TokenizerI
 
 from voicebox.ssml import SSML
-from voicebox.types import KWArgs
+from voicebox.types import KWArgs, StrOrSSML
 
 
 class Splitter(ABC):
     """Splits text into chunks."""
 
     @abstractmethod
-    def split(self, text: str) -> Iterable[str]:
+    def split(self, text: StrOrSSML) -> Iterable[StrOrSSML]:
         ...
 
 
@@ -29,10 +29,10 @@ class RegexSplitter(Splitter):
         self.pattern = pattern if isinstance(pattern, re.Pattern) else re.compile(pattern)
         self.join_split_group = join_split_group
 
-    def split(self, text: str) -> Iterable[str]:
+    def split(self, text: StrOrSSML) -> Iterable[StrOrSSML]:
         # Do not split SSML
         if isinstance(text, SSML):
-            return text
+            return [text]
 
         result = self.pattern.split(text)
         result = map(str.strip, result)
@@ -59,8 +59,11 @@ class NltkTokenizerSplitter(Splitter):
 
     tokenizer: TokenizerI
 
-    def split(self, text: str) -> Iterable[str]:
-        return self.tokenizer.tokenize(text)
+    def split(self, text: StrOrSSML) -> Iterable[StrOrSSML]:
+        return (
+            [text] if isinstance(text, SSML) else
+            self.tokenizer.tokenize(text)
+        )
 
 
 class PunktSentenceSplitter(NltkTokenizerSplitter):
