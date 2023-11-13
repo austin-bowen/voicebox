@@ -30,7 +30,11 @@ class Audio:
         self.sample_rate = round(1. / period)
 
     def __eq__(self, other: 'Audio') -> bool:
-        return np.allclose(self.signal, other.signal) and self.sample_rate == other.sample_rate
+        return (
+            other.signal.shape == self.signal.shape
+            and np.allclose(self.signal, other.signal)
+            and self.sample_rate == other.sample_rate
+        )
 
     def __len__(self) -> int:
         """Number of samples in audio signal."""
