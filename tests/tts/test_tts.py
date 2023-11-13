@@ -3,7 +3,7 @@ from unittest.mock import Mock, call
 
 from parameterized import parameterized
 
-from utils import assert_called_with_exactly, build_audio
+from tests.utils import assert_called_with_exactly, build_audio
 from voicebox.tts import TTS, FallbackTTS, RetryTTS
 
 
