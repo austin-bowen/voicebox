@@ -66,3 +66,10 @@ class AudioTest(unittest.TestCase):
         np.testing.assert_equal(copy.signal, self.audio.signal)
 
         self.assertEqual(sample_rate, copy.sample_rate)
+
+    def test_empty_audio(self):
+        audio = build_audio(signal_len=0)
+
+        self.assertEqual(0, audio.len_bytes)
+        self.assertEqual(0, audio.len_seconds)
+        self.assertEqual(0, len(audio))
