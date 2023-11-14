@@ -18,7 +18,7 @@ class SeriesChain(Effect):
 
     def apply(self, audio: Audio) -> Audio:
         for effect in self.effects:
-            audio = effect(audio)
+            audio = effect.apply(audio)
 
         return audio
 
@@ -54,12 +54,12 @@ class ParallelChain(Effect):
             audios.append(dry_audio)
 
         for effect in self.effects:
-            audios.append(effect(audio.copy()))
+            audios.append(effect.apply(audio.copy()))
 
         sample_rates = set(a.sample_rate for a in audios)
         if len(sample_rates) != 1:
             raise RuntimeError(f'All sample rates must be the same; got sample rates: {sample_rates}')
-        sample_rate = tuple(sample_rates)[0]
+        sample_rate = next(iter(sample_rates))
 
         max_length = max(len(a) for a in audios)
         signals = np.zeros((len(audios), max_length))
