@@ -58,7 +58,7 @@ class Voicebox(BaseVoicebox):
 
     def say(self, text: str) -> None:
         audio = self._get_tts_audio_with_effects(text)
-        self.sink(audio)
+        self.sink.play(audio)
 
     def _get_tts_audio_with_effects(self, text: str) -> Audio:
         audio = self.tts.get_speech(text)
