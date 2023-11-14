@@ -4,7 +4,7 @@ from unittest.mock import Mock
 import numpy as np
 from parameterized import parameterized
 
-from utils import build_audio
+from tests.utils import build_audio
 from voicebox.audio import Audio
 from voicebox.effects.chain import SeriesChain, ParallelChain
 
