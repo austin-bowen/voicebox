@@ -13,5 +13,16 @@ def assert_called_with_exactly(mock: Mock, calls: Sequence['call']) -> None:
     t.assertSequenceEqual(calls, mock.mock_calls)
 
 
+def assert_first_call(mock: Mock, call_: 'call') -> None:
+    """Asserts the very first call to the mock matches the given call."""
+    assert_nth_call(mock, 0, call_)
+
+
+def assert_nth_call(mock: Mock, n: int, call_: 'call') -> None:
+    """Assert the Nth call to the mock matches the given call."""
+    t = unittest.TestCase()
+    t.assertSequenceEqual(call_, mock.mock_calls[n])
+
+
 def build_audio(signal_len: int = 1, sample_rate: int = 44100) -> Audio:
     return Audio(np.zeros(signal_len, dtype=np.float32), sample_rate)
