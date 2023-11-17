@@ -12,7 +12,7 @@ from voicebox.voiceboxes.splitter import SimpleSentenceSplitter
 class ChunkedVoiceboxTest(unittest.TestCase):
     chunked_voicebox_class = ChunkedVoicebox
 
-    def test_default_constructor(self):
+    def test_constructor_defaults(self):
         voicebox = self.chunked_voicebox_class()
 
         self.assertIsInstance(voicebox.tts, PicoTTS)
@@ -67,6 +67,6 @@ class ChunkedVoiceboxTest(unittest.TestCase):
 class ParallelChunkedVoiceboxTest(ChunkedVoiceboxTest):
     chunked_voicebox_class = ParallelChunkedVoicebox
 
-    def test_default_constructor(self):
-        voicebox = super().test_default_constructor()
+    def test_constructor_defaults(self):
+        voicebox = super().test_constructor_defaults()
         self.assertEqual(1, voicebox.queue_size)
