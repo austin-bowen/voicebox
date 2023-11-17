@@ -34,7 +34,6 @@ class VoiceboxThread(Thread, BaseVoicebox):
             queue_get_timeout: float = 1.,
             name: str = 'Voicebox',
             daemon: bool = True,
-            **kwargs,
     ):
         """
         :param voicebox: The Voicebox instance that will be used to generate speech.
@@ -43,10 +42,9 @@ class VoiceboxThread(Thread, BaseVoicebox):
             of things to say between checks of the stop flag.
         :param name: Name of the thread.
         :param daemon: Whether the thread is daemonic (i.e. dies when the main thread exits).
-        :param kwargs: Additional keyword args will get passed to the Thread constructor.
         """
 
-        Thread.__init__(self, name=name, daemon=daemon, **kwargs)
+        Thread.__init__(self, name=name, daemon=daemon)
 
         self.voicebox = voicebox
         self.queue_get_timeout = queue_get_timeout
@@ -69,7 +67,7 @@ class VoiceboxThread(Thread, BaseVoicebox):
         if wait:
             self.join(timeout=timeout)
 
-    def wait_for_all_speech_to_complete(self) -> None:
+    def wait_until_done(self) -> None:
         self._say_queue.join()
 
     def run(self):
