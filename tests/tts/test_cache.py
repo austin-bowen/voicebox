@@ -15,29 +15,33 @@ from voicebox.tts.cache import PrerecordedTTS
 
 class CachedTTSTest(unittest.TestCase):
     def setUp(self):
+        self.audio = build_audio(signal_len=10, sample_rate=1)
+
         self.mock_tts = Mock()
         self.setup_mock_tts({})
 
     def test_build_defaults(self):
-        audio = build_audio(signal_len=10, sample_rate=1)
-
         tts = CachedTTS.build(self.mock_tts)
 
         self.assertIs(tts.tts, self.mock_tts)
         self.assertIsInstance(tts.cache, cachetools.LRUCache)
         self.assertEqual(60, tts.cache.maxsize)
-        self.assertEqual(audio.len_seconds, tts.cache.getsizeof(audio))
+        self.assertEqual(
+            self.audio.len_seconds,
+            tts.cache.getsizeof(self.audio),
+        )
         self.mock_tts.get_speech.assert_not_called()
 
     def test_build_with_max_size(self):
-        audio = build_audio(signal_len=10, sample_rate=1)
-
         tts = CachedTTS.build(self.mock_tts, max_size=100)
 
         self.assertIs(tts.tts, self.mock_tts)
         self.assertIsInstance(tts.cache, cachetools.LRUCache)
         self.assertEqual(100, tts.cache.maxsize)
-        self.assertEqual(audio.len_seconds, tts.cache.getsizeof(audio))
+        self.assertEqual(
+            self.audio.len_seconds,
+            tts.cache.getsizeof(self.audio),
+        )
         self.mock_tts.get_speech.assert_not_called()
 
     @parameterized.expand([
@@ -46,8 +50,6 @@ class CachedTTSTest(unittest.TestCase):
         ('seconds',),
     ])
     def test_build_with_size_func_aliases(self, size_func):
-        audio = build_audio(signal_len=10, sample_rate=1)
-
         tts = CachedTTS.build(self.mock_tts, size_func=size_func)
 
         self.assertIs(tts.tts, self.mock_tts)
@@ -55,23 +57,24 @@ class CachedTTSTest(unittest.TestCase):
         self.assertEqual(60, tts.cache.maxsize)
 
         expected_size = {
-            'bytes': audio.len_bytes,
+            'bytes': self.audio.len_bytes,
             'count': 1,
-            'seconds': audio.len_seconds,
+            'seconds': self.audio.len_seconds,
         }[size_func]
 
-        self.assertEqual(expected_size, tts.cache.getsizeof(audio))
+        self.assertEqual(expected_size, tts.cache.getsizeof(self.audio))
         self.mock_tts.get_speech.assert_not_called()
 
     def test_build_with_cache_class(self):
-        audio = build_audio(signal_len=10, sample_rate=1)
-
         tts = CachedTTS.build(self.mock_tts, cache_class=cachetools.LFUCache)
 
         self.assertIs(tts.tts, self.mock_tts)
         self.assertIsInstance(tts.cache, cachetools.LFUCache)
         self.assertEqual(60, tts.cache.maxsize)
-        self.assertEqual(audio.len_seconds, tts.cache.getsizeof(audio))
+        self.assertEqual(
+            self.audio.len_seconds,
+            tts.cache.getsizeof(self.audio),
+        )
         self.mock_tts.get_speech.assert_not_called()
 
     def test_get_speech_returns_cached_audio(self):
