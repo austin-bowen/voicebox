@@ -1,4 +1,3 @@
-import importlib
 import unittest
 from typing import Mapping
 from unittest.mock import Mock, call, patch
@@ -6,7 +5,6 @@ from unittest.mock import Mock, call, patch
 import cachetools
 from parameterized import parameterized
 
-import voicebox.tts.cache
 from tests.utils import assert_called_with_exactly, build_audio
 from voicebox.audio import Audio
 from voicebox.tts.cache import CachedTTS
@@ -138,9 +136,6 @@ class PrerecordedTTSTest(unittest.TestCase):
         self.fallback_tts = Mock()
         self.setup_fallback_tts({})
 
-    def tearDown(self):
-        reload_tts_cache_module()
-
     def test_get_speech_with_fallback_tts(self):
         self.setup_fallback_tts({'baz': self.baz_audio})
 
@@ -202,10 +197,8 @@ class PrerecordedTTSTest(unittest.TestCase):
             [call('foo'), call('baz')],
         )
 
-    @patch('voicebox.tts.utils.get_audio_from_wav_file')
+    @patch('voicebox.tts.cache.get_audio_from_wav_file')
     def test_from_wav_files(self, get_audio_from_wav_file):
-        reload_tts_cache_module()
-
         get_audio_from_wav_file.side_effect = lambda file: {
             'foo.wav': self.foo_audio,
             'bar.wav': self.bar_audio,
@@ -233,10 +226,6 @@ class PrerecordedTTSTest(unittest.TestCase):
 
     def setup_fallback_tts(self, texts_to_audios: Mapping[str, Audio]) -> None:
         self.fallback_tts.get_speech.side_effect = lambda text: texts_to_audios[text]
-
-
-def reload_tts_cache_module() -> None:
-    importlib.reload(voicebox.tts.cache)
 
 
 if __name__ == '__main__':
