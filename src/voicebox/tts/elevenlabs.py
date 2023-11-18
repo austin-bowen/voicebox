@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from io import BytesIO
 from typing import Union
 
@@ -19,7 +19,7 @@ class ElevenLabs(TTS):
     ``elevenlabs.set_api_key()`` or env var ``ELEVEN_API_KEY``.
     """
 
-    voice: Union[str, Voice] = elevenlabs.DEFAULT_VOICE
+    voice: Union[str, Voice] = field(default_factory=lambda: elevenlabs.DEFAULT_VOICE)
 
     model: Union[str, Model] = 'eleven_monolingual_v1'
 
