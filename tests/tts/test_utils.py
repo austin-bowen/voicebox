@@ -89,7 +89,7 @@ class GetAudioFromWavFileTest(unittest.TestCase):
         self.assertEqual(np.float32, result.signal.dtype)
         self.assertEqual(framerate, result.sample_rate)
 
-    def test_raises_ValueError_when_given_unsupported_sample_width(
+    def test_raises_KeyError_when_given_unsupported_sample_width(
             self,
             sampwidth: int = 3,
     ):
@@ -99,7 +99,7 @@ class GetAudioFromWavFileTest(unittest.TestCase):
             frames=np.int8([]),
         )
 
-        self.assertRaises(ValueError, get_audio_from_wav_file, wav_file)
+        self.assertRaises(KeyError, get_audio_from_wav_file, wav_file)
 
     @staticmethod
     def build_wav(sampwidth: int, framerate: int, frames: np.ndarray) -> BytesIO:
