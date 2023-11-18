@@ -34,12 +34,12 @@ python -m voicebox.examples.battle_droid "optional message"
 
 ```python
 # Use eSpeak NG at 120 WPM and en-us voice as the TTS engine
-from voicebox import ESpeakConfig, ESpeakNG
+from voicebox.tts import ESpeakConfig, ESpeakNG
 
 tts = ESpeakNG(ESpeakConfig(speed=120, voice='en-us'))
 
 # Add some voice effects
-from voicebox import Vocoder, Glitch, Normalize
+from voicebox.effects import Vocoder, Glitch, Normalize
 
 effects = [
     Vocoder.build(),  # Makes a very robotic, monotone voice
@@ -48,7 +48,7 @@ effects = [
 ]
 
 # Send audio to playback device, and save to speech.wav file
-from voicebox import Distributor, SoundDevice, WaveFile
+from voicebox.sinks import Distributor, SoundDevice, WaveFile
 
 sink = Distributor([
     SoundDevice(),
@@ -149,7 +149,7 @@ Built-in effect classes are located in the [`voicebox.effects`](src/voicebox/eff
 and can be imported like:
 
 ```python
-from voicebox import CoolEffect
+from voicebox.effects import CoolEffect
 ```
 
 Here is a non-exhaustive list of fun effects:
