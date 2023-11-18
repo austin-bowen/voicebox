@@ -1,8 +1,10 @@
 import unittest
 
 import numpy as np
+from parameterized import parameterized
 
 from tests.utils import build_audio
+from voicebox.audio import Audio
 
 
 class AudioTest(unittest.TestCase):
@@ -37,6 +39,23 @@ class AudioTest(unittest.TestCase):
 
     def test_len(self):
         self.assertEqual(100, len(self.audio))
+
+    @parameterized.expand([
+        ([], 1),
+        ([-1., 0., 1.], 2),
+    ])
+    def test_check_on_valid_audio_just_returns(self, signal, sample_rate: int):
+        audio = Audio(np.float32(signal), sample_rate)
+        audio.check()
+
+    @parameterized.expand([
+        ([1.0001], 1),
+        ([0.], 0),
+        ([0.], -1),
+    ])
+    def test_check_on_invalid_audio_raises_ValueError(self, signal, sample_rate: int):
+        audio = Audio(np.float32(signal), sample_rate)
+        self.assertRaises(ValueError, audio.check)
 
     def test_copy(self):
         copy = self.audio.copy()

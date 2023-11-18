@@ -40,6 +40,15 @@ class Audio:
         """Number of samples in audio signal."""
         return len(self.signal)
 
+    def check(self) -> None:
+        """Raises ValueError if the audio is invalid."""
+
+        if len(self) and np.any(np.abs(self.signal) > 1.):
+            raise ValueError(f'All values in signal must be in range [-1, 1].')
+
+        if self.sample_rate <= 0:
+            raise ValueError(f'sample_rate must be > 0; sample_rate={self.sample_rate}')
+
     def copy(self, signal: np.ndarray = None, sample_rate: int = None) -> 'Audio':
         return Audio(
             signal=signal if signal is not None else self.signal.copy(),

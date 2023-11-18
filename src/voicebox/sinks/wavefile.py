@@ -7,7 +7,7 @@ import numpy as np
 
 from voicebox.audio import Audio
 from voicebox.sinks.sink import Sink
-from voicebox.tts.utils import get_audio_from_wav_file
+from voicebox.tts.utils import get_audio_from_wav_file, sample_width_to_dtype
 from voicebox.types import FileOrPath
 
 
@@ -22,11 +22,13 @@ class WaveFile(Sink):
 
 
 def write_audio_to_wav(
-        audio,
+        audio: Audio,
         file_or_path: FileOrPath,
         append: bool = False,
         sample_width: int = 2,
 ) -> None:
+    audio.check()
+
     if isinstance(file_or_path, (Path, str)):
         file_or_path = str(file_or_path)
         needs_append = append and os.path.isfile(file_or_path)
@@ -49,15 +51,10 @@ def write_audio_to_wav(
     else:
         signal = audio.signal
 
-    bits_per_sample = 8 * sample_width
-    dtype = {
-        8: np.uint8,
-        16: np.int16,
-        32: np.int32,
-    }[bits_per_sample]
+    dtype = sample_width_to_dtype[sample_width]
 
     # Assuming signal is in range[-1, 1], scale to [-max_value, max_value]
-    max_value = 2 ** (bits_per_sample - 1) - 1
+    max_value = 2 ** (8 * sample_width - 1) - 1
     signal = np.round(signal * max_value).astype(dtype)
     signal_bytes = signal.tobytes()
 
