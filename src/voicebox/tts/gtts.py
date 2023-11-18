@@ -26,8 +26,8 @@ class gTTS(TTS):
     def get_speech(self, text: StrOrSSML) -> Audio:
         gtts = gTTS_(text, **self.gtts_kwargs)
 
-        mp3_file = BytesIO()
-        gtts.write_to_fp(mp3_file)
-        mp3_file.seek(0)
+        with BytesIO() as mp3_file:
+            gtts.write_to_fp(mp3_file)
+            mp3_file.seek(0)
 
-        return get_audio_from_mp3(mp3_file)
+            return get_audio_from_mp3(mp3_file)

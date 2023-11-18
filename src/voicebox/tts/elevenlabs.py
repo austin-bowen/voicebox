@@ -31,6 +31,5 @@ class ElevenLabs(TTS):
             model=self.model,
         )
 
-        mp3_data = BytesIO(mp3_data)
-
-        return get_audio_from_mp3(mp3_data)
+        with BytesIO(mp3_data) as mp3_data:
+            return get_audio_from_mp3(mp3_data)

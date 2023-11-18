@@ -43,9 +43,10 @@ class GoogleCloudTTS(TTS):
             timeout=self.timeout,
         )
 
-        with wave.open(BytesIO(response.audio_content), 'rb') as wav_file:
-            signal_bytes = wav_file.readframes(-1)
-            sample_rate = wav_file.getframerate()
+        with BytesIO(response.audio_content) as wav_data:
+            with wave.open(wav_data, 'rb') as wav_file:
+                signal_bytes = wav_file.readframes(-1)
+                sample_rate = wav_file.getframerate()
 
         signal = np.frombuffer(signal_bytes, dtype=np.int16)
 
