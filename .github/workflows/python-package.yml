@@ -30,7 +30,10 @@ jobs:
         python -m pip install coverage flake8
         pip install -r requirements/main.txt -r requirements/test.txt
         sudo apt install -y libportaudio2
+        pip install -r requirements/amazon-polly.txt
+        pip install -r requirements/elevenlabs.txt
         pip install -r requirements/google-cloud-tts.txt
+        pip install -r requirements/gtts.txt
         python -m nltk.downloader punkt
     - name: Lint with flake8
       run: |
