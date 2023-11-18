@@ -1,8 +1,8 @@
 import unittest
 from pathlib import Path
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch
 
-from tests.utils import build_audio, assert_first_call, assert_called_with_exactly
+from tests.utils import build_audio, assert_first_call
 from voicebox.tts.picotts import PicoTTS
 
 
@@ -96,7 +96,6 @@ class PicoTTSTest(unittest.TestCase):
             check=True,
         )
 
-        assert_called_with_exactly(
-            self.mock_get_audio_from_wav_file,
-            [call(Path(self.tmp_file))],
+        self.mock_get_audio_from_wav_file.assert_called_once_with(
+            Path(self.tmp_file),
         )

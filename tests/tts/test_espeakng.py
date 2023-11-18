@@ -1,8 +1,8 @@
 import subprocess
 import unittest
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch
 
-from tests.utils import build_audio, assert_called_with_exactly, assert_first_call
+from tests.utils import build_audio, assert_first_call
 from voicebox.ssml import SSML
 from voicebox.tts import ESpeakNG, ESpeakConfig
 
@@ -110,21 +110,12 @@ class ESpeakNGTest(unittest.TestCase):
             stdout=subprocess.PIPE,
         )
 
-        assert_called_with_exactly(
-            self.mock_proc.stdin.write,
-            [call('foo'.encode('utf-8'))],
-        )
-
+        self.mock_proc.stdin.write.assert_called_once_with(b'foo')
         self.mock_proc.stdin.close.assert_called_once()
 
-        assert_called_with_exactly(
-            self.mock_get_audio_from_wav_file,
-            [call(self.mock_proc.stdout)],
+        self.mock_get_audio_from_wav_file.assert_called_once_with(
+            self.mock_proc.stdout
         )
 
         self.mock_proc.wait.assert_called_once()
-
-        assert_called_with_exactly(
-            self.mock_proc.wait,
-            [call(timeout=config.timeout)]
-        )
+        self.mock_proc.wait.assert_called_once_with(timeout=config.timeout)

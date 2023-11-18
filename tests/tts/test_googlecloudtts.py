@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock, patch, call
+from unittest.mock import Mock, patch
 
 from google.api_core import gapic_v1
 from google.cloud.texttospeech import (
@@ -9,7 +9,7 @@ from google.cloud.texttospeech import (
 )
 from parameterized import parameterized
 
-from tests.utils import assert_called_with_exactly, build_audio
+from tests.utils import build_audio
 from voicebox.ssml import SSML
 from voicebox.tts.googlecloudtts import GoogleCloudTTS
 
@@ -62,14 +62,11 @@ class GoogleCloudTTSTest(unittest.TestCase):
         expected_input = (SynthesisInput(ssml='foo') if is_ssml else
                           SynthesisInput(text='foo'))
 
-        assert_called_with_exactly(
-            self.client.synthesize_speech,
-            [call(
-                input=expected_input,
-                voice=self.tts.voice_params,
-                audio_config=self.tts.audio_config,
-                timeout=self.tts.timeout,
-            )]
+        self.client.synthesize_speech.assert_called_once_with(
+            input=expected_input,
+            voice=self.tts.voice_params,
+            audio_config=self.tts.audio_config,
+            timeout=self.tts.timeout,
         )
 
         self.assertEqual(

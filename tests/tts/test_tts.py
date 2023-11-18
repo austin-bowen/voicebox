@@ -31,7 +31,7 @@ class FallbackTTSTest(unittest.TestCase):
         self.assertIs(result, audio)
 
         for mock_tts in [bad_tts_1, bad_tts_2, good_tts_1]:
-            assert_called_with_exactly(mock_tts.get_speech, [call('foo')])
+            mock_tts.get_speech.assert_called_once_with('foo')
 
         good_tts_2.get_speech.assert_not_called()
 
@@ -43,8 +43,8 @@ class FallbackTTSTest(unittest.TestCase):
 
         self.assertRaises(Exception, tts.get_speech, 'foo')
 
-        assert_called_with_exactly(bad_tts_1.get_speech, [call('foo')])
-        assert_called_with_exactly(bad_tts_2.get_speech, [call('foo')])
+        bad_tts_1.get_speech.assert_called_once_with('foo')
+        bad_tts_2.get_speech.assert_called_once_with('foo')
 
     def test_get_speech_with_empty_ttss_raises_ValueError(self):
         tts = FallbackTTS([], log=log)

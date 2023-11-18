@@ -88,7 +88,7 @@ class CachedTTSTest(unittest.TestCase):
             result = tts.get_speech('foo')
             self.assertIs(foo_audio, result)
             self.assertDictEqual({'foo': foo_audio}, cache)
-            assert_called_with_exactly(self.mock_tts.get_speech, [call('foo')])
+            self.mock_tts.get_speech.assert_called_once_with('foo')
 
     def test_get_speech_does_not_cache_audios_too_large(self):
         too_large_audio = build_audio(100)
@@ -99,10 +99,7 @@ class CachedTTSTest(unittest.TestCase):
         result = tts.get_speech('too large')
         self.assertIs(result, too_large_audio)
         self.assertDictEqual({}, dict(tts.cache))
-        assert_called_with_exactly(
-            self.mock_tts.get_speech,
-            [call('too large')],
-        )
+        self.mock_tts.get_speech.assert_called_once_with('too large')
 
         result = tts.get_speech('too large')
         self.assertIs(result, too_large_audio)
@@ -151,10 +148,7 @@ class PrerecordedTTSTest(unittest.TestCase):
         self.assertIs(tts.get_speech('bar'), self.bar_audio)
         self.assertIs(tts.get_speech('baz'), self.baz_audio)
 
-        assert_called_with_exactly(
-            self.fallback_tts.get_speech,
-            [call('baz')]
-        )
+        self.fallback_tts.get_speech.assert_called_once_with('baz')
 
     def test_get_speech_without_fallback_tts(self):
         tts = PrerecordedTTS(

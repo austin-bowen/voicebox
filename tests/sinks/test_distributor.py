@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import call, Mock
+from unittest.mock import Mock
 
-from tests.utils import assert_called_with_exactly, build_audio
+from tests.utils import build_audio
 from voicebox.sinks.distributor import Distributor
 
 
@@ -18,7 +18,7 @@ class DistributorTest(unittest.TestCase):
         distributor.play(audio)
 
         for sink in sinks:
-            assert_called_with_exactly(sink.play, [call(audio)])
+            sink.play.assert_called_once_with(audio)
 
 
 def mock_sink():

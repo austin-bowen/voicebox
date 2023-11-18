@@ -51,7 +51,7 @@ class ChunkedVoiceboxTest(unittest.TestCase):
 
         voicebox.say('foo bar')
 
-        assert_called_with_exactly(splitter, [call('foo bar')])
+        splitter.split.assert_called_once_with('foo bar')
 
         assert_called_with_exactly(
             tts,

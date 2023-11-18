@@ -41,9 +41,9 @@ class VoiceboxTest(unittest.TestCase):
     def test_say(self):
         self.voicebox.say('foo')
 
-        assert_called_with_exactly(self.tts.get_speech, [call('foo')])
-        assert_called_with_exactly(self.effect.apply, [call(self.foo_audio)])
-        assert_called_with_exactly(self.sink.play, [call(self.foo_audio)])
+        self.tts.get_speech.assert_called_once_with('foo')
+        self.effect.apply.assert_called_once_with(self.foo_audio)
+        self.sink.play.assert_called_once_with(self.foo_audio)
 
     def test_say_all(self):
         self.voicebox.say_all(['foo', 'bar'])

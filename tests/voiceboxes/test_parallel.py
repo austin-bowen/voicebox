@@ -52,10 +52,7 @@ class VoiceboxThreadTest(unittest.TestCase):
         self.voicebox.say('foo')
         self.voicebox.wait_until_done()
 
-        assert_called_with_exactly(
-            self.mock_voicebox.say,
-            [call('foo')],
-        )
+        self.mock_voicebox.say.assert_called_once_with('foo')
 
     def test_say_all(self):
         self.voicebox.say_all(['foo', 'bar'])
