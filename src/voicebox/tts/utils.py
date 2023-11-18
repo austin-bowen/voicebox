@@ -27,6 +27,9 @@ if pydub:
 
         return Audio(signal, sample_rate=audio_segment.frame_rate)
 
+    def get_audio_from_mp3(file) -> Audio:
+        return get_audio_from_audio_segment(AudioSegment.from_mp3(file))
+
 
 def get_audio_from_wav_file(file_or_path: FileOrPath) -> Audio:
     if isinstance(file_or_path, Path):

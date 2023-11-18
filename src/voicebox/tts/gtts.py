@@ -1,11 +1,10 @@
 from io import BytesIO
 
 from gtts import gTTS as gTTS_
-from pydub import AudioSegment
 
 from voicebox.audio import Audio
 from voicebox.tts.tts import TTS
-from voicebox.tts.utils import get_audio_from_audio_segment
+from voicebox.tts.utils import get_audio_from_mp3
 from voicebox.types import KWArgs, StrOrSSML
 
 
@@ -31,6 +30,4 @@ class gTTS(TTS):
         gtts.write_to_fp(mp3_file)
         mp3_file.seek(0)
 
-        audio_segment = AudioSegment.from_mp3(mp3_file)
-
-        return get_audio_from_audio_segment(audio_segment)
+        return get_audio_from_mp3(mp3_file)

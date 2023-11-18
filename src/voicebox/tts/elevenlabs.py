@@ -4,11 +4,10 @@ from typing import Union
 
 import elevenlabs
 from elevenlabs import Voice, Model
-from pydub import AudioSegment
 
 from voicebox.audio import Audio
 from voicebox.tts import TTS
-from voicebox.tts.utils import get_audio_from_audio_segment
+from voicebox.tts.utils import get_audio_from_mp3
 from voicebox.types import StrOrSSML
 
 
@@ -33,6 +32,5 @@ class ElevenLabs(TTS):
         )
 
         mp3_data = BytesIO(mp3_data)
-        audio_segment = AudioSegment.from_mp3(mp3_data)
 
-        return get_audio_from_audio_segment(audio_segment)
+        return get_audio_from_mp3(mp3_data)
