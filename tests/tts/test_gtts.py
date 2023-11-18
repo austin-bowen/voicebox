@@ -27,4 +27,5 @@ class gTTSTest(unittest.TestCase):
         self.assertIs(result, audio)
 
         assert_first_call(mock_gTTS, 'foo', key='value')
+        mock_gTTS.return_value.write_to_fp.assert_called_once()
         mock_get_audio_from_mp3.assert_called_once()
