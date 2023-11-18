@@ -16,11 +16,11 @@ from voicebox.tts.googlecloudtts import GoogleCloudTTS
 
 class GoogleCloudTTSTest(unittest.TestCase):
     def setUp(self):
-        self.response = Mock()
-        self.response.audio_content = b'audio_content'
+        response = Mock()
+        response.audio_content = b'audio_content'
 
         self.client = Mock()
-        self.client.synthesize_speech.return_value = self.response
+        self.client.synthesize_speech.return_value = response
 
         self.voice_params = Mock()
 
