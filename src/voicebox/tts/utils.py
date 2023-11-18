@@ -30,14 +30,9 @@ sample_width_to_dtype = {
 
 if pydub:
     def get_audio_from_audio_segment(audio_segment: AudioSegment) -> Audio:
-        bits_per_sample = 8 * audio_segment.frame_width
-        max_value = 2 ** (bits_per_sample - 1)
-
-        signal = np.array(audio_segment.get_array_of_samples(), dtype=float)
-        signal /= max_value
-        signal = signal.astype(np.float32)
-
-        return Audio(signal, sample_rate=audio_segment.frame_rate)
+        dtype = sample_width_to_dtype[audio_segment.frame_width]
+        samples = np.array(audio_segment.get_array_of_samples(), dtype=dtype)
+        return get_audio_from_samples(samples, audio_segment.frame_rate)
 
 
     def get_audio_from_mp3(file) -> Audio:
