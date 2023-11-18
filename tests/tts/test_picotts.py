@@ -92,7 +92,8 @@ class PicoTTSTest(unittest.TestCase):
     def _check_mock_calls(self, run_args):
         assert_first_call(
             self.mock_run,
-            call(run_args, check=True),
+            run_args,
+            check=True,
         )
 
         assert_called_with_exactly(

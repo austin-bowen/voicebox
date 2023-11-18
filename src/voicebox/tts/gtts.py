@@ -15,7 +15,7 @@ class gTTS(TTS):
 
     gtts_kwargs: KWArgs
 
-    def __init__(self, **gtts_kwargs: KWArgs):
+    def __init__(self, **gtts_kwargs):
         """
         :param gtts_kwargs: These will be passed to the ``gtts.gTTS`` constructor.
             See the docs for options: https://gtts.readthedocs.io/en/latest/module.html#module-gtts.tts

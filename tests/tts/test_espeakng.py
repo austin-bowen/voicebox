@@ -105,11 +105,9 @@ class ESpeakNGTest(unittest.TestCase):
     def _check_mock_calls(self, Popen_args, config):
         assert_first_call(
             self.mock_Popen,
-            call(
-                Popen_args,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-            ),
+            Popen_args,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
         )
 
         assert_called_with_exactly(
