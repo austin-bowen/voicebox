@@ -6,6 +6,8 @@ from parameterized import parameterized
 from tests.utils import assert_called_with_exactly, build_audio
 from voicebox.tts import TTS, FallbackTTS, RetryTTS
 
+log = Mock()
+
 
 class FallbackTTSTest(unittest.TestCase):
     def test_get_speech_returns_first_good_tts_response(self):
@@ -19,7 +21,10 @@ class FallbackTTSTest(unittest.TestCase):
 
         good_tts_2 = Mock()
 
-        tts = FallbackTTS([bad_tts_1, bad_tts_2, good_tts_1, good_tts_2])
+        tts = FallbackTTS(
+            [bad_tts_1, bad_tts_2, good_tts_1, good_tts_2],
+            log=log,
+        )
 
         result = tts.get_speech('foo')
 
@@ -34,7 +39,7 @@ class FallbackTTSTest(unittest.TestCase):
         bad_tts_1 = build_bad_tts()
         bad_tts_2 = build_bad_tts()
 
-        tts = FallbackTTS([bad_tts_1, bad_tts_2])
+        tts = FallbackTTS([bad_tts_1, bad_tts_2], log=log)
 
         self.assertRaises(Exception, tts.get_speech, 'foo')
 
@@ -42,7 +47,7 @@ class FallbackTTSTest(unittest.TestCase):
         assert_called_with_exactly(bad_tts_2.get_speech, [call('foo')])
 
     def test_get_speech_with_empty_ttss_raises_ValueError(self):
-        tts = FallbackTTS([])
+        tts = FallbackTTS([], log=log)
         self.assertRaises(ValueError, tts.get_speech, 'foo')
 
 
@@ -67,7 +72,7 @@ class RetryTTSTest(unittest.TestCase):
         mock_tts.get_speech.side_effect = mock_get_speech
         mock_get_speech.call_count = 0
 
-        tts = RetryTTS(mock_tts)
+        tts = RetryTTS(mock_tts, log=log)
 
         result = tts.get_speech('foo')
 
@@ -79,7 +84,7 @@ class RetryTTSTest(unittest.TestCase):
     def test_get_speech_raises_exception_on_last_failed_attempt(self):
         mock_tts = build_bad_tts()
 
-        tts = RetryTTS(mock_tts)
+        tts = RetryTTS(mock_tts, log=log)
 
         self.assertRaises(Exception, tts.get_speech, 'foo')
 
@@ -91,7 +96,7 @@ class RetryTTSTest(unittest.TestCase):
             self,
             max_attempts: int,
     ):
-        tts = RetryTTS(tts=Mock(), max_attempts=max_attempts)
+        tts = RetryTTS(tts=Mock(), max_attempts=max_attempts, log=log)
         self.assertRaises(ValueError, tts.get_speech, 'foo')
 
 
