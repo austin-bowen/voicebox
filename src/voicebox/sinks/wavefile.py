@@ -18,10 +18,10 @@ class WaveFile(Sink):
     sample_width: int = 2
 
     def play(self, audio: Audio) -> None:
-        write_audio_to_wave(audio, self.file, append=self.append, sample_width=self.sample_width)
+        write_audio_to_wav(audio, self.file, append=self.append, sample_width=self.sample_width)
 
 
-def write_audio_to_wave(
+def write_audio_to_wav(
         audio,
         file_or_path: FileOrPath,
         append: bool = False,
