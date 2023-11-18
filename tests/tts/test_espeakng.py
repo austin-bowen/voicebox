@@ -81,6 +81,16 @@ class ESpeakNGTest(unittest.TestCase):
 
         self._check_mock_calls(expected_args, config)
 
+    @patch('voicebox.tts.espeakng.get_audio_from_wav_file')
+    @patch('subprocess.Popen')
+    def test_get_speech_without_espeakng_installed_raises_FileNotFoundError(self, *mocks):
+        self._setup_mocks(*mocks)
+        self.mock_Popen.side_effect = FileNotFoundError('File not found')
+
+        tts = ESpeakNG()
+
+        self.assertRaises(FileNotFoundError, tts.get_speech, 'foo')
+
     def _setup_mocks(
             self,
             mock_Popen,
