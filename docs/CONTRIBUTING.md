@@ -13,9 +13,11 @@ python3 -m venv venv
 
 # Install dependencies
 pip install --editable .[all]
+sudo apt install -y libportaudio2
+python -m nltk.downloader punkt -d ./venv/nltk_data
 
-# Run tests, generate coverage report, and build (but don't publish) PyPI deployable
-invoke test cov build
+# Run tests and generate coverage report
+invoke test cov
 ```
 
 ## Running Tasks
