@@ -96,7 +96,7 @@ class Vocoder(Effect):
             min_freq: float = 80.,
             max_freq: float = 8000.,
             bands: int = 40,
-            bandwidth: float = 0.5,
+            bandwidth: float = 0.8,
             bandpass_filter_order: int = 3,
             bandpass_filter_kwargs: KWArgs = None,
             envelope_follower_freq: float = 50.,
