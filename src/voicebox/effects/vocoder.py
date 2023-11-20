@@ -1,3 +1,4 @@
+import warnings
 from dataclasses import dataclass, field
 from random import Random
 from typing import Callable, Sequence
@@ -127,8 +128,6 @@ class Vocoder(Effect):
         return cls(carrier_wave, bandpass_filters, envelope_follower, max_freq)
 
     def apply(self, audio: Audio) -> Audio:
-        self._check_sample_rate(audio.sample_rate)
-
         carrier = self._get_carrier(audio)
 
         new_signals = [
@@ -140,25 +139,28 @@ class Vocoder(Effect):
 
         return audio
 
-    def _check_sample_rate(self, sample_rate: float) -> None:
-        min_sample_rate = 2 * self.max_freq
-        if sample_rate < min_sample_rate:
-            raise ValueError(
-                f'Received audio with sample_rate={sample_rate}, which is too '
-                f'low for Vocoder with max_freq={self.max_freq}. '
-                f'Either build the Vocoder with '
-                f'max_freq <= sample_rate / 2 = {sample_rate / 2}, '
-                f'or use a TTS engine with a '
-                f'sample_rate >= 2 * max_freq = {2 * self.max_freq}.'
-            )
-
     def _get_carrier(self, audio: Audio) -> Audio:
         t = np.arange(len(audio)) * audio.period
         carrier = self.carrier_wave(t)
         return audio.copy(signal=carrier)
 
     def _get_carrier_signal_for_band(self, modulator: Audio, carrier: Audio, bpf: Filter) -> np.ndarray:
-        filtered_modulator = bpf(modulator.copy())
+        try:
+            filtered_modulator = bpf(modulator.copy())
+        except ValueError:
+            sample_rate = modulator.sample_rate
+            warnings.warn(
+                f'Received audio with sample_rate={sample_rate}, which is too '
+                f'low for Vocoder with max_freq={self.max_freq}; '
+                f'band(s) will be dropped, reducing quality. '
+                f'To fix, either 1) build the Vocoder with '
+                f'max_freq <= sample_rate / 2 = {sample_rate / 2}, '
+                f'or 2) use a TTS engine with a '
+                f'sample_rate >= 2 * max_freq = {2 * self.max_freq}.'
+            )
+
+            return np.zeros_like(modulator.signal)
+
         modulator_level = self.envelope_follower(filtered_modulator).signal
 
         carrier_signal = bpf(carrier.copy()).signal
