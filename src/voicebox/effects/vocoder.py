@@ -87,11 +87,11 @@ class Vocoder(Effect):
     @classmethod
     def build(
             cls,
-            carrier_freq: float = 150.,
+            carrier_freq: float = 160.,
             carrier_wave_builder=SawtoothWave,
             carrier_wave=None,
-            min_freq: float = 100.,
-            max_freq: float = 10_000.,
+            min_freq: float = 80.,
+            max_freq: float = 8000.,
             bands: int = 40,
             bandwidth: float = 0.5,
             bandpass_filter_order: int = 3,
@@ -104,8 +104,8 @@ class Vocoder(Effect):
         bandpass_filters = []
         alpha = np.log2(max_freq / min_freq)
         for band in range(bands):
-            f = min_freq * 2 ** (alpha * band / (bands - 1))
-            f_next = min_freq * 2 ** (alpha * (band + 1) / (bands - 1))
+            f = min_freq * 2 ** (alpha * band / bands)
+            f_next = min_freq * 2 ** (alpha * (band + 1) / bands)
             width = bandwidth * (f_next - f)
 
             bandpass_filters.append(
