@@ -41,5 +41,8 @@ def build(c):
 @task
 def publish(c, test: bool = True):
     """Upload the distribution files to PyPI."""
+
+    c.run('python -m twine check dist/*')
+
     repo = 'testpypi' if test else 'pypi'
     c.run(f'python -m twine upload -u __token__ -r {repo} dist/*')
