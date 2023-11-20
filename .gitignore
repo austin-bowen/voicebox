@@ -1,5 +1,6 @@
 .coverage
 .idea/
+.pypirc*
 build/
 dist/
 src/voicebox_tts.egg-info/

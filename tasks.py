@@ -45,4 +45,5 @@ def publish(c, test: bool = True):
     c.run('python -m twine check dist/*')
 
     repo = 'testpypi' if test else 'pypi'
-    c.run(f'python -m twine upload -u __token__ -r {repo} dist/*')
+    config = '.pypirc-test' if test else '.pypirc'
+    c.run(f'python -m twine upload -r {repo} --config-file {config} dist/*')
