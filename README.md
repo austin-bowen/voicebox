@@ -73,17 +73,9 @@ python -m voicebox "Hello, world!"  # Basic usage
 
 ## Setup
 
-1. Setup virtual environment if necessary, e.g.
-   1. `python3 -m venv venv`
-   2. `. venv/bin/activate`
-2. Install dependencies:
-   1. `pip install -U pip`
-   2. `pip install -r requirements/main.txt`
-   3. Install the `PortAudio` library for the `sounddevice` dependency:
-      - On Debian/Ubuntu: `sudo apt install libportaudio2`
-   4. For development:
-      - `pip install -r requirements/test.txt`
-      - `python -m nltk.downloader punkt -d ./venv/nltk_data`
+1. `pip install voicebox-tts`
+2. Install the `PortAudio` library for audio playback.
+   - On Debian/Ubuntu: `sudo apt install libportaudio2`
 3. Install dependencies for whichever TTS engine(s) you want to use (see section below).
 
 ## Supported Text-to-Speech Engines
@@ -95,7 +87,7 @@ Classes for supported TTS engines are located in the [`voicebox.tts.*`](src/voic
 Online TTS engine from AWS.
 
 - Class: [`voicebox.tts.AmazonPolly`](src/voicebox/tts/amazonpolly.py)
-- Setup: `pip install -r requirements/amazon-polly.txt`
+- Setup: `pip install voicebox-tts[amazon-polly]`
 
 ### ElevenLabs [🌐](https://elevenlabs.io/)
 
@@ -103,7 +95,7 @@ Online TTS engine with very realistic voices and support for voice cloning.
 
 - Class: [`voicebox.tts.ElevenLabs`](src/voicebox/tts/elevenlabs.py)
 - Setup:
-  1. `pip install -r requirements/elevenlabs.txt`
+  1. `pip install voicebox-tts[elevenlabs]`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
   3. Get an [API key](https://elevenlabs.io/docs/api-reference/authentication)
      and do one of the following:
@@ -124,7 +116,7 @@ Offline TTS engine with a good number of options.
 Powerful online TTS engine offered by Google Cloud.
 
 - Class: [`voicebox.tts.GoogleCloudTTS`](src/voicebox/tts/googlecloudtts.py)
-- Setup: `pip install -r requirements/google-cloud-tts.txt`
+- Setup: `pip install voicebox-tts[google-cloud-tts]`
 
 ### gTTS [🌐](https://github.com/pndurette/gTTS)
 
@@ -132,7 +124,7 @@ Online TTS engine used by Google Translate.
 
 - Class: [`voicebox.tts.gTTS`](src/voicebox/tts/gtts.py)
 - Setup:
-  1. `pip install -r requirements/gtts.txt`
+  1. `pip install voicebox-tts[gtts]`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
 
 ### Pico TTS
