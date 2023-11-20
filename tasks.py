@@ -16,9 +16,25 @@ def cov(c):
 
 
 @task
+def clean(c, cov: bool = False):
+    """Remove auto-generated files."""
+
+    patterns = [
+        'build/',
+        'dist/',
+        'src/voicebox_tts.egg-info/',
+    ]
+
+    if cov:
+        patterns.append('.coverage')
+
+    for pattern in patterns:
+        c.run(f'rm -r {pattern}', echo=True, warn=True)
+
+
+@task(pre=[clean])
 def build(c):
     """Build distribution files."""
-    c.run('rm dist/voicebox*')
     c.run('python -m build')
 
 
@@ -26,9 +42,3 @@ def build(c):
 def publish(c):
     """Upload the distribution files to PyPI."""
     c.run('python -m twine -r testpypi dist/*')
-
-
-@task
-def clean(c):
-    """Remove auto-generated files."""
-    c.run('rm -r .coverage build/ dist/ src/voicebox_tts.egg-info/')
