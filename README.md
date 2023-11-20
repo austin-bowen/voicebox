@@ -4,71 +4,21 @@
 
 Python text-to-speech library with built-in voice effects and support for multiple TTS engines.
 
-## Examples
-
 Listen to audio samples here: [Audio Samples](https://austin-bowen.github.io/voicebox/)
 
-### Basic
-
 ```python
-# PicoTTS is used to say "Hello, world!"
+# Example: Use gTTS with a vocoder effect to speak in a robotic voice
+
 from voicebox import Voicebox
-voicebox = Voicebox()
-voicebox.say('Hello, world!')
-```
+from voicebox.tts import gTTS
+from voicebox.effects import Vocoder, Normalize
 
-### Pre-built
+voicebox = Voicebox(
+    tts=gTTS(),
+    effects=[Vocoder.build(), Normalize()],
+)
 
-Some pre-built voiceboxes are available in the [`voicebox.examples`](src/voicebox/examples) package.
-They can be imported into your own code, and you can run them to demo:
-
-```bash
-# Voice of GLaDOS from the Portal video game series
-python -m voicebox.examples.glados "optional message"
-
-# Voice of the OOM-9 command battle droid from Star Wars: Episode I
-python -m voicebox.examples.battle_droid "optional message"
-```
-
-### Advanced
-
-```python
-# Use eSpeak NG at 120 WPM and en-us voice as the TTS engine
-from voicebox.tts import ESpeakConfig, ESpeakNG
-
-tts = ESpeakNG(ESpeakConfig(speed=120, voice='en-us'))
-
-# Add some voice effects
-from voicebox.effects import Vocoder, Glitch, Normalize
-
-effects = [
-    Vocoder.build(),  # Makes a very robotic, monotone voice
-    Glitch(),  # Randomly repeats small sections of audio
-    Normalize(),  # Remove DC and make volume consistent
-]
-
-# Send audio to playback device, and save to speech.wav file
-from voicebox.sinks import Distributor, SoundDevice, WaveFile
-
-sink = Distributor([
-    SoundDevice(),
-    WaveFile('speech.wav'),
-])
-
-# Build the voicebox
-from voicebox import Voicebox
-
-voicebox = Voicebox(tts, effects, sink)
-
-# eSpeak NG is used to say "Hello, world!" with a glitchy robot voice
-voicebox.say('Hello, world!')
-```
-
-### Command Line Demo
-
-```bash
-python -m voicebox -h               # Print command help
-python -m voicebox "Hello, world!"  # Basic usage
+voicebox.say('Hello, world! How are you today?')
 ```
 
 ## Setup
@@ -167,4 +117,69 @@ voicebox = Voicebox(
         ...,
     ]
 )
+```
+
+## Examples
+
+### Minimal
+
+```python
+# PicoTTS is used to say "Hello, world!"
+from voicebox import Voicebox
+voicebox = Voicebox()
+voicebox.say('Hello, world!')
+```
+
+### Pre-built
+
+Some pre-built voiceboxes are available in the [`voicebox.examples`](src/voicebox/examples) package.
+They can be imported into your own code, and you can run them to demo:
+
+```bash
+# Voice of GLaDOS from the Portal video game series
+python -m voicebox.examples.glados "optional message"
+
+# Voice of the OOM-9 command battle droid from Star Wars: Episode I
+python -m voicebox.examples.battle_droid "optional message"
+```
+
+### Advanced
+
+```python
+# Use eSpeak NG at 120 WPM and en-us voice as the TTS engine
+from voicebox.tts import ESpeakConfig, ESpeakNG
+
+tts = ESpeakNG(ESpeakConfig(speed=120, voice='en-us'))
+
+# Add some voice effects
+from voicebox.effects import Vocoder, Glitch, Normalize
+
+effects = [
+    Vocoder.build(),  # Makes a very robotic, monotone voice
+    Glitch(),  # Randomly repeats small sections of audio
+    Normalize(),  # Remove DC and make volume consistent
+]
+
+# Send audio to playback device, and save to speech.wav file
+from voicebox.sinks import Distributor, SoundDevice, WaveFile
+
+sink = Distributor([
+    SoundDevice(),
+    WaveFile('speech.wav'),
+])
+
+# Build the voicebox
+from voicebox import Voicebox
+
+voicebox = Voicebox(tts, effects, sink)
+
+# eSpeak NG is used to say "Hello, world!" with a glitchy robot voice
+voicebox.say('Hello, world!')
+```
+
+### Command Line Demo
+
+```bash
+python -m voicebox -h               # Print command help
+python -m voicebox "Hello, world!"  # Basic usage
 ```
