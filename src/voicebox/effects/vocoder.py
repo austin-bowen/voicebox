@@ -84,6 +84,8 @@ class Vocoder(Effect):
 
     envelope_follower: EnvelopeFollower
 
+    max_freq: float
+
     @classmethod
     def build(
             cls,
@@ -122,9 +124,11 @@ class Vocoder(Effect):
             **(envelope_follower_kwargs or {}),
         )
 
-        return cls(carrier_wave, bandpass_filters, envelope_follower)
+        return cls(carrier_wave, bandpass_filters, envelope_follower, max_freq)
 
     def apply(self, audio: Audio) -> Audio:
+        self._check_sample_rate(audio.sample_rate)
+
         carrier = self._get_carrier(audio)
 
         new_signals = [
@@ -135,6 +139,18 @@ class Vocoder(Effect):
         audio.signal = np.sum(new_signals, axis=0)
 
         return audio
+
+    def _check_sample_rate(self, sample_rate: float) -> None:
+        min_sample_rate = 2 * self.max_freq
+        if sample_rate < min_sample_rate:
+            raise ValueError(
+                f'Received audio with sample_rate={sample_rate}, which is too '
+                f'low for Vocoder with max_freq={self.max_freq}. '
+                f'Either build the Vocoder with '
+                f'max_freq <= sample_rate / 2 = {sample_rate / 2}, '
+                f'or use a TTS engine with a '
+                f'sample_rate >= 2 * max_freq = {2 * self.max_freq}.'
+            )
 
     def _get_carrier(self, audio: Audio) -> Audio:
         t = np.arange(len(audio)) * audio.period
