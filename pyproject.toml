@@ -1,0 +1,78 @@
+# General pyproject.toml options:
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/
+#
+# setuptools-specific options:
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "voicebox-tts"
+authors = [
+    { name = "Austin Bowen", email = "austin.bowen.314@gmail.com" },
+]
+description = "Python text-to-speech library with built-in voice effects and support for multiple TTS engines."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["version"]
+dependencies = [
+    "nltk",
+    "numpy",
+    "pedalboard",
+    "scipy",
+    "sounddevice",
+]
+
+[project.optional-dependencies]
+all = [
+    "voicebox-tts[dev]",
+    "voicebox-tts[test]",
+    "voicebox-tts[amazon-polly]",
+    "voicebox-tts[elevenlabs]",
+    "voicebox-tts[google-cloud-tts]",
+    "voicebox-tts[gtts]",
+]
+dev = [
+    "build",
+    "invoke",
+    "twine",
+]
+test = [
+    "coverage",
+    "parameterized",
+]
+amazon-polly = [
+    "boto3",
+    "boto3-stubs",
+    "boto3-stubs[polly]",
+]
+elevenlabs = [
+    "elevenlabs",
+    "pydub",
+]
+google-cloud-tts = [
+    "google-cloud-texttospeech",
+]
+gtts = [
+    "gTTS",
+    "pydub",
+]
+
+[project.urls]
+Homepage = "https://github.com/austin-bowen/voicebox"
+Issues = "https://github.com/austin-bowen/voicebox/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "voicebox.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["voicebox*"]
