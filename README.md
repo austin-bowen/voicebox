@@ -38,7 +38,7 @@ Classes for supported TTS engines are located in the
 Online TTS engine from AWS.
 
 - Class: [`voicebox.tts.AmazonPolly`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/amazonpolly.py)
-- Setup: `pip install voicebox-tts[amazon-polly]`
+- Setup: `pip install "voicebox-tts[amazon-polly]"`
 
 ### ElevenLabs [🌐](https://elevenlabs.io/)
 
@@ -46,7 +46,7 @@ Online TTS engine with very realistic voices and support for voice cloning.
 
 - Class: [`voicebox.tts.ElevenLabs`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/elevenlabs.py)
 - Setup:
-  1. `pip install voicebox-tts[elevenlabs]`
+  1. `pip install "voicebox-tts[elevenlabs]"`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
   3. Get an [API key](https://elevenlabs.io/docs/api-reference/authentication)
      and do one of the following:
@@ -67,7 +67,7 @@ Offline TTS engine with a good number of options.
 Powerful online TTS engine offered by Google Cloud.
 
 - Class: [`voicebox.tts.GoogleCloudTTS`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/googlecloudtts.py)
-- Setup: `pip install voicebox-tts[google-cloud-tts]`
+- Setup: `pip install "voicebox-tts[google-cloud-tts]"`
 
 ### gTTS [🌐](https://github.com/pndurette/gTTS)
 
@@ -75,7 +75,7 @@ Online TTS engine used by Google Translate.
 
 - Class: [`voicebox.tts.gTTS`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/gtts.py)
 - Setup:
-  1. `pip install voicebox-tts[gtts]`
+  1. `pip install "voicebox-tts[gtts]"`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
 
 ### Pico TTS
