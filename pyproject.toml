@@ -42,6 +42,7 @@ dependencies = [
 [project.optional-dependencies]
 all = [
     "voicebox-tts[dev]",
+    "voicebox-tts[docs]",
     "voicebox-tts[test]",
     "voicebox-tts[amazon-polly]",
     "voicebox-tts[elevenlabs]",
@@ -52,6 +53,10 @@ dev = [
     "build",
     "invoke",
     "twine",
+]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
 ]
 test = [
     "coverage",

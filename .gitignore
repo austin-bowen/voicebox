@@ -3,4 +3,5 @@
 .pypirc*
 build/
 dist/
+docs/_build/
 src/voicebox_tts.egg-info/

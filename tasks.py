@@ -47,3 +47,11 @@ def publish(c, test: bool = True):
     repo = 'testpypi' if test else 'pypi'
     config = '.pypirc-test' if test else '.pypirc'
     c.run(f'python -m twine upload -r {repo} --config-file {config} dist/*')
+
+
+@task
+def make_docs(c):
+    """Generate the documentation files."""
+
+    c.run('sphinx-apidoc -f --maxdepth 1 -o docs src/voicebox')
+    c.run('cd docs && make html')
