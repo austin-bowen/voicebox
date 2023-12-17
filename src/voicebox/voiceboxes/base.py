@@ -3,12 +3,11 @@ from abc import ABC, abstractmethod
 from typing import Iterable
 
 from voicebox.audio import Audio
-from voicebox.effects import SeriesChain
+from voicebox.effects import SeriesChain, default_effects
 from voicebox.effects.effect import Effects
-from voicebox.effects.normalize import Normalize
+from voicebox.sinks import default_sink
 from voicebox.sinks.sink import Sink
-from voicebox.sinks.sounddevice import SoundDevice
-from voicebox.tts.picotts import PicoTTS
+from voicebox.tts import default_tts
 from voicebox.tts.tts import TTS
 
 __all__ = ['BaseVoicebox', 'Voicebox']
@@ -38,23 +37,9 @@ class Voicebox(BaseVoicebox):
     sink: Sink
 
     def __init__(self, tts: TTS = None, effects: Effects = None, sink: Sink = None):
-        self.tts = tts if tts is not None else self._default_tts()
-        self.effects = effects if effects is not None else self._default_effects()
-        self.sink = sink if sink is not None else self._default_sink()
-
-    @staticmethod
-    def _default_tts() -> TTS:
-        return PicoTTS()
-
-    @staticmethod
-    def _default_effects() -> Effects:
-        return [
-            Normalize(),
-        ]
-
-    @staticmethod
-    def _default_sink() -> Sink:
-        return SoundDevice()
+        self.tts = tts if tts is not None else default_tts()
+        self.effects = effects if effects is not None else default_effects()
+        self.sink = sink if sink is not None else default_sink()
 
     def say(self, text: str) -> None:
         audio = self._get_tts_audio_with_effects(text)

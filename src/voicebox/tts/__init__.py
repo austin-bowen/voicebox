@@ -24,3 +24,8 @@ except ImportError:
     pass
 
 from voicebox.tts.picotts import PicoTTS
+
+
+def default_tts() -> TTS:
+    """Returns a new instance of the default TTS, ``PicoTTS``."""
+    return PicoTTS()
