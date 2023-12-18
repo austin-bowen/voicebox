@@ -1,11 +1,15 @@
+import warnings
 from dataclasses import dataclass
 from typing import Union, Literal
 
-import sounddevice as sd
-
-from voicebox.sinks.sink import Sink
 from voicebox.audio import Audio
+from voicebox.sinks.sink import Sink
 
+try:
+    import sounddevice as sd
+except OSError as e:
+    warnings.warn(f'{e.__class__.__name__}: {e}')
+    sd = None
 
 Device = Union[int, str]
 Latency = Union[float, Literal['low', 'high']]
