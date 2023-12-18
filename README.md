@@ -3,6 +3,7 @@
 ![python-package](https://github.com/austin-bowen/voicebox/actions/workflows/python-package.yml/badge.svg)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/voicebox-tts)
 [![PyPI - Version](https://img.shields.io/pypi/v/voicebox-tts)](https://pypi.org/project/voicebox-tts/)
+[![Documentation Status](https://readthedocs.org/projects/voicebox/badge/?version=latest)](https://voicebox.readthedocs.io/en/latest/?badge=latest)
 
 Python text-to-speech library with built-in voice effects and support for multiple TTS engines.
 
