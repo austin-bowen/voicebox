@@ -92,6 +92,14 @@ voicebox.effects.pedalboard module
    :undoc-members:
    :show-inheritance:
 
+voicebox.effects.tail module
+----------------------------
+
+.. automodule:: voicebox.effects.tail
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 voicebox.effects.utils module
 -----------------------------
 
