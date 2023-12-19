@@ -1,11 +1,11 @@
+__all__ = ['SeriesChain', 'ParallelChain']
+
 from typing import Sequence, Callable
 
 import numpy as np
 
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
-
-__all__ = ['SeriesChain', 'ParallelChain']
 
 
 class SeriesChain(Effect):
@@ -29,6 +29,15 @@ class ParallelChain(Effect):
 
     All effects must output audios with the same sample rate.
     The combined output audio will expand to fit the longest effect audio.
+
+    Args:
+        effects:
+            Effects to apply in parallel.
+        dry_gain:
+            How much of the original audio to include in the output.
+            0 (default) is none, 1 is unity.
+        combine_func:
+            Function to combine the output signals. Defaults to ``np.sum``.
     """
 
     effects: Sequence[Effect]

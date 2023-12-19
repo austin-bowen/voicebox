@@ -10,6 +10,11 @@ __all__ = ['Delay']
 
 @dataclass
 class Delay(Effect):
+    """
+    DEPRECATED: Use the ``pedalboard.Delay`` effect instead.
+    This will be removed in the future.
+    """
+
     time: float = 0.1
     repeats: int = 1
     dry: float = 1.

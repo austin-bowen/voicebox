@@ -12,7 +12,6 @@ from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
 
 
-
 @dataclass
 class PedalboardEffect(Effect):
     """

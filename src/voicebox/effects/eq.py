@@ -93,20 +93,36 @@ class Filter(Effect):
         See here for details:
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.iirfilter.html
 
-        :param btype: The type of filter. One of 'lowpass', 'highpass', 'bandpass', or 'bandstop'.
-        :param freq: The filter frequency in Hz. Should be a single number for lowpass/highpass,
-            or a frequency band as a sequence ``(low_freq, high_freq)`` for bandpass/bandstop.
-            See the ``center_to_band()`` function for easy converting from a center freq with
-            bandwidth to a frequency band.
-        :param order: The order of the filter. Defaults to 1. Higher orders will have faster dropoffs.
-        :param rp: For Chebyshev and elliptic filters, provides the maximum ripple in the passband. (dB)
-        :param rs: For Chebyshev and elliptic filters, provides the minimum attenuation in the stop band. (dB)
-        :param ftype: The type of IIR filter to design. Defaults to 'butter'. Should be one of:
-            - 'butter' (Butterworth)
-            - 'cheby1' (Chebychev I)
-            - 'cheby2' (Chebychev II)
-            - 'ellip' (Cauer/elliptic)
-            - 'bessel' (Bessel/Thomson)
+        Args:
+            btype (BType):
+                The type of filter. Should be one of ``'lowpass'``,
+                ``'highpass'``, ``'bandpass'``, or ``'bandstop'``.
+            freq (FreqOrBand):
+                The filter frequency in Hz. Should be a single number for lowpass/highpass,
+                or a frequency band as a sequence ``(low_freq, high_freq)`` for bandpass/bandstop.
+                See the ``center_to_band()`` function for easy converting from a center freq with
+                bandwidth to a frequency band.
+            order (int, optional):
+                The order of the filter. Defaults to 1.
+                Higher orders will have faster dropoffs.
+            rp (float, optional):
+                For Chebyshev and elliptic filters, provides the maximum
+                ripple in the passband. (dB)
+            rs (float, optional):
+                For Chebyshev and elliptic filters, provides the minimum
+                attenuation in the stop band. (dB)
+            ftype (FType, optional):
+                The type of IIR filter to design. Defaults to ``'butter'``.
+                Should be one of:
+
+                - ``'butter'`` (Butterworth)
+                - ``'cheby1'`` (Chebychev I)
+                - ``'cheby2'`` (Chebychev II)
+                - ``'ellip'`` (Cauer/elliptic)
+                - ``'bessel'`` (Bessel/Thomson)
+
+        Returns:
+            Filter: A Filter instance with the specified parameters.
         """
 
         param_builder = IIRFilterParamBuilder(order, freq, rp, rs, btype, ftype)

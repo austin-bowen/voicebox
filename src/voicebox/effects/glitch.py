@@ -1,3 +1,5 @@
+__all__ = ['Glitch']
+
 from dataclasses import dataclass, field
 from random import Random
 
@@ -6,11 +8,24 @@ import numpy as np
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
 
-__all__ = ['Glitch']
-
 
 @dataclass
 class Glitch(Effect):
+    """
+    Creates a glitchy sound by randomly repeating small chunks of audio.
+
+    Args:
+        chunk_time:
+            Length of each repeated chunk, in seconds.
+        p_repeat:
+            Probability of repeating each chunk.
+        max_repeats:
+            Maximum number of times to repeat each chunk.
+        rng:
+            Random number generator to use.
+            One will be constructed if not given.
+    """
+
     chunk_time: float = 0.1
     p_repeat: float = 0.07
     max_repeats: int = 3

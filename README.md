@@ -99,15 +99,18 @@ from voicebox.effects import CoolEffect
 ```
 
 Here is a non-exhaustive list of fun effects:
-- [`Delay`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/delay.py)
-- [`Flanger`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/flanger.py)
 - [`Glitch`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/glitch.py)
+  creates a glitchy sound by randomly repeating small chunks of audio.
 - [`RingMod`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/modulation.py)
+  can be used to create choppy, Doctor Who Dalek-like effects.
 - [`Vocoder`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/vocoder.py)
+  is useful for making monotone, robotic voices.
 
 There is also support for all the awesome audio plugins in
 [Spotify's `pedalboard` library](https://spotify.github.io/pedalboard/index.html)
-using the special [`PedalboardEffect`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/pedalboard.py) wrapper, e.g.:
+using the special
+[`PedalboardEffect`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/pedalboard.py)
+wrapper, e.g.:
 
 ```python
 from voicebox import Voicebox

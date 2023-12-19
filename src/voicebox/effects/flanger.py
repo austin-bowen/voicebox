@@ -1,3 +1,5 @@
+__all__ = ['Flanger']
+
 import time
 from dataclasses import dataclass
 from typing import Callable, Optional
@@ -7,11 +9,24 @@ import numpy as np
 from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
 
-__all__ = ['Flanger']
-
 
 @dataclass
 class Flanger(Effect):
+    """
+    DEPRECATED: Use the ``pedalboard.Chorus`` effect instead.
+    This will be removed in the future.
+
+    TODO: Replace this with a Chorus pedalboard effect.
+    These settings are close:
+        PedalboardEffect(pedalboard.Chorus(
+            rate_hz=0.15,
+            depth=.04,
+            centre_delay_ms=1.5,
+            feedback=.9,
+            mix=.8,
+        ))
+    """
+
     rate: float = .15
     """LFO rate in Hz."""
 

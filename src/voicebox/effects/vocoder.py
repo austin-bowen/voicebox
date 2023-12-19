@@ -1,3 +1,5 @@
+__all__ = ['Vocoder']
+
 import warnings
 from dataclasses import dataclass, field
 from random import Random
@@ -9,8 +11,6 @@ from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
 from voicebox.effects.eq import Filter, center_to_band
 from voicebox.types import KWArgs
-
-__all__ = ['Vocoder']
 
 
 def sawtooth_wave(radians: np.ndarray) -> np.ndarray:
@@ -78,6 +78,12 @@ class EnvelopeFollower(Effect):
 
 @dataclass
 class Vocoder(Effect):
+    """
+    Vocoder effect. Useful for making monotone, robotic voices.
+
+    See ``Vocoder.build()`` to easily construct a Vocoder instance.
+    """
+
     carrier_wave: Callable[[np.ndarray], np.ndarray]
     """Takes in an array of sample times and outputs corresponding wave samples."""
 
@@ -102,6 +108,40 @@ class Vocoder(Effect):
             envelope_follower_freq: float = 50.,
             envelope_follower_kwargs: KWArgs = None,
     ) -> 'Vocoder':
+        """
+        Builds a Vocoder instance.
+
+        Args:
+            carrier_freq (float):
+                Frequency of the carrier wave in Hz.
+            carrier_wave_builder:
+                Defaults to ``SawtoothWave``.
+            carrier_wave:
+                Optional pre-built carrier wave. If provided, this will
+                override ``carrier_freq`` and ``carrier_wave_builder``.
+            min_freq (float):
+                Minimum frequency of the bandpass filters in Hz.
+            max_freq (float):
+                Maximum frequency of the bandpass filters in Hz.
+                Should be <= half the sample rate of the audio.
+            bands (int):
+                Number of bands to divide the frequency range into.
+                More bands increases reconstruction quality.
+            bandwidth (float):
+                Bandwidth of each band, as a fraction of its maximum width.
+                Range: ``(0, 1]``.
+            bandpass_filter_order (int):
+                Bandpass filter order. Higher orders have steeper rolloffs.
+            bandpass_filter_kwargs:
+                Optional keyword arguments to pass to the
+                bandpass filter builder.
+            envelope_follower_freq (float):
+                Cutoff frequency of the envelope follower in Hz.
+            envelope_follower_kwargs:
+                Optional keyword arguments to pass to the
+                envelope follower filter builder.
+        """
+
         carrier_wave = carrier_wave or carrier_wave_builder(carrier_freq)
 
         bandpass_filters = []
