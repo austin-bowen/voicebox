@@ -99,7 +99,6 @@ from voicebox.effects import CoolEffect
 ```
 
 Here is a non-exhaustive list of fun effects:
-- [`Bitcrusher`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/distortion.py)
 - [`Delay`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/delay.py)
 - [`Flanger`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/flanger.py)
 - [`Glitch`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/glitch.py)
