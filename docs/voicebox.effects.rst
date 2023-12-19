@@ -28,14 +28,6 @@ voicebox.effects.delay module
    :undoc-members:
    :show-inheritance:
 
-voicebox.effects.distortion module
-----------------------------------
-
-.. automodule:: voicebox.effects.distortion
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 voicebox.effects.effect module
 ------------------------------
 
