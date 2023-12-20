@@ -54,4 +54,5 @@ def make_docs(c):
     """Generate the documentation files."""
 
     c.run('sphinx-apidoc -f --maxdepth 1 -o docs src/voicebox')
+    c.run('rm docs/modules.rst')
     c.run('cd docs && make html')
