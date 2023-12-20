@@ -13,12 +13,32 @@ from voicebox.types import FileOrPath
 
 @dataclass
 class WaveFile(Sink):
+    """
+    Writes audio to a WAV file.
+
+    Args:
+        file (FileOrPath):
+            The file to write to. If a path is given, the file will be opened
+            in write mode. If a file-like object is given, it will be written
+            to directly.
+        append (bool):
+            Whether to append to an existing file. If ``True``, the file must
+            already exist and the sample rate must match the existing file.
+        sample_width (int):
+            The number of bytes to use per sample. Must be 1, 2, or 4.
+    """
+
     file: FileOrPath
     append: bool = False
     sample_width: int = 2
 
     def play(self, audio: Audio) -> None:
-        write_audio_to_wav(audio, self.file, append=self.append, sample_width=self.sample_width)
+        write_audio_to_wav(
+            audio,
+            self.file,
+            append=self.append,
+            sample_width=self.sample_width,
+        )
 
 
 def write_audio_to_wav(

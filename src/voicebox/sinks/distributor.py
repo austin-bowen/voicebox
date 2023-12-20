@@ -6,6 +6,8 @@ from voicebox.sinks.sink import Sink
 
 @dataclass
 class Distributor(Sink):
+    """Distributes audio to multiple sinks."""
+
     sinks: Sequence[Sink]
 
     def play(self, audio):
