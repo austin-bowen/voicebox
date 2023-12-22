@@ -5,8 +5,13 @@ import numpy as np
 
 @dataclass
 class Audio:
+    """Represents an audio signal."""
+
     signal: np.ndarray
-    """Audio signal represented as a 1D array of samples, each in the range [-1, 1]."""
+    """
+    Audio signal represented as a 1D array of samples,
+    each in the range ``[-1, 1]``.
+    """
 
     sample_rate: int
     """Number of samples per second."""
@@ -23,6 +28,7 @@ class Audio:
 
     @property
     def period(self) -> float:
+        """Period of audio signal in seconds."""
         return 1. / self.sample_rate
 
     @period.setter
@@ -41,7 +47,15 @@ class Audio:
         return len(self.signal)
 
     def check(self) -> None:
-        """Raises ValueError if the audio is invalid."""
+        """
+        Raises ``ValueError`` if the audio is invalid.
+
+        For an audio to be valid, it must satisfy the following conditions:
+
+        1. Must have at least one sample.
+        2. All samples must be in the range ``[-1, 1]``.
+        3. The sample rate must be greater than 0.
+        """
 
         if len(self) and np.any(np.abs(self.signal) > 1.):
             raise ValueError(f'All values in signal must be in range [-1, 1].')
@@ -50,6 +64,8 @@ class Audio:
             raise ValueError(f'sample_rate must be > 0; sample_rate={self.sample_rate}')
 
     def copy(self, signal: np.ndarray = None, sample_rate: int = None) -> 'Audio':
+        """Returns a deep copy of self, with optional new property values."""
+
         return Audio(
             signal=signal if signal is not None else self.signal.copy(),
             sample_rate=sample_rate if sample_rate is not None else self.sample_rate,
