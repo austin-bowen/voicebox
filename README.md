@@ -7,6 +7,8 @@
 
 Python text-to-speech library with built-in voice effects and support for multiple TTS engines.
 
+Documentation: [voicebox.readthedocs.io](https://voicebox.readthedocs.io)
+
 Listen to audio samples here: [Audio Samples](https://austin-bowen.github.io/voicebox/)
 
 ```python

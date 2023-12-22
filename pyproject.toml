@@ -55,6 +55,7 @@ dev = [
     "twine",
 ]
 docs = [
+    "myst-parser",
     "sphinx",
     "sphinx-rtd-theme",
 ]
