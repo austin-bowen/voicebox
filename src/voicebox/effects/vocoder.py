@@ -180,7 +180,7 @@ class Vocoder(Effect):
         return audio
 
     def _get_carrier(self, audio: Audio) -> Audio:
-        t = np.arange(len(audio)) * audio.period
+        t = np.arange(len(audio)) * audio.sample_period
         carrier = self.carrier_wave(t)
         return audio.copy(signal=carrier)
 

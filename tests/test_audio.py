@@ -17,12 +17,12 @@ class AudioTest(unittest.TestCase):
     def test_len_seconds(self):
         self.assertAlmostEqual(100 / 10, self.audio.len_seconds)
 
-    def test_period(self):
-        self.assertAlmostEqual(1 / 10, self.audio.period)
+    def test_sample_period(self):
+        self.assertAlmostEqual(1 / 10, self.audio.sample_period)
 
-    def test_set_period(self):
-        self.audio.period = 1 / 100
-        self.assertAlmostEqual(1 / 100, self.audio.period)
+    def test_set_sample_period(self):
+        self.audio.sample_period = 1 / 100
+        self.assertAlmostEqual(1 / 100, self.audio.sample_period)
         self.assertAlmostEqual(100, self.audio.sample_rate)
 
     def test_equal(self):

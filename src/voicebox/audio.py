@@ -27,12 +27,12 @@ class Audio:
         return len(self) / self.sample_rate
 
     @property
-    def period(self) -> float:
-        """Period of audio signal in seconds."""
+    def sample_period(self) -> float:
+        """Sample period in seconds."""
         return 1. / self.sample_rate
 
-    @period.setter
-    def period(self, period: float) -> None:
+    @sample_period.setter
+    def sample_period(self, period: float) -> None:
         self.sample_rate = round(1. / period)
 
     def __eq__(self, other: 'Audio') -> bool:

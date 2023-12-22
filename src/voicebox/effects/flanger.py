@@ -81,7 +81,7 @@ class Flanger(Effect):
         return np.round(delay_times * audio.sample_rate).astype(int)
 
     def _get_time_from_lfo(self, audio: Audio) -> np.ndarray:
-        t = np.arange(len(audio)) * audio.period + self.t_offset
+        t = np.arange(len(audio)) * audio.sample_period + self.t_offset
 
         if self.t_offset_func:
             t += self.t_offset_func() % (1 / self.rate)
