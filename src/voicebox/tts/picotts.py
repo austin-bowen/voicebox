@@ -12,10 +12,11 @@ from voicebox.types import StrOrSSML
 @dataclass
 class PicoTTS(TTS):
     """
-    TSS supplied by Pico TTS.
+    TTS using `Pico TTS <https://www.openhab.org/addons/voice/picotts/>`_.
 
-    You may need to install this with your system's package manager.
-    On Debian/Ubuntu: ``sudo apt install libttspico-utils``
+    You may need to install this with your system's package manager:
+
+    - On Debian/Ubuntu: ``sudo apt install libttspico-utils``
     """
 
     pico2wave_path: str = 'pico2wave'

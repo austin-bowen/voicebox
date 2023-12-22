@@ -11,22 +11,35 @@ log = logging.getLogger(__name__)
 
 
 class TTS(ABC):
+    """Base class for text-to-speech engines."""
+
     def __call__(self, text: StrOrSSML) -> Audio:
         return self.get_speech(text)
 
     @abstractmethod
     def get_speech(self, text: StrOrSSML) -> Audio:
+        """Returns audio of the given text."""
         ...
 
 
 @dataclass
 class FallbackTTS(TTS):
     """
+    Attempts to call the TTSs in order, returning results from the first TTS
+    that does not raise an exception.
+
     Useful if you have e.g. an online TTS that you want to use primarily,
     and want to fall back to an offline TTS in case something goes wrong.
 
-    Attempts to call the TTSs in order, returning results from the first TTS
-    that does not raise an exception.
+    Args:
+        ttss:
+            The TTSs to try, in order.
+        exceptions_to_catch:
+            The exceptions to catch and log when calling the TTSs.
+            If an exception is raised that is not in this tuple,
+            then it will not be caught.
+        log:
+            The logger to use for logging exceptions.
     """
 
     ttss: Sequence[TTS]
@@ -58,6 +71,18 @@ class RetryTTS(TTS):
     """
     If an exception occurs while getting speech from the given TTS,
     retry until ``max_attempts`` is reached.
+
+    Args:
+        tts:
+            The TTS to call.
+        max_attempts:
+            The maximum number of attempts to make.
+        exceptions_to_catch:
+            The exceptions to catch and log when calling the TTS.
+            If an exception is raised that is not in this tuple,
+            then it will not be caught.
+        log:
+            The logger to use for logging exceptions.
     """
 
     tts: TTS

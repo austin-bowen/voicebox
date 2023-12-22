@@ -5,5 +5,5 @@ from voicebox.sinks.wavefile import WaveFile
 
 
 def default_sink() -> Sink:
-    """Returns a new instance of the default sink, ``SoundDevice``."""
+    """Returns a new instance of the default sink, :class:`SoundDevice`."""
     return SoundDevice()

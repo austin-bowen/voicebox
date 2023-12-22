@@ -27,5 +27,5 @@ from voicebox.tts.picotts import PicoTTS
 
 
 def default_tts() -> TTS:
-    """Returns a new instance of the default TTS, ``PicoTTS``."""
+    """Returns a new instance of the default TTS, :class:`PicoTTS`."""
     return PicoTTS()

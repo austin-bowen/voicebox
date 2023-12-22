@@ -20,10 +20,12 @@ from voicebox.types import StrOrSSML
 @dataclass
 class GoogleCloudTTS(TTS):
     """
-    TTS supplied by Google Cloud TTS.
+    TTS using `Google Cloud TTS <https://cloud.google.com/text-to-speech>`_.
 
     You will need to set up a Google Cloud project with billing enabled.
-    See https://cloud.google.com/text-to-speech/docs/create-audio-text-client-libraries#client-libraries-usage-python
+    See this `quickstart guide
+    <https://cloud.google.com/text-to-speech/docs/create-audio-text-client-libraries#client-libraries-install-python>`_
+    to get started.
     """
 
     client: TextToSpeechClient

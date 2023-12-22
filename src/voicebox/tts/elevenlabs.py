@@ -13,14 +13,27 @@ from voicebox.types import StrOrSSML
 
 @dataclass
 class ElevenLabs(TTS):
+    """
+    TTS using the `ElevenLabs API <https://elevenlabs.io/>`_.
+
+    Args:
+        api_key:
+            Optional API key to use. Not needed if already set via
+            :func:`elevenlabs.set_api_key()` or env var ``ELEVEN_API_KEY``.
+        voice:
+            Optional voice to use. Can be an :class:`elevenlabs.Voice` instance,
+            or a string representing the voice ID. See
+            `here <https://elevenlabs.io/docs/api-reference/get-voices>`_ for
+            a list of valid voice IDs. If not given, a default voice is used.
+        model:
+            Optional model to use. Can be an :class:`elevenlabs.Model` instance,
+            or a string representing the model ID. See
+            `here <https://elevenlabs.io/docs/api-reference/get-models>`_ for
+            a list of valid model IDs. If not given, a default model is used.
+    """
+
     api_key: str = None
-    """
-    Optional API key to use. Not needed if already set via
-    ``elevenlabs.set_api_key()`` or env var ``ELEVEN_API_KEY``.
-    """
-
     voice: Union[str, Voice] = field(default_factory=lambda: elevenlabs.DEFAULT_VOICE)
-
     model: Union[str, Model] = 'eleven_monolingual_v1'
 
     def get_speech(self, text: StrOrSSML) -> Audio:

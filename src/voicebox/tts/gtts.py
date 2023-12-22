@@ -10,17 +10,20 @@ from voicebox.types import KWArgs, StrOrSSML
 
 class gTTS(TTS):
     """
-    Online TTS engine used by Google Translate.
+    Online TTS using the `gTTS <https://gtts.readthedocs.io/en/latest/>`_
+    library, which queries the Google Translate TTS API under the hood.
+
+    Args:
+        gtts_kwargs:
+            These will be passed to the :class:`gtts.gTTS` constructor.
+            See the `gTTS docs
+            <https://gtts.readthedocs.io/en/latest/module.html#module-gtts.tts>`_
+            for options.
     """
 
     gtts_kwargs: KWArgs
 
     def __init__(self, **gtts_kwargs):
-        """
-        :param gtts_kwargs: These will be passed to the ``gtts.gTTS`` constructor.
-            See the docs for options: https://gtts.readthedocs.io/en/latest/module.html#module-gtts.tts
-        """
-
         self.gtts_kwargs = gtts_kwargs
 
     def get_speech(self, text: StrOrSSML) -> Audio:

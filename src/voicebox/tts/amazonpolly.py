@@ -16,20 +16,19 @@ from voicebox.types import StrOrSSML
 @dataclass
 class AmazonPolly(TTS):
     """
-    TTS using Amazon Polly.
+    TTS using `Amazon Polly <https://aws.amazon.com/polly/>`_.
 
-    See Amazon Polly documentation for full descriptions of the parameters:
-    https://docs.aws.amazon.com/polly/latest/dg/API_SynthesizeSpeech.html
+    See the `Amazon Polly documentation
+    <https://docs.aws.amazon.com/polly/latest/dg/API_SynthesizeSpeech.html>`_
+    for full descriptions of the parameters.
     """
 
     client: PollyClient
     """
     Boto3 Polly client, created by e.g.
 
-    ``
-    session = boto3.Session(...)
-    client = session.client('polly')
-    ``
+        >>> session = boto3.Session(...)
+        >>> client = session.client('polly')
     """
 
     voice_id: VoiceIdType

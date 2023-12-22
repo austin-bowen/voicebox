@@ -30,16 +30,35 @@ sample_width_to_dtype = {
 
 if pydub:
     def get_audio_from_audio_segment(audio_segment: AudioSegment) -> Audio:
+        """
+        Returns an :class:`Audio` instance from a :class:`pydub.AudioSegment`
+        instance.
+        """
+
         dtype = sample_width_to_dtype[audio_segment.frame_width]
         samples = np.array(audio_segment.get_array_of_samples(), dtype=dtype)
         return get_audio_from_samples(samples, audio_segment.frame_rate)
 
 
     def get_audio_from_mp3(file) -> Audio:
+        """Returns an :class:`Audio` instance from an MP3 file."""
         return get_audio_from_audio_segment(AudioSegment.from_mp3(file))
 
 
 def get_audio_from_samples(samples: np.ndarray, sample_rate: int) -> Audio:
+    """
+    Takes raw int-typed samples and a sample rate, and returns an
+    :class:`Audio` instance with ``signal`` properly scaled to range
+    ``[-1, 1)``.
+
+    Args:
+        samples:
+            The raw samples as a numpy array.
+            dtype must be int8, int16, or int32.
+        sample_rate:
+            The sample rate of the samples in Hz.
+    """
+
     bytes_per_sample = dtype_to_sample_width[samples.dtype]
     max_value = 2 ** (8 * bytes_per_sample - 1)
 
@@ -51,6 +70,8 @@ def get_audio_from_samples(samples: np.ndarray, sample_rate: int) -> Audio:
 
 
 def get_audio_from_wav_file(file_or_path: FileOrPath) -> Audio:
+    """Returns an :class:`Audio` instance from a WAV file."""
+
     if isinstance(file_or_path, Path):
         file_or_path = str(file_or_path)
 
@@ -66,6 +87,8 @@ def get_audio_from_wav_file(file_or_path: FileOrPath) -> Audio:
 
 
 def add_optional_items(d: dict, items: Iterable[Tuple[K, Optional[V]]]) -> None:
+    """Adds items with non-null values to the given dict."""
+
     for k, v in items:
         if v is not None:
             d[k] = v

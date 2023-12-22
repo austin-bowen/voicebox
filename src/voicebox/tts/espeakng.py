@@ -11,6 +11,12 @@ from voicebox.types import StrOrSSML
 
 @dataclass
 class ESpeakConfig:
+    """
+    Configuration for the eSpeak NG engine.
+
+    Run "``espeak-ng -h``" for more information on these options.
+    """
+
     amplitude: int = None
     word_gap_seconds: float = None
     # TODO -k
@@ -27,9 +33,16 @@ class ESpeakConfig:
 @dataclass
 class ESpeakNG(TTS):
     """
-    TTS with the eSpeak NG engine.
+    TTS using the `eSpeak NG <https://github.com/espeak-ng/espeak-ng>`_ engine.
 
-    You may need to install it, e.g. ``sudo apt install espeak-ng``.
+    You may need to install it:
+
+    - On Debian/Ubuntu: ``sudo apt install espeak-ng``
+
+    Args:
+        config:
+            Optional configuration for the eSpeak NG engine.
+            If not given, a default config will be used.
     """
 
     config: ESpeakConfig = field(default_factory=ESpeakConfig)
