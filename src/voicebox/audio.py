@@ -5,16 +5,19 @@ import numpy as np
 
 @dataclass
 class Audio:
-    """Represents an audio signal."""
+    """
+    Represents an audio signal.
+
+    Args:
+        signal:
+            Audio signal represented as a 1D array of samples,
+            each in the range ``[-1, 1]``.
+        sample_rate:
+            Number of samples per second.
+    """
 
     signal: np.ndarray
-    """
-    Audio signal represented as a 1D array of samples,
-    each in the range ``[-1, 1]``.
-    """
-
     sample_rate: int
-    """Number of samples per second."""
 
     @property
     def len_bytes(self) -> int:
