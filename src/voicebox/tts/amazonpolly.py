@@ -21,6 +21,9 @@ class AmazonPolly(TTS):
     See the `Amazon Polly documentation
     <https://docs.aws.amazon.com/polly/latest/dg/API_SynthesizeSpeech.html>`_
     for full descriptions of the parameters.
+
+    Supports `SSML <https://www.w3.org/TR/speech-synthesis/>`_: ✔
+    (`docs <https://docs.aws.amazon.com/polly/latest/dg/ssml.html>`_)
     """
 
     client: PollyClient
@@ -50,6 +53,7 @@ class AmazonPolly(TTS):
     """
 
     sample_rate: Literal[8000, 16000] = 16000
+    """Sample rate of returned audio. Must be ``8000`` or ``16000``."""
 
     def get_speech(self, text: StrOrSSML) -> Audio:
         kwargs = dict(

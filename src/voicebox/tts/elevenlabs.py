@@ -16,6 +16,9 @@ class ElevenLabs(TTS):
     """
     TTS using the `ElevenLabs API <https://elevenlabs.io/>`_.
 
+    Supports `SSML <https://www.w3.org/TR/speech-synthesis/>`_: ✔
+    (`docs <https://elevenlabs.io/docs/speech-synthesis/prompting#pronunciation>`_)
+
     Args:
         api_key:
             Optional API key to use. Not needed if already set via

@@ -26,6 +26,9 @@ class GoogleCloudTTS(TTS):
     See this `quickstart guide
     <https://cloud.google.com/text-to-speech/docs/create-audio-text-client-libraries#client-libraries-install-python>`_
     to get started.
+
+    Supports `SSML <https://www.w3.org/TR/speech-synthesis/>`_: ✔
+    (`docs <https://cloud.google.com/text-to-speech/docs/ssml>`_)
     """
 
     client: TextToSpeechClient

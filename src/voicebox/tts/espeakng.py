@@ -39,6 +39,9 @@ class ESpeakNG(TTS):
 
     - On Debian/Ubuntu: ``sudo apt install espeak-ng``
 
+    Supports `SSML <https://www.w3.org/TR/speech-synthesis/>`_: ✔
+    (`docs <https://github.com/espeak-ng/espeak-ng/blob/master/docs/markup.md>`_)
+
     Args:
         config:
             Optional configuration for the eSpeak NG engine.

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from voicebox.audio import Audio
+from voicebox.ssml import SSML
 from voicebox.tts.tts import TTS
 from voicebox.tts.utils import get_audio_from_wav_file
 from voicebox.types import StrOrSSML
@@ -14,9 +15,11 @@ class PicoTTS(TTS):
     """
     TTS using `Pico TTS <https://www.openhab.org/addons/voice/picotts/>`_.
 
-    You may need to install this with your system's package manager:
+    You may need to install it:
 
     - On Debian/Ubuntu: ``sudo apt install libttspico-utils``
+
+    Supports `SSML <https://www.w3.org/TR/speech-synthesis/>`_: ✘
     """
 
     pico2wave_path: str = 'pico2wave'
@@ -26,6 +29,9 @@ class PicoTTS(TTS):
     temp_wav_file_dir: str = None
 
     def get_speech(self, text: StrOrSSML) -> Audio:
+        if isinstance(text, SSML):
+            raise ValueError('PicoTTS does not support SSML.')
+
         with tempfile.NamedTemporaryFile(
                 prefix=self.temp_wav_file_prefix,
                 suffix='.wav',

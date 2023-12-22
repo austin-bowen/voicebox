@@ -3,6 +3,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 from tests.utils import build_audio, assert_first_call
+from voicebox.ssml import SSML
 from voicebox.tts.picotts import PicoTTS
 
 
@@ -13,8 +14,10 @@ class PicoTTSTest(unittest.TestCase):
 
         self.tmp_file = '/some/tmp/file.wav'
 
+        self.tts = PicoTTS()
+
     def test_constructor_defaults(self):
-        tts = PicoTTS()
+        tts = self.tts
         self.assertEqual('pico2wave', tts.pico2wave_path)
         self.assertIsNone(tts.language)
         self.assertEqual('voicebox-pico-tts-', tts.temp_wav_file_prefix)
@@ -26,9 +29,7 @@ class PicoTTSTest(unittest.TestCase):
     def test_get_speech_with_constructor_defaults(self, *mocks):
         self._setup_mocks(*mocks)
 
-        tts = PicoTTS()
-
-        result = tts.get_speech('foo bar')
+        result = self.tts.get_speech('foo bar')
 
         self.assertIs(result, self.audio)
 
@@ -43,7 +44,7 @@ class PicoTTSTest(unittest.TestCase):
     @patch('tempfile.NamedTemporaryFile')
     @patch('voicebox.tts.picotts.get_audio_from_wav_file')
     @patch('subprocess.run')
-    def test_get_speech_with_custom_config_and_SSML_text(self, *mocks):
+    def test_get_speech_with_custom_config(self, *mocks):
         self._setup_mocks(*mocks)
 
         tts = PicoTTS(
@@ -71,9 +72,12 @@ class PicoTTSTest(unittest.TestCase):
         self._setup_mocks(*mocks)
         self.mock_run.side_effect = FileNotFoundError('File not found')
 
-        tts = PicoTTS()
+        with self.assertRaises(FileNotFoundError):
+            self.tts.get_speech('foo bar')
 
-        self.assertRaises(FileNotFoundError, tts.get_speech, 'foo bar')
+    def test_get_speech_with_SSML_raises_ValueError(self):
+        with self.assertRaises(ValueError):
+            self.tts.get_speech(SSML('<speak>foo</speak>'))
 
     def _setup_mocks(
             self,
