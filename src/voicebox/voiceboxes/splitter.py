@@ -16,6 +16,11 @@ class Splitter(ABC):
 
     @abstractmethod
     def split(self, text: StrOrSSML) -> Iterable[StrOrSSML]:
+        """
+        Splits the given text into chunks, unless it is a
+        :class:`voicebox.SSML` instance, in which case it is returned
+        as-is, i.e. ``[text]``.
+        """
         ...
 
 
@@ -55,7 +60,10 @@ class SimpleSentenceSplitter(RegexSplitter):
 
 @dataclass
 class NltkTokenizerSplitter(Splitter):
-    """Uses an NLTK tokenizer to split text."""
+    """
+    Uses an `NLTK tokenizer <https://www.nltk.org/api/nltk.tokenize.html>`_
+    to split text.
+    """
 
     tokenizer: TokenizerI
 
@@ -68,10 +76,11 @@ class NltkTokenizerSplitter(Splitter):
 
 class PunktSentenceSplitter(NltkTokenizerSplitter):
     """
-    Uses the Punkt sentence tokenizer from NLTK to split text into sentences
-    more intelligently than a simple pattern-based splitter. It can handle
-    instances of mid-sentence punctuation very well; e.g. "Mr. Jones went to
-    see Dr. Sherman" would be correctly split into only one sentence.
+    Uses the `Punkt <https://www.nltk.org/api/nltk.tokenize.punkt.html>`_
+    sentence tokenizer from `NLTK <https://www.nltk.org>`_ to split text into
+    sentences more intelligently than a simple pattern-based splitter. It can
+    handle instances of mid-sentence punctuation very well; e.g. "Mr. Jones went
+    to see Dr. Sherman" would be correctly "split" into only one sentence.
 
     This requires that the Punkt NLTK resources be located on disk,
     e.g. by downloading via one of these methods:
@@ -105,4 +114,5 @@ class PunktSentenceSplitter(NltkTokenizerSplitter):
 
     @staticmethod
     def download_resources(**kwargs):
+        """Download the Punkt NLTK resources."""
         nltk.download('punkt', **kwargs)

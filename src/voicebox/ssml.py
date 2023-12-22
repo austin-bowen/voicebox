@@ -1,3 +1,5 @@
+__all__ = ['SSML']
+
 from typing import Union
 
 
@@ -10,9 +12,8 @@ class SSML(str):
     by :class:`TTS` engines that support it.
 
     Example:
-
         >>> from voicebox.tts import ESpeakNG
-        >>> from voicebox.ssml import SSML
+        >>> from voicebox import SSML
         >>> tts = ESpeakNG()
         >>> text = SSML('<speak>Hello world</speak>')
         >>> audio = tts.get_speech(text)
@@ -25,8 +26,7 @@ class SSML(str):
         otherwise returns the ``text`` unaltered.
 
         Example:
-
-            >>> from voicebox.ssml import SSML
+            >>> from voicebox import SSML
             >>> SSML.auto('<speak>Hello world</speak>')
             SSML('<speak>Hello world</speak>')
             >>> SSML.auto('Hello world')

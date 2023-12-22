@@ -1,10 +1,10 @@
+__all__ = ['VoiceboxThread']
+
 from queue import Queue, Empty
 from threading import Thread, Event
 from typing import Optional
 
 from voicebox.voiceboxes.base import BaseVoicebox
-
-__all__ = ['VoiceboxThread']
 
 
 class VoiceboxThread(Thread, BaseVoicebox):
@@ -13,12 +13,24 @@ class VoiceboxThread(Thread, BaseVoicebox):
     so the main thread is not blocked waiting for speech to complete.
 
     Example:
-    ::
-        voicebox = Voicebox(...)            # Build voicebox like normal
-        voicebox = VoiceboxThread(voicebox) # Wrap voicebox in thread
-        voicebox.say('Hello, world!')       # Does not block; speech handled by thread
-        voicebox.say('How are you?')        # Does not block
-        # Do stuff in main thread while speech is happening...
+        >>> voicebox = Voicebox(...)            # Build voicebox like normal
+        >>> voicebox = VoiceboxThread(voicebox) # Wrap voicebox in thread
+        >>> voicebox.say('Hello, world!')       # Does not block; speech handled by thread
+        >>> voicebox.say('How are you?')        # Does not block
+        >>> # Do stuff in main thread while speech is happening...
+
+    Args:
+        voicebox:
+            The voicebox instance that will be used to generate speech.
+        start:
+            If ``True``, go ahead and start the thread.
+        queue_get_timeout:
+            Seconds to wait for text to appear in the queue of things to say
+            between checks of the stop flag.
+        name:
+            Name of the thread.
+        daemon:
+            Whether the thread is daemonic (i.e. dies when the main thread exits).
     """
 
     voicebox: BaseVoicebox
@@ -35,15 +47,6 @@ class VoiceboxThread(Thread, BaseVoicebox):
             name: str = 'Voicebox',
             daemon: bool = True,
     ):
-        """
-        :param voicebox: The Voicebox instance that will be used to generate speech.
-        :param start: If ``True``, go ahead and start the thread.
-        :param queue_get_timeout: How long to wait for text to appear in the queue
-            of things to say between checks of the stop flag.
-        :param name: Name of the thread.
-        :param daemon: Whether the thread is daemonic (i.e. dies when the main thread exits).
-        """
-
         Thread.__init__(self, name=name, daemon=daemon)
 
         self.voicebox = voicebox
@@ -68,6 +71,7 @@ class VoiceboxThread(Thread, BaseVoicebox):
             self.join(timeout=timeout)
 
     def wait_until_done(self) -> None:
+        """Wait until the queue of things to say is empty."""
         self._say_queue.join()
 
     def run(self):

@@ -1,3 +1,8 @@
+__all__ = [
+    'ChunkedVoicebox',
+    'ParallelChunkedVoicebox',
+]
+
 from queue import Queue
 from threading import Thread
 from typing import Iterable, Callable, TypeVar, Any
@@ -7,12 +12,6 @@ from voicebox.effects.effect import Effects
 from voicebox.sinks.sink import Sink
 from voicebox.tts import TTS
 from voicebox.voiceboxes.base import Voicebox
-
-__all__ = [
-    'ChunkedVoicebox',
-    'ParallelChunkedVoicebox',
-]
-
 from voicebox.voiceboxes.splitter import Splitter, SimpleSentenceSplitter
 
 T = TypeVar('T')
