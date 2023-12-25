@@ -6,4 +6,5 @@
 :caption: Package Documentation
 
 voicebox
+samples
 ```

@@ -7,9 +7,10 @@
 
 Python text-to-speech library with built-in voice effects and support for multiple TTS engines.
 
-Documentation: [voicebox.readthedocs.io](https://voicebox.readthedocs.io)
-
-Listen to audio samples here: [Audio Samples](https://austin-bowen.github.io/voicebox/)
+| [GitHub](https://github.com/austin-bowen/voicebox/)
+| [Documentation 📘](https://voicebox.readthedocs.io)
+| [Audio Samples 🔉](https://voicebox.readthedocs.io/en/stable/samples.html)
+|
 
 ```python
 # Example: Use gTTS with a vocoder effect to speak in a robotic voice
