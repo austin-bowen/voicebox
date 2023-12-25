@@ -1,41 +1,11 @@
 __all__ = (
-    'fast_voicebox',
     'reliable_tts',
 )
 
 from typing import Union, Iterable, Literal
 
-from voicebox.effects.effect import Effects
-from voicebox.sinks.sink import Sink
 from voicebox.tts import CachedTTS, TTS, FallbackTTS, RetryTTS, default_tts
 from voicebox.tts.cache import Size, SizeFunc
-from voicebox.voiceboxes import (
-    BaseVoicebox,
-    ChunkedVoicebox,
-    Voicebox,
-    VoiceboxThread,
-)
-
-
-def fast_voicebox(
-        tts: TTS = None,
-        effects: Effects = None,
-        sink: Sink = None,
-        chunked: bool = True,
-        parallel: bool = True,
-) -> BaseVoicebox:
-    """
-    Builds a voicebox that uses sentence chunking and threading to reduce
-    time to speech.
-    """
-
-    voicebox_class = ChunkedVoicebox if chunked else Voicebox
-    voicebox = voicebox_class(tts=tts, effects=effects, sink=sink)
-
-    if parallel:
-        voicebox = VoiceboxThread(voicebox)
-
-    return voicebox
 
 
 def reliable_tts(
