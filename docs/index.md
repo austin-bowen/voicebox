@@ -3,7 +3,7 @@
 
 ```{toctree}
 :maxdepth: 3
-:caption: Package Documentation
+:caption: Contents
 
 voicebox
 samples
