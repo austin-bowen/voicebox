@@ -5,7 +5,7 @@ from unittest import TestCase
 from parameterized import parameterized
 
 from voicebox.ssml import SSML
-from voicebox.voiceboxes.splitter import SimpleSentenceSplitter, PunktSentenceSplitter
+from voicebox.voiceboxes.splitter import SimpleSentenceSplitter, PunktSentenceSplitter, default_splitter
 
 commonly_handled_sentences = [
     ('', []),
@@ -48,6 +48,11 @@ class PunktSentenceSplitterTest(TestCase):
     def test_split(self, text: str, expected: List[str]):
         actual = list(self.splitter.split(text))
         self.assertListEqual(expected, actual)
+
+
+class DefaultSplitterTest(unittest.TestCase):
+    def test(self):
+        self.assertIsInstance(default_splitter(), SimpleSentenceSplitter)
 
 
 if __name__ == '__main__':

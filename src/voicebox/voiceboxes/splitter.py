@@ -116,3 +116,7 @@ class PunktSentenceSplitter(NltkTokenizerSplitter):
     def download_resources(**kwargs):
         """Download the Punkt NLTK resources."""
         nltk.download('punkt', **kwargs)
+
+
+def default_splitter() -> Splitter:
+    return SimpleSentenceSplitter()

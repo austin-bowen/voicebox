@@ -1,11 +1,54 @@
 __all__ = (
+    'fast_voicebox',
     'reliable_tts',
 )
 
 from typing import Union, Iterable, Literal
 
+from voicebox.effects import Effects
+from voicebox.sinks import Sink
 from voicebox.tts import CachedTTS, TTS, FallbackTTS, RetryTTS, default_tts
 from voicebox.tts.cache import Size, SizeFunc
+from voicebox.voiceboxes import (
+    BaseVoicebox,
+    ChunkedVoicebox,
+    ParallelVoicebox,
+    Voicebox,
+)
+from voicebox.voiceboxes.splitter import (
+    Splitter,
+    SimpleSentenceSplitter,
+    PunktSentenceSplitter,
+)
+
+
+def fast_voicebox(
+        tts: TTS = None,
+        effects: Effects = None,
+        sink: Sink = None,
+        parallel: bool = True,
+        chunked: bool = True,
+        splitter: Union[Splitter, Literal['simple', 'punkt']] = 'simple',
+) -> BaseVoicebox:
+    voicebox = ParallelVoicebox.build(
+        tts=tts,
+        effects=effects,
+        sink=sink,
+    ) if parallel else Voicebox(
+        tts=tts,
+        effects=effects,
+        sink=sink,
+    )
+
+    if chunked:
+        if splitter == 'simple':
+            splitter = SimpleSentenceSplitter()
+        elif splitter == 'punkt':
+            splitter = PunktSentenceSplitter()
+
+        voicebox = ChunkedVoicebox(voicebox, splitter=splitter)
+
+    return voicebox
 
 
 def reliable_tts(
