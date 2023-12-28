@@ -5,10 +5,10 @@ from tests.utils import assert_called_with_exactly, build_audio
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks.sounddevice import SoundDevice
 from voicebox.tts.picotts import PicoTTS
-from voicebox.voiceboxes.base import Voicebox
+from voicebox.voiceboxes.simple import SimpleVoicebox
 
 
-class VoiceboxTest(unittest.TestCase):
+class SimpleVoiceboxTest(unittest.TestCase):
     def setUp(self):
         self.foo_audio = build_audio()
         self.bar_audio = build_audio()
@@ -25,10 +25,10 @@ class VoiceboxTest(unittest.TestCase):
         self.sink = Mock()
         self.sink.play.side_effect = lambda a: None
 
-        self.voicebox = Voicebox(self.tts, [self.effect], self.sink)
+        self.voicebox = SimpleVoicebox(self.tts, [self.effect], self.sink)
 
     def test_constructor_defaults(self):
-        voicebox = Voicebox()
+        voicebox = SimpleVoicebox()
 
         self.assertIsInstance(voicebox.tts, PicoTTS)
 

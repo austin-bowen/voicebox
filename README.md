@@ -15,11 +15,11 @@ Python text-to-speech library with built-in voice effects and support for multip
 ```python
 # Example: Use gTTS with a vocoder effect to speak in a robotic voice
 
-from voicebox import Voicebox
+from voicebox import SimpleVoicebox
 from voicebox.tts import gTTS
 from voicebox.effects import Vocoder, Normalize
 
-voicebox = Voicebox(
+voicebox = SimpleVoicebox(
     tts=gTTS(),
     effects=[Vocoder.build(), Normalize()],
 )
@@ -116,11 +116,11 @@ using the special
 wrapper, e.g.:
 
 ```python
-from voicebox import Voicebox
+from voicebox import SimpleVoicebox
 from voicebox.effects import PedalboardEffect
 import pedalboard
 
-voicebox = Voicebox(
+voicebox = SimpleVoicebox(
     effects=[
         PedalboardEffect(pedalboard.Reverb()),
         ...,
@@ -134,8 +134,9 @@ voicebox = Voicebox(
 
 ```python
 # PicoTTS is used to say "Hello, world!"
-from voicebox import Voicebox
-voicebox = Voicebox()
+from voicebox import SimpleVoicebox
+
+voicebox = SimpleVoicebox()
 voicebox.say('Hello, world!')
 ```
 
@@ -178,9 +179,9 @@ sink = Distributor([
 ])
 
 # Build the voicebox
-from voicebox import Voicebox
+from voicebox import SimpleVoicebox
 
-voicebox = Voicebox(tts, effects, sink)
+voicebox = SimpleVoicebox(tts, effects, sink)
 
 # eSpeak NG is used to say "Hello, world!" with a glitchy robot voice
 voicebox.say('Hello, world!')

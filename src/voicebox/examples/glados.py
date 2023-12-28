@@ -9,7 +9,7 @@ from random import Random
 
 import numpy as np
 
-from voicebox import Voicebox
+from voicebox.voiceboxes.simple import SimpleVoicebox
 from voicebox.effects import Vocoder, Normalize
 from voicebox.effects.effect import Effects
 from voicebox.effects.vocoder import sawtooth_wave
@@ -17,8 +17,8 @@ from voicebox.examples.demo import demo
 from voicebox.tts import gTTS
 
 
-def build_glados_voicebox() -> Voicebox:
-    return Voicebox(
+def build_glados_voicebox() -> SimpleVoicebox:
+    return SimpleVoicebox(
         tts=gTTS(),
         effects=build_glados_effects(),
     )

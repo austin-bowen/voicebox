@@ -6,7 +6,7 @@ Requires the Google Cloud TTS engine.
 
 from google.cloud.texttospeech import TextToSpeechClient, VoiceSelectionParams, AudioConfig
 
-from voicebox import Voicebox
+from voicebox.voiceboxes.simple import SimpleVoicebox
 from voicebox.effects import Vocoder, Normalize, RingMod
 from voicebox.effects.effect import Effects
 from voicebox.examples.demo import demo
@@ -14,8 +14,8 @@ from voicebox.tts import GoogleCloudTTS
 from voicebox.tts.tts import TTS
 
 
-def build_battle_droid_voicebox(gctts_client: TextToSpeechClient = None) -> Voicebox:
-    return Voicebox(
+def build_battle_droid_voicebox(gctts_client: TextToSpeechClient = None) -> SimpleVoicebox:
+    return SimpleVoicebox(
         tts=build_battle_droid_tts(gctts_client),
         effects=build_battle_droid_effects(),
     )

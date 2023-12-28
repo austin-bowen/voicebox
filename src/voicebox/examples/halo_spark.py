@@ -7,7 +7,7 @@ Requires the Google Cloud TTS engine.
 
 from google.cloud.texttospeech import TextToSpeechClient, VoiceSelectionParams, AudioConfig
 
-from voicebox import Voicebox
+from voicebox.voiceboxes.simple import SimpleVoicebox
 from voicebox.effects import Normalize, Flanger
 from voicebox.effects.effect import Effects
 from voicebox.examples.demo import demo
@@ -15,8 +15,8 @@ from voicebox.tts import GoogleCloudTTS
 from voicebox.tts.tts import TTS
 
 
-def build_spark_voicebox(gctts_client: TextToSpeechClient = None) -> Voicebox:
-    return Voicebox(
+def build_spark_voicebox(gctts_client: TextToSpeechClient = None) -> SimpleVoicebox:
+    return SimpleVoicebox(
         tts=build_spark_tts(gctts_client),
         effects=build_spark_effects(),
     )

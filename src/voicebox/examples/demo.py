@@ -2,10 +2,10 @@ import argparse
 import sys
 from typing import Iterable
 
-from voicebox import BaseVoicebox
+from voicebox import Voicebox
 
 
-def demo(description: str, voicebox: BaseVoicebox, default_messages: Iterable[str]) -> None:
+def demo(description: str, voicebox: Voicebox, default_messages: Iterable[str]) -> None:
     args = _parse_args(description)
     messages = _get_messages(args, default_messages)
 
