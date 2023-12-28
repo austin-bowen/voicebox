@@ -5,7 +5,12 @@ from unittest import TestCase
 from parameterized import parameterized
 
 from voicebox.ssml import SSML
-from voicebox.voiceboxes.splitter import SimpleSentenceSplitter, PunktSentenceSplitter, default_splitter
+from voicebox.voiceboxes.splitter import (
+    default_splitter,
+    NoopSplitter,
+    PunktSentenceSplitter,
+    SimpleSentenceSplitter,
+)
 
 commonly_handled_sentences = [
     ('', []),
@@ -18,6 +23,14 @@ commonly_handled_sentences = [
     # Does not split SSML
     (SSML('<speak>This is SSML. Do not split.</speak>'), [SSML('<speak>This is SSML. Do not split.</speak>')]),
 ]
+
+
+class NoopSplitterTest(TestCase):
+    @parameterized.expand(map(lambda it: it[0], commonly_handled_sentences))
+    def test_does_not_split(self, text: str):
+        splitter = NoopSplitter()
+        actual = list(splitter.split(text))
+        self.assertListEqual([text], actual)
 
 
 class SimpleSentenceSplitterTest(TestCase):
@@ -52,7 +65,7 @@ class PunktSentenceSplitterTest(TestCase):
 
 class DefaultSplitterTest(unittest.TestCase):
     def test(self):
-        self.assertIsInstance(default_splitter(), SimpleSentenceSplitter)
+        self.assertIsInstance(default_splitter(), NoopSplitter)
 
 
 if __name__ == '__main__':

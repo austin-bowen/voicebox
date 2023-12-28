@@ -24,6 +24,13 @@ class Splitter(ABC):
         ...
 
 
+class NoopSplitter(Splitter):
+    """Does not split text."""
+
+    def split(self, text: StrOrSSML) -> Iterable[StrOrSSML]:
+        yield text
+
+
 class RegexSplitter(Splitter):
     """Splits text on regex pattern."""
 
@@ -119,4 +126,4 @@ class PunktSentenceSplitter(NltkTokenizerSplitter):
 
 
 def default_splitter() -> Splitter:
-    return SimpleSentenceSplitter()
+    return NoopSplitter()
