@@ -48,6 +48,14 @@ voicebox.utils module
    :undoc-members:
    :show-inheritance:
 
+voicebox.version module
+-----------------------
+
+.. automodule:: voicebox.version
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
