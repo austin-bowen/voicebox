@@ -9,19 +9,15 @@ from random import Random
 
 import numpy as np
 
-from voicebox.voiceboxes.simple import SimpleVoicebox
 from voicebox.effects import Vocoder, Normalize
 from voicebox.effects.effect import Effects
 from voicebox.effects.vocoder import sawtooth_wave
 from voicebox.examples.demo import demo
-from voicebox.tts import gTTS
+from voicebox.tts import TTS, gTTS
 
 
-def build_glados_voicebox() -> SimpleVoicebox:
-    return SimpleVoicebox(
-        tts=gTTS(),
-        effects=build_glados_effects(),
-    )
+def build_glados_tts() -> TTS:
+    return gTTS()
 
 
 def build_glados_effects() -> Effects:
@@ -71,7 +67,8 @@ class RandomSemitoneSawtoothWave:
 if __name__ == '__main__':
     demo(
         description=__doc__,
-        voicebox=build_glados_voicebox(),
+        tts=build_glados_tts(),
+        effects=build_glados_effects(),
         default_messages=[
             'Hello and, again, welcome to the Aperture Science computer-aided enrichment center.',
             'We hope your brief detention in the relaxation vault has been a pleasant one.',

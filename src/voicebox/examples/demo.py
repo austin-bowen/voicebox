@@ -2,15 +2,30 @@ import argparse
 import sys
 from typing import Iterable
 
-from voicebox import Voicebox
+from voicebox import ParallelVoicebox
+from voicebox.effects import Effects
+from voicebox.tts import TTS
+from voicebox.voiceboxes.splitter import SimpleSentenceSplitter
 
 
-def demo(description: str, voicebox: Voicebox, default_messages: Iterable[str]) -> None:
+def demo(
+        description: str,
+        tts: TTS,
+        effects: Effects,
+        default_messages: Iterable[str],
+) -> None:
     args = _parse_args(description)
     messages = _get_messages(args, default_messages)
 
+    voicebox = ParallelVoicebox(
+        tts,
+        effects,
+        text_splitter=SimpleSentenceSplitter(),
+    )
+
     try:
         voicebox.say_all(messages)
+        voicebox.wait_until_done()
     except KeyboardInterrupt:
         pass
 

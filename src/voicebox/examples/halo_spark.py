@@ -7,7 +7,6 @@ Requires the Google Cloud TTS engine.
 
 from google.cloud.texttospeech import TextToSpeechClient, VoiceSelectionParams, AudioConfig
 
-from voicebox.voiceboxes.simple import SimpleVoicebox
 from voicebox.effects import Normalize, Flanger
 from voicebox.effects.effect import Effects
 from voicebox.examples.demo import demo
@@ -15,14 +14,7 @@ from voicebox.tts import GoogleCloudTTS
 from voicebox.tts.tts import TTS
 
 
-def build_spark_voicebox(gctts_client: TextToSpeechClient = None) -> SimpleVoicebox:
-    return SimpleVoicebox(
-        tts=build_spark_tts(gctts_client),
-        effects=build_spark_effects(),
-    )
-
-
-def build_spark_tts(client: TextToSpeechClient) -> TTS:
+def build_spark_tts(client: TextToSpeechClient = None) -> TTS:
     if not client:
         client = TextToSpeechClient()
 
@@ -49,7 +41,8 @@ def build_spark_effects() -> Effects:
 if __name__ == '__main__':
     demo(
         description=__doc__,
-        voicebox=build_spark_voicebox(),
+        tts=build_spark_tts(),
+        effects=build_spark_effects(),
         default_messages=[
             'Greetings. I am the Monitor of Installation zero 4. I am 3 4 3, Guilty Spark.',
             'Someone has released The Flood. '
