@@ -1,8 +1,7 @@
 __all__ = ['ParallelVoicebox']
 
 from abc import abstractmethod
-from dataclasses import dataclass
-from queue import Queue, Empty
+from queue import Empty
 from threading import Thread, Event
 from typing import TypeVar, Iterable
 
@@ -11,7 +10,9 @@ from voicebox.effects import Effects, default_effects
 from voicebox.sinks import Sink, default_sink
 from voicebox.tts import TTS, default_tts
 from voicebox.types import StrOrSSML
-from voicebox.voiceboxes.base import BaseVoicebox
+from voicebox.voiceboxes.base import VoiceboxWithTextSplitter
+from voicebox.voiceboxes.queue import Queue
+from voicebox.voiceboxes.splitter import Splitter
 
 T = TypeVar('T')
 
@@ -50,9 +51,9 @@ class _QueueThread(Thread):
         if wait:
             self.join(timeout=timeout)
 
-    def wait_until_done(self) -> None:
+    def wait_until_done(self, timeout: float = None) -> None:
         """Wait until the queue is empty."""
-        self._queue.join()
+        self._queue.join(timeout=timeout)
 
     def run(self):
         for item in self._get_items():
@@ -70,7 +71,7 @@ class _QueueThread(Thread):
 
     @abstractmethod
     def _process_item(self, item: T) -> None:
-        ...
+        ...  # pragma: no cover
 
 
 class _SinkQueueThread(_QueueThread):
@@ -110,8 +111,7 @@ class _TTSAndEffectsQueueThread(_QueueThread):
         self.sink_queue_thread.put(audio)
 
 
-@dataclass
-class ParallelVoicebox(BaseVoicebox):
+class ParallelVoicebox(VoiceboxWithTextSplitter):
     """
     Handles speech on a separate thread so the main thread is not blocked
     waiting for speech to complete.
@@ -119,58 +119,58 @@ class ParallelVoicebox(BaseVoicebox):
     Also eliminates loading time between messages by loading the audio for the
     next message while the current message is playing.
 
-    Note: This is not meant to be instantiated directly.
-    Use :meth:`ParallelVoicebox.build` instead.
-
     Example:
-        >>> voicebox = ParallelVoicebox.build(...)
+        >>> voicebox = ParallelVoicebox(...)
         >>> voicebox.say('Hello, world!')   # Does not block; speech handled by thread
         >>> voicebox.say('How are you?')    # Does not block
         >>> # Do stuff in main thread while speech is happening...
         >>> voicebox.wait_until_done()      # Call before program end to prevent cutoff
         >>>
         >>> # Can be used as context manager
-        >>> with ParallelVoicebox.build(...) as voicebox:
+        >>> with ParallelVoicebox(...) as voicebox:
         >>>     ...
         >>> # Voicebox threads are stopped after exiting `with` block
+
+    Args:
+        tts:
+            The :class:`voicebox.tts.TTS` engine to use.
+        effects:
+            Sequence of :class:`voicebox.effects.Effect` instances to apply to
+            the audio before playing it.
+        sink:
+            The :class:`voicebox.sinks.Sink` to use to play the audio.
+        text_splitter:
+            The :class:`voicebox.voiceboxes.splitter.Splitter` to use to split
+            the text into chunks to be spoken. Defaults to no splitting.
+        start:
+            Whether to start the threads.
+        queue_get_timeout:
+            Seconds to wait for text to appear in the queue of things to say
+            between checks of the stop flag.
+        daemon:
+            Whether the thread is daemonic (i.e. dies when the main thread exits).
     """
 
     _tts_and_effects_queue_thread: _TTSAndEffectsQueueThread
     _sink_queue_thread: _SinkQueueThread
 
-    @classmethod
-    def build(
-            cls,
+    def __init__(
+            self,
             tts: TTS = None,
             effects: Effects = None,
             sink: Sink = None,
+            text_splitter: Splitter = None,
             start: bool = True,
             queue_get_timeout: float = 1.,
             daemon: bool = True,
     ):
-        """
-        Args:
-            tts:
-                The :class:`voicebox.tts.TTS` engine to use.
-            effects:
-                Sequence of :class:`voicebox.effects.Effect` instances to apply to
-                the audio before playing it.
-            sink:
-                The :class:`voicebox.sinks.Sink` to use to play the audio.
-            start:
-                Whether to start the threads.
-            queue_get_timeout:
-                Seconds to wait for text to appear in the queue of things to say
-                between checks of the stop flag.
-            daemon:
-                Whether the thread is daemonic (i.e. dies when the main thread exits).
-        """
+        super().__init__(text_splitter)
 
-        tts = tts or default_tts()
-        effects = effects or default_effects()
-        sink = sink or default_sink()
+        tts = tts if tts is not None else default_tts()
+        effects = effects if effects is not None else default_effects()
+        sink = sink if sink is not None else default_sink()
 
-        sink_queue_thread = _SinkQueueThread(
+        self._sink_queue_thread = _SinkQueueThread(
             sink,
             queue_max_size=1,
             queue_get_timeout=queue_get_timeout,
@@ -178,16 +178,38 @@ class ParallelVoicebox(BaseVoicebox):
             daemon=daemon,
         )
 
-        tts_and_effects_queue_thread = _TTSAndEffectsQueueThread(
+        self._tts_and_effects_queue_thread = _TTSAndEffectsQueueThread(
             tts=tts,
             effects=effects,
-            sink_queue_thread=sink_queue_thread,
+            sink_queue_thread=self._sink_queue_thread,
             queue_get_timeout=queue_get_timeout,
             start=start,
             daemon=daemon,
         )
 
-        return cls(tts_and_effects_queue_thread, sink_queue_thread)
+    @property
+    def tts(self) -> TTS:
+        return self._tts_and_effects_queue_thread.tts
+
+    @tts.setter
+    def tts(self, tts: TTS) -> None:
+        self._tts_and_effects_queue_thread.tts = tts
+
+    @property
+    def effects(self) -> Effects:
+        return self._tts_and_effects_queue_thread.effects
+
+    @effects.setter
+    def effects(self, effects: Effects) -> None:
+        self._tts_and_effects_queue_thread.effects = effects
+
+    @property
+    def sink(self) -> Sink:
+        return self._sink_queue_thread.sink
+
+    @sink.setter
+    def sink(self, sink: Sink) -> None:
+        self._sink_queue_thread.sink = sink
 
     def __enter__(self):
         return self
@@ -195,8 +217,8 @@ class ParallelVoicebox(BaseVoicebox):
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
 
-    def say(self, text: str) -> None:
-        self._tts_and_effects_queue_thread.put(text)
+    def _say_chunk(self, chunk: str) -> None:
+        self._tts_and_effects_queue_thread.put(chunk)
 
     def start(self) -> None:
         """Start the threads."""
@@ -204,23 +226,20 @@ class ParallelVoicebox(BaseVoicebox):
         self._sink_queue_thread.start()
 
     def is_alive(self) -> bool:
-        """Returns ``True`` iff all the threads are alive."""
+        """Return whether the threads are alive."""
 
         return (
-            self._tts_and_effects_queue_thread.is_alive()
-            and self._sink_queue_thread.is_alive()
+                self._tts_and_effects_queue_thread.is_alive()
+                and self._sink_queue_thread.is_alive()
         )
 
     def join(self, timeout: float = None) -> None:
         """
-        Wait for running threads to stop.
+        Wait until the threads terminate.
 
         Args:
             timeout:
                 Wait up to this many seconds. ``None`` waits forever.
-
-        :param timeout:
-        :return:
         """
 
         self._tts_and_effects_queue_thread.join(timeout=timeout)
@@ -228,7 +247,7 @@ class ParallelVoicebox(BaseVoicebox):
 
     def stop(self, wait: bool = False, timeout: float = None) -> None:
         """
-        Stop the running threads.
+        Notify the threads to stop running.
 
         Args:
             wait:
@@ -241,12 +260,17 @@ class ParallelVoicebox(BaseVoicebox):
         self._tts_and_effects_queue_thread.stop(wait=wait, timeout=timeout)
         self._sink_queue_thread.stop(wait=wait, timeout=timeout)
 
-    def wait_until_done(self) -> None:
+    def wait_until_done(self, timeout: float = None) -> None:
         """
-        Waits until all speech is done.
+        Wait until all speech is done.
 
         Useful to run before program end to prevent speech from being cut off.
+
+        Raises:
+            NotFinished:
+                If ``timeout`` is not ``None`` and the timeout is reached
+                before all speech is done.
         """
 
-        self._tts_and_effects_queue_thread.wait_until_done()
-        self._sink_queue_thread.wait_until_done()
+        self._tts_and_effects_queue_thread.wait_until_done(timeout=timeout)
+        self._sink_queue_thread.wait_until_done(timeout=timeout)

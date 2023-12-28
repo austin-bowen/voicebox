@@ -21,7 +21,7 @@ class Splitter(ABC):
         :class:`voicebox.SSML` instance, in which case it is returned
         as-is, i.e. ``[text]``.
         """
-        ...
+        ...  # pragma: no cover
 
 
 class NoopSplitter(Splitter):
@@ -122,7 +122,7 @@ class PunktSentenceSplitter(NltkTokenizerSplitter):
     @staticmethod
     def download_resources(**kwargs):
         """Download the Punkt NLTK resources."""
-        nltk.download('punkt', **kwargs)
+        nltk.download('punkt', **kwargs)  # pragma: no cover
 
 
 def default_splitter() -> Splitter:

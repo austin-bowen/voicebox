@@ -20,7 +20,7 @@ class Effect(ABC):
         May or may not return a new ``Audio`` instance.
         """
 
-        ...
+        ...  # pragma: no cover
 
 
 Effects = List[Effect]

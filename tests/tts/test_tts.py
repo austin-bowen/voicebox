@@ -9,6 +9,25 @@ from voicebox.tts import TTS, FallbackTTS, RetryTTS
 log = Mock()
 
 
+class TTSTest(unittest.TestCase):
+    def test_call(self):
+        class TestTTS(TTS):
+            def get_speech(self, text):
+                return text
+
+        audio = Mock()
+
+        tts = TestTTS()
+        tts.get_speech = Mock()
+        tts.get_speech.side_effect = lambda _: audio
+
+        result = tts('foo')
+
+        self.assertEqual(result, audio)
+
+        tts.get_speech.assert_called_once_with('foo')
+
+
 class FallbackTTSTest(unittest.TestCase):
     def test_get_speech_returns_first_good_tts_response(self):
         audio = build_audio()

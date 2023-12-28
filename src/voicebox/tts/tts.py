@@ -19,7 +19,7 @@ class TTS(ABC):
     @abstractmethod
     def get_speech(self, text: StrOrSSML) -> Audio:
         """Returns audio of the given text."""
-        ...
+        ...  # pragma: no cover
 
 
 @dataclass

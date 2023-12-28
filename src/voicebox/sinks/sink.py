@@ -11,4 +11,4 @@ class Sink(ABC):
 
     @abstractmethod
     def play(self, audio: Audio) -> None:
-        ...
+        ...  # pragma: no cover
