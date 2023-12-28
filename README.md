@@ -9,7 +9,7 @@ Python text-to-speech library with built-in voice effects and support for multip
 
 | [GitHub](https://github.com/austin-bowen/voicebox/)
 | [Documentation 📘](https://voicebox.readthedocs.io)
-| [Audio Samples 🔉](https://voicebox.readthedocs.io/en/stable/samples.html)
+| [Audio Samples 🔉](samples)
 |
 
 ```python
@@ -37,20 +37,20 @@ voicebox.say('Hello, world! How are you today?')
 ## Supported Text-to-Speech Engines
 
 Classes for supported TTS engines are located in the
-[`voicebox.tts.*`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts) modules.
+[`voicebox.tts`](voicebox.tts) package.
 
 ### Amazon Polly [🌐](https://aws.amazon.com/polly/)
 
 Online TTS engine from AWS.
 
-- Class: [`voicebox.tts.AmazonPolly`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/amazonpolly.py)
+- Class: [`voicebox.tts.AmazonPolly`](voicebox.tts.amazonpolly.AmazonPolly)
 - Setup: `pip install "voicebox-tts[amazon-polly]"`
 
 ### ElevenLabs [🌐](https://elevenlabs.io/)
 
 Online TTS engine with very realistic voices and support for voice cloning.
 
-- Class: [`voicebox.tts.ElevenLabs`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/elevenlabs.py)
+- Class: [`voicebox.tts.ElevenLabs`](voicebox.tts.elevenlabs.ElevenLabs)
 - Setup:
   1. `pip install "voicebox-tts[elevenlabs]"`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
@@ -64,7 +64,7 @@ Online TTS engine with very realistic voices and support for voice cloning.
 
 Offline TTS engine with a good number of options.
 
-- Class: [`voicebox.tts.ESpeakNG`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/espeakng.py)
+- Class: [`voicebox.tts.ESpeakNG`](voicebox.tts.espeakng.ESpeakNG)
 - Setup:
   - On Debian/Ubuntu: `sudo apt install espeak-ng`
 
@@ -72,14 +72,14 @@ Offline TTS engine with a good number of options.
 
 Powerful online TTS engine offered by Google Cloud.
 
-- Class: [`voicebox.tts.GoogleCloudTTS`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/googlecloudtts.py)
+- Class: [`voicebox.tts.GoogleCloudTTS`](voicebox.tts.googlecloudtts.GoogleCloudTTS)
 - Setup: `pip install "voicebox-tts[google-cloud-tts]"`
 
 ### gTTS [🌐](https://github.com/pndurette/gTTS)
 
 Online TTS engine used by Google Translate.
 
-- Class: [`voicebox.tts.gTTS`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/gtts.py)
+- Class: [`voicebox.tts.gTTS`](voicebox.tts.gtts.gTTS)
 - Setup:
   1. `pip install "voicebox-tts[gtts]"`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
@@ -88,13 +88,14 @@ Online TTS engine used by Google Translate.
 
 Very basic offline TTS engine.
 
-- Class: [`voicebox.tts.PicoTTS`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/tts/picotts.py)
+- Class: [`voicebox.tts.PicoTTS`](voicebox.tts.picotts.PicoTTS)
 - Setup:
   - On Debian/Ubuntu: `sudo apt install libttspico-utils`
 
 ## Effects
 
-Built-in effect classes are located in the [`voicebox.effects`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects) module,
+Built-in effect classes are located in the
+[`voicebox.effects`](voicebox.effects) package,
 and can be imported like:
 
 ```python
@@ -102,17 +103,16 @@ from voicebox.effects import CoolEffect
 ```
 
 Here is a non-exhaustive list of fun effects:
-- [`Glitch`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/glitch.py)
+- [`Glitch`](voicebox.effects.glitch.Glitch)
   creates a glitchy sound by randomly repeating small chunks of audio.
-- [`RingMod`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/modulation.py)
+- [`RingMod`](voicebox.effects.modulation.RingMod)
   can be used to create choppy, Doctor Who Dalek-like effects.
-- [`Vocoder`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/vocoder.py)
+- [`Vocoder`](voicebox.effects.vocoder.Vocoder)
   is useful for making monotone, robotic voices.
 
 There is also support for all the awesome audio plugins in
 [Spotify's `pedalboard` library](https://spotify.github.io/pedalboard/index.html)
-using the special
-[`PedalboardEffect`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/effects/pedalboard.py)
+using the special [`PedalboardEffect`](voicebox.effects.pedalboard.PedalboardEffect)
 wrapper, e.g.:
 
 ```python
@@ -142,7 +142,8 @@ voicebox.say('Hello, world!')
 
 ### Pre-built
 
-Some pre-built voiceboxes are available in the [`voicebox.examples`](https://github.com/austin-bowen/voicebox/tree/main/src/voicebox/examples) package.
+Some pre-built voiceboxes are available in the
+[`voicebox.examples`](voicebox.examples) package.
 They can be imported into your own code, and you can run them to demo:
 
 ```bash
