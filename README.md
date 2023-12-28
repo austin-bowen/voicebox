@@ -157,34 +157,54 @@ python -m voicebox.examples.battle_droid "optional message"
 
 ```python
 # Use eSpeak NG at 120 WPM and en-us voice as the TTS engine
-from voicebox.tts import ESpeakConfig, ESpeakNG
+from voicebox import reliable_tts
+from voicebox.tts import ESpeakConfig, ESpeakNG, gTTS
 
-tts = ESpeakNG(ESpeakConfig(speed=120, voice='en-us'))
+# Wrap multiple TTSs in retries and caches
+tts = reliable_tts(
+    ttss=[
+        # Prefer using online TTS first
+        gTTS(),
+        # Fall back to offline TTS if online TTS fails
+        ESpeakNG(ESpeakConfig(speed=120, voice='en-us')),
+    ],
+)
 
 # Add some voice effects
 from voicebox.effects import Vocoder, Glitch, Normalize
 
 effects = [
-    Vocoder.build(),  # Makes a very robotic, monotone voice
-    Glitch(),  # Randomly repeats small sections of audio
-    Normalize(),  # Remove DC and make volume consistent
+    Vocoder.build(),    # Make a robotic, monotone voice
+    Glitch(),           # Randomly repeat small sections of audio
+    Normalize(),        # Remove DC and make volume consistent
 ]
 
-# Send audio to playback device, and save to speech.wav file
+# Build audio sink
 from voicebox.sinks import Distributor, SoundDevice, WaveFile
 
 sink = Distributor([
-    SoundDevice(),
-    WaveFile('speech.wav'),
+    SoundDevice(),          # Send audio to playback device
+    WaveFile('speech.wav'), # Save audio to speech.wav file
 ])
 
 # Build the voicebox
-from voicebox import SimpleVoicebox
+from voicebox import ParallelVoicebox
+from voicebox.voiceboxes.splitter import SimpleSentenceSplitter
 
-voicebox = SimpleVoicebox(tts, effects, sink)
+# Parallel voicebox doesn't block the main thread
+voicebox = ParallelVoicebox(
+    tts,
+    effects,
+    sink,
+    # Split text into sentences to reduce time to first speech
+    text_splitter=SimpleSentenceSplitter(),
+)
 
-# eSpeak NG is used to say "Hello, world!" with a glitchy robot voice
+# Speak!
 voicebox.say('Hello, world!')
+
+# Wait for all audio to finish playing before exiting
+voicebox.wait_until_done()
 ```
 
 ### Command Line Demo
