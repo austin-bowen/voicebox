@@ -85,7 +85,7 @@ Homepage = "https://github.com/austin-bowen/voicebox"
 Issues = "https://github.com/austin-bowen/voicebox/issues"
 
 [tool.setuptools.dynamic]
-version = { attr = "voicebox.__version__" }
+version = { attr = "voicebox.version.__version__" }
 
 [tool.setuptools.packages.find]
 where = ["src"]
