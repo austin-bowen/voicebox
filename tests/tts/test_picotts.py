@@ -12,7 +12,7 @@ class PicoTTSTest(unittest.TestCase):
         self.mock_proc = Mock()
         self.audio = build_audio()
 
-        self.tmp_file = '/some/tmp/file.wav'
+        self.tmp_file = str(Path('/some/tmp/file.wav'))
 
         self.tts = PicoTTS()
 
