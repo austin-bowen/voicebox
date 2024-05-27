@@ -120,6 +120,7 @@ class AddOptionalItemsTest(unittest.TestCase):
     def test(self):
         d = {'foo': 1}
 
-        add_optional_items(d, [('bar', None), ('baz', 3)])
+        result = add_optional_items(d, [('bar', None), ('baz', 3)])
 
+        self.assertIs(result, d)
         self.assertDictEqual({'foo': 1, 'baz': 3}, d)

@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 from io import BytesIO
-from typing import Union
+from typing import Union, Iterator
 
-import elevenlabs
 from elevenlabs import Voice, Model
+from elevenlabs.client import ElevenLabs
 
 from voicebox.audio import Audio
 from voicebox.tts import TTS
-from voicebox.tts.utils import get_audio_from_mp3
+from voicebox.tts.utils import get_audio_from_mp3, add_optional_items
 from voicebox.types import StrOrSSML
 
 
 @dataclass
-class ElevenLabs(TTS):
+class ElevenLabsTTS(TTS):
     """
     TTS using the `ElevenLabs API <https://elevenlabs.io/>`_.
 
@@ -20,32 +20,41 @@ class ElevenLabs(TTS):
     (`docs <https://elevenlabs.io/docs/speech-synthesis/prompting#pronunciation>`_)
 
     Args:
-        api_key:
-            Optional API key to use. Not needed if already set via
-            :func:`elevenlabs.set_api_key()` or env var ``ELEVEN_API_KEY``.
+        client:
+            An optional :class:`elevenlabs.client.ElevenLabs` instance.
+            Use this if you have an API key you wish to use. See
+            `here <https://github.com/elevenlabs/elevenlabs-python?tab=readme-ov-file#client-instantiation>`_
+            for simple client instantiation example.
         voice:
             Optional voice to use. Can be an :class:`elevenlabs.Voice` instance,
             or a string representing the voice ID. See
             `here <https://elevenlabs.io/docs/api-reference/get-voices>`_ for
-            a list of valid voice IDs. If not given, a default voice is used.
+            a list of valid voice IDs. If not given, the default voice is used.
         model:
             Optional model to use. Can be an :class:`elevenlabs.Model` instance,
             or a string representing the model ID. See
             `here <https://elevenlabs.io/docs/api-reference/get-models>`_ for
-            a list of valid model IDs. If not given, a default model is used.
+            a list of valid model IDs. If not given, the default model is used.
     """
 
-    api_key: str = None
-    voice: Union[str, Voice] = field(default_factory=lambda: elevenlabs.DEFAULT_VOICE)
-    model: Union[str, Model] = 'eleven_monolingual_v1'
+    client: ElevenLabs = field(default_factory=ElevenLabs)
+    voice: Union[str, Voice] = None
+    model: Union[str, Model] = None
 
     def get_speech(self, text: StrOrSSML) -> Audio:
-        mp3_data = elevenlabs.generate(
-            text,
-            api_key=self.api_key,
-            voice=self.voice,
-            model=self.model,
-        )
+        mp3_data = self.client.generate(**self._get_generate_args(text))
+
+        if isinstance(mp3_data, Iterator):
+            mp3_data = b"".join(mp3_data)
 
         with BytesIO(mp3_data) as mp3_data:
             return get_audio_from_mp3(mp3_data)
+
+    def _get_generate_args(self, text: StrOrSSML) -> dict:
+        return add_optional_items(
+            dict(text=text),
+            [
+                ('voice', self.voice),
+                ('model', self.model),
+            ]
+        )

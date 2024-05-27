@@ -9,7 +9,7 @@ from voicebox.tts.cache import CachedTTS, PrerecordedTTS
 from voicebox.tts.espeakng import ESpeakConfig, ESpeakNG
 
 try:
-    from voicebox.tts.elevenlabs import ElevenLabs
+    from voicebox.tts.elevenlabs import ElevenLabsTTS
 except ImportError:
     pass
 

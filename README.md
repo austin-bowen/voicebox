@@ -50,15 +50,17 @@ Online TTS engine from AWS.
 
 Online TTS engine with very realistic voices and support for voice cloning.
 
-- Class: [`voicebox.tts.ElevenLabs`](voicebox.tts.elevenlabs.ElevenLabs)
+- Class: [`voicebox.tts.ElevenLabsTTS`](voicebox.tts.elevenlabs.ElevenLabsTTS)
 - Setup:
   1. `pip install "voicebox-tts[elevenlabs]"`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
-  3. Get an [API key](https://elevenlabs.io/docs/api-reference/authentication)
-     and do one of the following:
-     - Set environment variable `ELEVEN_API_KEY=<api-key>`; or
-     - Set with `import elevenlabs; elevenlabs.set_api_key('<api_key>')`; or
-     - Pass as parameter to class: `voicebox.tts.ElevenLabs(api_key='<api_key>')`
+  3. (Optional) Use an [API key](https://elevenlabs.io/docs/api-reference/authentication):
+     ```python
+     from elevenlabs.client import ElevenLabs
+     from voicebox.tts import ElevenLabsTTS
+
+     tts = ElevenLabsTTS(client=ElevenLabs(api_key='your-api-key'))
+     ```
 
 ### eSpeak NG [🌐](https://github.com/espeak-ng/espeak-ng)
 

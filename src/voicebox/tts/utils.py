@@ -86,9 +86,11 @@ def get_audio_from_wav_file(file_or_path: FileOrPath) -> Audio:
     return get_audio_from_samples(samples, sample_rate)
 
 
-def add_optional_items(d: dict, items: Iterable[Tuple[K, Optional[V]]]) -> None:
+def add_optional_items(d: dict, items: Iterable[Tuple[K, Optional[V]]]) -> dict:
     """Adds items with non-null values to the given dict."""
 
     for k, v in items:
         if v is not None:
             d[k] = v
+
+    return d
