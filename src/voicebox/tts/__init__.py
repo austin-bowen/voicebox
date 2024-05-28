@@ -1,4 +1,15 @@
-from voicebox.tts.tts import TTS, FallbackTTS, RetryTTS
+from voicebox.tts.tts import (
+    TTS,
+    AudioFileTTS,
+    WavFileTTS,
+    FallbackTTS,
+    RetryTTS,
+)
+
+try:
+    from voicebox.tts.tts import Mp3FileTTS
+except ImportError:
+    pass
 
 try:
     from voicebox.tts.amazonpolly import AmazonPolly
