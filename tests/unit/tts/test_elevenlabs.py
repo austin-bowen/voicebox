@@ -3,7 +3,7 @@ from unittest.mock import patch, Mock
 
 from elevenlabs.client import ElevenLabs
 
-from tests.utils import build_audio
+from unit.utils import build_audio
 from voicebox.tts.elevenlabs import ElevenLabsTTS
 
 

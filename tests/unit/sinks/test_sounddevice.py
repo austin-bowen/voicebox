@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from parameterized import parameterized
 
-from tests.utils import build_audio
+from unit.utils import build_audio
 from voicebox.sinks.sounddevice import SoundDevice, Device, Latency
 
 

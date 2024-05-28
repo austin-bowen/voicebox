@@ -4,7 +4,7 @@ from unittest.mock import Mock, patch
 import numpy as np
 from mypy_boto3_polly.literals import VoiceIdType
 
-from tests.utils import build_audio
+from unit.utils import build_audio
 from voicebox.ssml import SSML
 from voicebox.tts.amazonpolly import AmazonPolly
 

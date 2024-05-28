@@ -5,7 +5,7 @@ from unittest.mock import Mock, call, patch
 import cachetools
 from parameterized import parameterized
 
-from tests.utils import assert_called_with_exactly, build_audio
+from unit.utils import assert_called_with_exactly, build_audio
 from voicebox.audio import Audio
 from voicebox.tts.cache import CachedTTS
 from voicebox.tts.cache import PrerecordedTTS

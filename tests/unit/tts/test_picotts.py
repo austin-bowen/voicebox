@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from tests.utils import build_audio, assert_first_call
+from unit.utils import build_audio, assert_first_call
 from voicebox.ssml import SSML
 from voicebox.tts.picotts import PicoTTS
 

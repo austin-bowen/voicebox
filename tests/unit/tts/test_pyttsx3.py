@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from tests.utils import build_audio
+from unit.utils import build_audio
 from voicebox.tts import Pyttsx3TTS
 
 

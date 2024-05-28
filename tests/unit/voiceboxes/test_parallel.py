@@ -4,7 +4,7 @@ from unittest.mock import Mock, call
 
 from parameterized import parameterized
 
-from tests.utils import assert_called_with_exactly
+from unit.utils import assert_called_with_exactly
 from voicebox.effects import Normalize
 from voicebox.sinks import SoundDevice
 from voicebox.tts import PicoTTS

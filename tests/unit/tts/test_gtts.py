@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from tests.utils import assert_first_call, build_audio
+from unit.utils import assert_first_call, build_audio
 from voicebox.ssml import SSML
 from voicebox.tts.gtts import gTTS
 
