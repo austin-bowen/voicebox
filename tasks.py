@@ -10,6 +10,12 @@ def test(c):
 
 
 @task
+def integration(c):
+    """Run integration tests."""
+    c.run('pytest tests/integration')
+
+
+@task
 def cov(c):
     """Generate coverage report."""
     c.run('coverage report -m')
