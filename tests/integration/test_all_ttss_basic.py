@@ -12,6 +12,7 @@ TTS_CLASSES = (
     ESpeakNG,
     GoogleCloudTTS,
     gTTS,
+    ParlerTTS,
     PicoTTS,
     Pyttsx3TTS,
 )
@@ -35,6 +36,9 @@ def test_get_speech(tts_class: Type[TTS]):
             client=TextToSpeechClient(),
             voice_params=VoiceSelectionParams(language_code='en-US'),
         )
+
+    elif tts_class is ParlerTTS:
+        tts = ParlerTTS.build()
 
     else:
         tts = tts_class()
