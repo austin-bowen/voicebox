@@ -48,6 +48,7 @@ all = [
     "voicebox-tts[elevenlabs]",
     "voicebox-tts[google-cloud-tts]",
     "voicebox-tts[gtts]",
+    "voicebox-tts[pyttsx3]",
 ]
 dev = [
     "build",
@@ -78,6 +79,9 @@ google-cloud-tts = [
 gtts = [
     "gTTS",
     "pydub",
+]
+pyttsx3 = [
+    "pyttsx3",
 ]
 
 [project.urls]
