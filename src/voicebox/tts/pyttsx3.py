@@ -3,11 +3,11 @@ from pathlib import Path
 import pyttsx3
 from pyttsx3 import Engine
 
-from voicebox.tts.tts import Mp3FileTTS
+from voicebox.tts.tts import WavFileTTS
 from voicebox.types import StrOrSSML
 
 
-class Pyttsx3TTS(Mp3FileTTS):
+class Pyttsx3TTS(WavFileTTS):
     def __init__(
             self,
             engine: Engine = None,
