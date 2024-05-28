@@ -2,11 +2,11 @@ import subprocess
 from pathlib import Path
 
 from voicebox.ssml import SSML
-from voicebox.tts.tts import AudioFileTTS
+from voicebox.tts.tts import WavFileTTS
 from voicebox.types import StrOrSSML
 
 
-class PicoTTS(AudioFileTTS):
+class PicoTTS(WavFileTTS):
     """
     TTS using `Pico TTS <https://www.openhab.org/addons/voice/picotts/>`_.
 
@@ -30,7 +30,6 @@ class PicoTTS(AudioFileTTS):
         super().__init__(
             temp_file_dir=temp_file_dir,
             temp_file_prefix=temp_file_prefix,
-            temp_file_type='wav',
         )
 
         self.pico2wave_path = pico2wave_path
