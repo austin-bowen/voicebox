@@ -34,6 +34,11 @@ try:
 except ImportError:
     pass
 
+try:
+    from voicebox.tts.parlertts import ParlerTTS
+except ImportError:
+    pass
+
 from voicebox.tts.picotts import PicoTTS
 
 try:

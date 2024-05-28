@@ -86,6 +86,14 @@ Online TTS engine used by Google Translate.
   1. `pip install "voicebox-tts[gtts]"`
   2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
 
+### 🤗 Parler TTS [🌐](https://github.com/huggingface/parler-tts)
+
+Offline TTS engine released by Hugging Face that uses a promptable
+deep learning model to generate speech.
+
+- Class: [`voicebox.tts.ParlerTTS`](voicebox.tts.parlertts.ParlerTTS)
+- Setup: `pip install git+https://github.com/huggingface/parler-tts.git`
+
 ### Pico TTS
 
 Very basic offline TTS engine.
