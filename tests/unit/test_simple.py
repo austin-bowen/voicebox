@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock, call
 
-from .utils import assert_called_with_exactly, build_audio
+from unit.utils import assert_called_with_exactly, build_audio
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks.sounddevice import SoundDevice
 from voicebox.tts.picotts import PicoTTS
