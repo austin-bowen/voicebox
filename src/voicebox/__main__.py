@@ -38,8 +38,12 @@ def _parse_args():
     parser.add_argument('text', nargs='?', help='Text to speak. If not given, text is read from stdin.')
 
     # TTS args
-    parser.add_argument('--tts', choices=('espeak-ng', 'googlecloudtts', 'gtts', 'picotts'), default='picotts',
-                        help='Which TTS engine to use. Default: picotts')
+    parser.add_argument(
+        '--tts',
+        choices=('espeak-ng', 'googlecloudtts', 'gtts', 'picotts', 'pyttsx3'),
+        default='picotts',
+        help='Which TTS engine to use. Default: picotts',
+    )
     parser.add_argument('--lang', help='Language code')
     parser.add_argument('--voice', help='Voice name')
     parser.add_argument('--ssml', action='store_true', help='Treat text as SSML')
@@ -71,7 +75,7 @@ def _get_text(args) -> str:
 
 
 def _get_tts(args) -> TTS:
-    if args.tts == 'espeakng':
+    if args.tts == 'espeak-ng':
         from voicebox.tts import ESpeakConfig, ESpeakNG
 
         return ESpeakNG(ESpeakConfig(
@@ -108,6 +112,10 @@ def _get_tts(args) -> TTS:
     elif args.tts == 'picotts':
         from voicebox.tts import PicoTTS
         return PicoTTS(language=args.lang)
+
+    elif args.tts == 'pyttsx3':
+        from voicebox.tts import Pyttsx3TTS
+        return Pyttsx3TTS()
 
     else:
         raise ValueError(f'Unrecognized tts: {args.tts}')
