@@ -1,6 +1,4 @@
-import unittest
 from typing import List
-from unittest import TestCase
 
 from parameterized import parameterized
 
@@ -25,16 +23,16 @@ commonly_handled_sentences = [
 ]
 
 
-class NoopSplitterTest(TestCase):
+class TestNoopSplitter:
     @parameterized.expand(map(lambda it: it[0], commonly_handled_sentences))
     def test_does_not_split(self, text: str):
         splitter = NoopSplitter()
         actual = list(splitter.split(text))
-        self.assertListEqual([text], actual)
+        assert [text] == actual
 
 
-class SimpleSentenceSplitterTest(TestCase):
-    def setUp(self):
+class TestSimpleSentenceSplitter:
+    def setup_method(self):
         self.splitter = SimpleSentenceSplitter()
 
     @parameterized.expand(commonly_handled_sentences + [
@@ -45,11 +43,11 @@ class SimpleSentenceSplitterTest(TestCase):
     ])
     def test_split(self, text: str, expected: List[str]):
         actual = list(self.splitter.split(text))
-        self.assertListEqual(expected, actual)
+        assert expected == actual
 
 
-class PunktSentenceSplitterTest(TestCase):
-    def setUp(self):
+class TestPunktSentenceSplitter:
+    def setup_method(self):
         self.splitter = PunktSentenceSplitter()
 
     @parameterized.expand(commonly_handled_sentences + [
@@ -60,13 +58,9 @@ class PunktSentenceSplitterTest(TestCase):
     ])
     def test_split(self, text: str, expected: List[str]):
         actual = list(self.splitter.split(text))
-        self.assertListEqual(expected, actual)
+        assert expected == actual
 
 
-class DefaultSplitterTest(unittest.TestCase):
+class TestDefaultSplitter:
     def test(self):
-        self.assertIsInstance(default_splitter(), NoopSplitter)
-
-
-if __name__ == '__main__':
-    unittest.main()
+        assert isinstance(default_splitter(), NoopSplitter)
