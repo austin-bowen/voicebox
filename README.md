@@ -94,6 +94,17 @@ Very basic offline TTS engine.
 - Setup:
   - On Debian/Ubuntu: `sudo apt install libttspico-utils`
 
+### pyttsx3 [🌐](https://pyttsx3.readthedocs.io/)
+
+Offline TTS engine wrapper with support for the built-in TTS engines on Windows
+(SAPI5) and macOS (NSSpeechSynthesizer), as well as espeak on Linux.
+By default, it will use the most appropriate engine for your platform.
+
+- Class: [`voicebox.tts.Pyttsx3TTS`](voicebox.tts.pyttsx3.Pyttsx3TTS)
+- Setup:
+  1. `pip install "voicebox-tts[pyttsx3]"`
+  2. On Debian/Ubuntu: `sudo apt install espeak`
+
 ## Effects
 
 Built-in effect classes are located in the

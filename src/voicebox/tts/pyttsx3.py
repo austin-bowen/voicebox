@@ -9,7 +9,7 @@ from voicebox.types import StrOrSSML
 
 class Pyttsx3TTS(WavFileTTS):
     """
-    TTS using `pyttsx3 <https://pyttsx3.readthedocs.io/en/latest/index.html>`_.
+    TTS using `pyttsx3 <https://pyttsx3.readthedocs.io/>`_.
 
     Args:
         engine:
