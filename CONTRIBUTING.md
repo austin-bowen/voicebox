@@ -18,6 +18,9 @@ python -m nltk.downloader punkt -d ./venv/nltk_data
 
 # Run tests and generate coverage report
 invoke test cov
+
+# Run integration tests
+invoke integration
 ```
 
 ## Running Tasks
