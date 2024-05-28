@@ -8,6 +8,20 @@ from voicebox.types import StrOrSSML
 
 
 class Pyttsx3TTS(WavFileTTS):
+    """
+    TTS using `pyttsx3 <https://pyttsx3.readthedocs.io/en/latest/index.html>`_.
+
+    Args:
+        engine:
+            The `pyttsx3` engine to use. If not given, a new engine will be
+            created via `pyttsx3.init()`.
+        temp_file_dir:
+            The directory to save temporary audio files to. If not given, then
+            the default temporary directory will be used.
+        temp_file_prefix:
+            The prefix to use for temporary audio files.
+    """
+
     def __init__(
             self,
             engine: Engine = None,
