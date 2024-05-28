@@ -20,11 +20,11 @@ class PicoTTSTest(unittest.TestCase):
         tts = self.tts
         self.assertEqual('pico2wave', tts.pico2wave_path)
         self.assertIsNone(tts.language)
-        self.assertEqual('voicebox-pico-tts-', tts.temp_wav_file_prefix)
-        self.assertIsNone(tts.temp_wav_file_dir)
+        self.assertEqual('voicebox-pico-tts-', tts.temp_file_prefix)
+        self.assertIsNone(tts.temp_file_dir)
 
-    @patch('tempfile.NamedTemporaryFile')
-    @patch('voicebox.tts.picotts.get_audio_from_wav_file')
+    @patch('voicebox.tts.tts.NamedTemporaryFile')
+    @patch('voicebox.tts.tts.get_audio_from_wav_file')
     @patch('subprocess.run')
     def test_get_speech_with_constructor_defaults(self, *mocks):
         self._setup_mocks(*mocks)
@@ -41,8 +41,8 @@ class PicoTTSTest(unittest.TestCase):
 
         self._check_mock_calls(expected_args)
 
-    @patch('tempfile.NamedTemporaryFile')
-    @patch('voicebox.tts.picotts.get_audio_from_wav_file')
+    @patch('voicebox.tts.tts.NamedTemporaryFile')
+    @patch('voicebox.tts.tts.get_audio_from_wav_file')
     @patch('subprocess.run')
     def test_get_speech_with_custom_config(self, *mocks):
         self._setup_mocks(*mocks)
@@ -65,8 +65,8 @@ class PicoTTSTest(unittest.TestCase):
 
         self._check_mock_calls(expected_args)
 
-    @patch('tempfile.NamedTemporaryFile')
-    @patch('voicebox.tts.picotts.get_audio_from_wav_file')
+    @patch('voicebox.tts.tts.NamedTemporaryFile')
+    @patch('voicebox.tts.tts.get_audio_from_wav_file')
     @patch('subprocess.run')
     def test_get_speech_without_pico2wave_installed_raises_FileNotFoundError(self, *mocks):
         self._setup_mocks(*mocks)

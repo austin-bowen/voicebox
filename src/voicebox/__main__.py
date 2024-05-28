@@ -1,12 +1,11 @@
 import argparse
 import sys
 
-from voicebox import ParallelVoicebox
+from voicebox import SimpleVoicebox
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks import WaveFile, SoundDevice
 from voicebox.ssml import SSML
 from voicebox.tts.tts import TTS
-from voicebox.voiceboxes.splitter import SimpleSentenceSplitter
 
 
 def main():
@@ -18,18 +17,13 @@ def main():
     effects = _get_effects(args)
     sink = _get_sink(args)
 
-    voicebox = ParallelVoicebox(
+    voicebox = SimpleVoicebox(
         tts=tts,
         effects=effects,
         sink=sink,
-        text_splitter=SimpleSentenceSplitter(),
     )
 
-    try:
-        voicebox.say(text)
-        voicebox.wait_until_done()
-    except KeyboardInterrupt:
-        pass
+    voicebox.say(text)
 
 
 def _parse_args():
@@ -38,8 +32,12 @@ def _parse_args():
     parser.add_argument('text', nargs='?', help='Text to speak. If not given, text is read from stdin.')
 
     # TTS args
-    parser.add_argument('--tts', choices=('espeak-ng', 'googlecloudtts', 'gtts', 'picotts'), default='picotts',
-                        help='Which TTS engine to use. Default: picotts')
+    parser.add_argument(
+        '--tts',
+        choices=('espeak-ng', 'googlecloudtts', 'gtts', 'picotts', 'pyttsx3'),
+        default='picotts',
+        help='Which TTS engine to use. Default: picotts',
+    )
     parser.add_argument('--lang', help='Language code')
     parser.add_argument('--voice', help='Voice name')
     parser.add_argument('--ssml', action='store_true', help='Treat text as SSML')
@@ -71,7 +69,7 @@ def _get_text(args) -> str:
 
 
 def _get_tts(args) -> TTS:
-    if args.tts == 'espeakng':
+    if args.tts == 'espeak-ng':
         from voicebox.tts import ESpeakConfig, ESpeakNG
 
         return ESpeakNG(ESpeakConfig(
@@ -108,6 +106,10 @@ def _get_tts(args) -> TTS:
     elif args.tts == 'picotts':
         from voicebox.tts import PicoTTS
         return PicoTTS(language=args.lang)
+
+    elif args.tts == 'pyttsx3':
+        from voicebox.tts import Pyttsx3TTS
+        return Pyttsx3TTS()
 
     else:
         raise ValueError(f'Unrecognized tts: {args.tts}')

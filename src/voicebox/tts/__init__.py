@@ -25,6 +25,11 @@ except ImportError:
 
 from voicebox.tts.picotts import PicoTTS
 
+try:
+    from voicebox.tts.pyttsx3 import Pyttsx3TTS
+except ImportError:
+    pass
+
 
 def default_tts() -> TTS:
     """Returns a new instance of the default TTS, :class:`PicoTTS`."""
