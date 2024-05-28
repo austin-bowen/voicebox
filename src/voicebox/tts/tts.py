@@ -1,10 +1,13 @@
 import logging
+from tempfile import NamedTemporaryFile
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from logging import Logger
-from typing import Sequence, Type, Tuple
+from pathlib import Path
+from typing import Sequence, Type, Tuple, Optional
 
 from voicebox.audio import Audio
+from voicebox.tts.utils import get_audio_from_mp3, get_audio_from_wav_file
 from voicebox.types import StrOrSSML
 
 log = logging.getLogger(__name__)
@@ -20,6 +23,49 @@ class TTS(ABC):
     def get_speech(self, text: StrOrSSML) -> Audio:
         """Returns audio of the given text."""
         ...  # pragma: no cover
+
+
+class AudioFileTTS(TTS):
+    """Base class for text-to-speech engines that generate audio files."""
+
+    temp_file_dir: Optional[str]
+    temp_file_prefix: str
+    temp_file_type: str
+
+    def __init__(
+            self,
+            temp_file_dir: Optional[str],
+            temp_file_prefix: str,
+            temp_file_type: str,
+    ):
+        self.temp_file_dir = temp_file_dir
+        self.temp_file_prefix = temp_file_prefix
+        self.temp_file_type = temp_file_type
+
+    def get_speech(self, text: StrOrSSML) -> Audio:
+        with NamedTemporaryFile(
+                prefix=self.temp_file_prefix,
+                suffix=f'.{self.temp_file_type}',
+                dir=self.temp_file_dir,
+                delete=True,
+        ) as audio_file:
+            audio_file_path = Path(audio_file.name)
+            self.generate_speech_audio_file(text, audio_file_path)
+            # TODO: Use audio_file instead?
+            return self._get_audio_from_file(audio_file_path)
+
+    @abstractmethod
+    def generate_speech_audio_file(self, text: StrOrSSML, audio_file_path: Path) -> None:
+        """Generates a speech audio file from the given text."""
+        ...
+
+    def _get_audio_from_file(self, audio_file_path: Path) -> Audio:
+        if self.temp_file_type == 'wav':
+            return get_audio_from_wav_file(audio_file_path)
+        elif self.temp_file_type == 'mp3':
+            return get_audio_from_mp3(audio_file_path)
+        else:
+            raise ValueError(f'Unsupported temp_file_type: {self.temp_file_type}')
 
 
 @dataclass
