@@ -1,12 +1,11 @@
 import argparse
 import sys
 
-from voicebox import ParallelVoicebox
+from voicebox import SimpleVoicebox
 from voicebox.effects.normalize import Normalize
 from voicebox.sinks import WaveFile, SoundDevice
 from voicebox.ssml import SSML
 from voicebox.tts.tts import TTS
-from voicebox.voiceboxes.splitter import SimpleSentenceSplitter
 
 
 def main():
@@ -18,18 +17,13 @@ def main():
     effects = _get_effects(args)
     sink = _get_sink(args)
 
-    voicebox = ParallelVoicebox(
+    voicebox = SimpleVoicebox(
         tts=tts,
         effects=effects,
         sink=sink,
-        text_splitter=SimpleSentenceSplitter(),
     )
 
-    try:
-        voicebox.say(text)
-        voicebox.wait_until_done()
-    except KeyboardInterrupt:
-        pass
+    voicebox.say(text)
 
 
 def _parse_args():

@@ -46,9 +46,9 @@ class AudioFileTTS(TTS, ABC):
                 dir=self.temp_file_dir,
                 delete=True,
         ) as audio_file:
+            audio_file.close()
             audio_file_path = Path(audio_file.name)
             self.generate_speech_audio_file(text, audio_file_path)
-            # TODO: Use audio_file instead?
             return self.get_audio_from_file(audio_file_path)
 
     @abstractmethod
