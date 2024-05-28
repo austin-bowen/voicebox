@@ -10,6 +10,16 @@ from voicebox.types import StrOrSSML
 
 
 class ParlerTTS(TTS):
+    """
+    Offline TTS engine released by Hugging Face 🤗 that uses a promptable
+    deep learning model to generate speech.
+
+    Use ``ParlerTTS.build()`` to create a new instance of this class
+    instead of instantiating it directly.
+
+    See repo for details: https://github.com/huggingface/parler-tts
+    """
+
     model: torch.nn.Module
     tokenizer: AutoTokenizer
     device: torch.device
@@ -45,6 +55,26 @@ class ParlerTTS(TTS):
             device: Union[str, torch.device] = None,
             torch_dtype: torch.dtype = None,
     ):
+        """
+        Build a new instance of ``ParlerTTS``.
+
+        Args:
+            description:
+                (Optional) The description of the voice to use.
+                This can be changed later by setting the ``description``
+                property on the returned instance.
+            model_name:
+                (Optional) The name of the Parler model to use.
+            device:
+                (Optional) The device to use for inference.
+                If not given, an appropriate default is chosen based on the
+                available hardware.
+            torch_dtype:
+                (Optional) The data type to use for inference.
+                If not given, an appropriate default is chosen based on the
+                device.
+        """
+
         if device is None:
             if torch.cuda.is_available():
                 device = 'cuda:0'

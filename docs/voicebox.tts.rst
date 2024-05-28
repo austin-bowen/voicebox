@@ -52,6 +52,14 @@ voicebox.tts.gtts module
    :undoc-members:
    :show-inheritance:
 
+voicebox.tts.parlertts module
+-----------------------------
+
+.. automodule:: voicebox.tts.parlertts
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 voicebox.tts.picotts module
 ---------------------------
 
