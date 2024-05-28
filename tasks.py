@@ -6,7 +6,7 @@ from invoke import task
 @task
 def test(c):
     """Run tests with coverage."""
-    c.run('coverage run --branch --source=src -m unittest')
+    c.run('coverage run --branch --source=src -m pytest tests/unit')
 
 
 @task
