@@ -60,6 +60,14 @@ voicebox.tts.picotts module
    :undoc-members:
    :show-inheritance:
 
+voicebox.tts.pyttsx3 module
+---------------------------
+
+.. automodule:: voicebox.tts.pyttsx3
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 voicebox.tts.tts module
 -----------------------
 
