@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock
 
-from tests.utils import build_audio
+from unit.utils import build_audio
 from voicebox.sinks.distributor import Distributor
 
 

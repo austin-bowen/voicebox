@@ -9,7 +9,7 @@ from google.cloud.texttospeech import (
 )
 from parameterized import parameterized
 
-from tests.utils import build_audio
+from unit.utils import build_audio
 from voicebox.ssml import SSML
 from voicebox.tts.googlecloudtts import GoogleCloudTTS
 

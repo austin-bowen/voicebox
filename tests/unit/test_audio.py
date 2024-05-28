@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from parameterized import parameterized
 
-from tests.utils import build_audio
+from unit.utils import build_audio
 from voicebox.audio import Audio
 
 
