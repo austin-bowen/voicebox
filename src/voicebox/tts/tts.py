@@ -49,7 +49,6 @@ class AudioFileTTS(TTS, ABC):
                 prefix=self.temp_file_prefix,
                 suffix='.' + self.get_audio_file_type(),
                 dir=self.temp_file_dir,
-                delete_on_close=False,
         ) as audio_file:
             audio_file.close()
             audio_file_path = Path(audio_file.name)

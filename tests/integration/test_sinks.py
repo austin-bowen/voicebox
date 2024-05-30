@@ -27,7 +27,7 @@ def test_sound_device_sink() -> None:
 def test_wave_file_sink() -> None:
     audio = build_audio()
 
-    with NamedTemporaryFile(delete_on_close=False) as file:
+    with NamedTemporaryFile() as file:
         file.close()
         file_path = Path(file.name)
 
