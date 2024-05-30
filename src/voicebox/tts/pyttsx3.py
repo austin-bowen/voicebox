@@ -2,11 +2,16 @@ from pathlib import Path
 
 import pyttsx3
 from pyttsx3 import Engine
-from pyttsx3.drivers import _espeak
 from pyttsx3.drivers.espeak import EspeakDriver
 
 from voicebox.tts.tts import WavFileTTS
 from voicebox.types import StrOrSSML
+
+try:
+    from pyttsx3.drivers import _espeak
+except OSError:
+    # This can occur if the espeak library is not installed
+    _espeak = None
 
 
 class Pyttsx3TTS(WavFileTTS):
