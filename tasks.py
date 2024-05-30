@@ -12,7 +12,7 @@ def test(c):
 @task
 def integration(c):
     """Run integration tests."""
-    c.run('pytest tests/integration')
+    c.run('coverage run --branch --source=src -m pytest tests/integration')
 
 
 @task
