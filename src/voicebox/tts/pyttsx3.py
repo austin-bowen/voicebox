@@ -2,6 +2,8 @@ from pathlib import Path
 
 import pyttsx3
 from pyttsx3 import Engine
+from pyttsx3.drivers import _espeak
+from pyttsx3.drivers.espeak import EspeakDriver
 
 from voicebox.tts.tts import WavFileTTS
 from voicebox.types import StrOrSSML
@@ -39,3 +41,9 @@ class Pyttsx3TTS(WavFileTTS):
     def generate_speech_audio_file(self, text: StrOrSSML, file_path: Path) -> None:
         self.engine.save_to_file(text, str(file_path))
         self.engine.runAndWait()
+
+        # Fix bug when using espeak where the file may not be fully written to
+        # disk before it is read.
+        driver = self.engine.proxy._driver
+        if isinstance(driver, EspeakDriver):
+            _espeak.Synchronize()
