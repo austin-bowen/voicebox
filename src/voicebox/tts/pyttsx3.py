@@ -2,16 +2,17 @@ from pathlib import Path
 
 import pyttsx3
 from pyttsx3 import Engine
-from pyttsx3.drivers.espeak import EspeakDriver
 
 from voicebox.tts.tts import WavFileTTS
 from voicebox.types import StrOrSSML
 
 try:
     from pyttsx3.drivers import _espeak
+    from pyttsx3.drivers.espeak import EspeakDriver
+# This can occur if the espeak library is not installed
 except OSError:
-    # This can occur if the espeak library is not installed
     _espeak = None
+    EspeakDriver = None
 
 
 class Pyttsx3TTS(WavFileTTS):
@@ -50,5 +51,5 @@ class Pyttsx3TTS(WavFileTTS):
         # Fix bug when using espeak where the file may not be fully written to
         # disk before it is read.
         driver = self.engine.proxy._driver
-        if isinstance(driver, EspeakDriver):
+        if EspeakDriver is not None and isinstance(driver, EspeakDriver):
             _espeak.Synchronize()
