@@ -2,6 +2,8 @@ import subprocess
 import unittest
 from unittest.mock import Mock, patch
 
+from parameterized import parameterized
+
 from unit.utils import build_audio, assert_first_call
 from voicebox.ssml import SSML
 from voicebox.tts import ESpeakNG, ESpeakConfig
@@ -39,9 +41,18 @@ class ESpeakNGTest(unittest.TestCase):
 
         self._check_mock_calls(expected_args, config)
 
+    @parameterized.expand([
+        ('.!?', '--punct=".!?"'),
+        (True, '--punct'),
+    ])
     @patch('voicebox.tts.espeakng.get_audio_from_wav_file')
     @patch('subprocess.Popen')
-    def test_get_speech_with_custom_config_and_SSML_text(self, *mocks):
+    def test_get_speech_with_custom_config_and_SSML_text(
+            self,
+            config_punctuation,
+            expected_punctuation,
+            *mocks,
+    ):
         self._setup_mocks(*mocks)
 
         config = ESpeakConfig(
@@ -53,6 +64,7 @@ class ESpeakNGTest(unittest.TestCase):
             speed=6,
             voice='test voice',
             no_final_pause=True,
+            speak_punctuation=config_punctuation,
             exe_path='/path/to/espeak-ng',
             timeout=7.8,
         )
@@ -79,6 +91,7 @@ class ESpeakNGTest(unittest.TestCase):
             '-v', 'test voice',
             '-z',
             '-m',
+            expected_punctuation,
         ]
 
         self._check_mock_calls(expected_args, config)

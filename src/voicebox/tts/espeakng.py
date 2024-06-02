@@ -1,6 +1,6 @@
 import subprocess
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Union
 
 from voicebox.audio import Audio
 from voicebox.ssml import SSML
@@ -25,6 +25,7 @@ class ESpeakConfig:
     speed: int = None
     voice: str = None
     no_final_pause: bool = False
+    speak_punctuation: Union[bool, str] = False
 
     exe_path: str = 'espeak-ng'
     timeout: float = None
@@ -115,5 +116,11 @@ class ESpeakNG(TTS):
 
         if isinstance(text, SSML):
             args.append('-m')
+
+        if c.speak_punctuation:
+            if isinstance(c.speak_punctuation, str):
+                args.append(f'--punct="{c.speak_punctuation}"')
+            else:
+                args.append('--punct')
 
         return args
