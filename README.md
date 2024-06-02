@@ -126,7 +126,7 @@ from voicebox.effects import CoolEffect
 Here is a non-exhaustive list of fun effects:
 - [`Glitch`](voicebox.effects.glitch.Glitch)
   creates a glitchy sound by randomly repeating small chunks of audio.
-- [`RingMod`](voicebox.effects.modulation.RingMod)
+- [`RingMod`](voicebox.effects.ring_mod.RingMod)
   can be used to create choppy, Doctor Who Dalek-like effects.
 - [`Vocoder`](voicebox.effects.vocoder.Vocoder)
   is useful for making monotone, robotic voices.
