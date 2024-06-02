@@ -8,7 +8,7 @@ from typing import Callable, Sequence
 import numpy as np
 
 from voicebox.audio import Audio
-from voicebox.effects.effect import Effect
+from voicebox.effects.effect import Effect, EffectWithDryWet
 from voicebox.effects.eq import Filter, center_to_band
 from voicebox.types import KWArgs
 
@@ -76,8 +76,7 @@ class EnvelopeFollower(Effect):
         return audio
 
 
-@dataclass
-class Vocoder(Effect):
+class Vocoder(EffectWithDryWet):
     """
     Vocoder effect. Useful for making monotone, robotic voices.
 
@@ -88,10 +87,24 @@ class Vocoder(Effect):
     """Takes in an array of sample times and outputs corresponding wave samples."""
 
     bandpass_filters: Sequence[Filter]
-
     envelope_follower: EnvelopeFollower
-
     max_freq: float
+
+    def __init__(
+            self,
+            carrier_wave: Callable[[np.ndarray], np.ndarray],
+            bandpass_filters: Sequence[Filter],
+            envelope_follower: EnvelopeFollower,
+            max_freq: float,
+            dry: float,
+            wet: float,
+    ):
+        super().__init__(dry, wet)
+
+        self.carrier_wave = carrier_wave
+        self.bandpass_filters = bandpass_filters
+        self.envelope_follower = envelope_follower
+        self.max_freq = max_freq
 
     @classmethod
     def build(
@@ -107,6 +120,8 @@ class Vocoder(Effect):
             bandpass_filter_kwargs: KWArgs = None,
             envelope_follower_freq: float = 50.,
             envelope_follower_kwargs: KWArgs = None,
+            dry: float = 0.,
+            wet: float = 1.,
     ) -> 'Vocoder':
         """
         Builds a Vocoder instance.
@@ -140,6 +155,10 @@ class Vocoder(Effect):
             envelope_follower_kwargs:
                 Optional keyword arguments to pass to the
                 envelope follower filter builder.
+            dry:
+                Dry (input) signal level. 0 is none, 1 is unity.
+            wet:
+                Wet (affected) signal level. 0 is none, 1 is unity.
         """
 
         carrier_wave = carrier_wave or carrier_wave_builder(carrier_freq)
@@ -165,9 +184,16 @@ class Vocoder(Effect):
             **(envelope_follower_kwargs or {}),
         )
 
-        return cls(carrier_wave, bandpass_filters, envelope_follower, max_freq)
+        return cls(
+            carrier_wave,
+            bandpass_filters,
+            envelope_follower,
+            max_freq,
+            dry,
+            wet,
+        )
 
-    def apply(self, audio: Audio) -> Audio:
+    def get_wet_signal(self, audio: Audio) -> np.ndarray:
         carrier = self._get_carrier(audio)
 
         new_signals = [
@@ -175,9 +201,7 @@ class Vocoder(Effect):
             for bpf in self.bandpass_filters
         ]
 
-        audio.signal = np.sum(new_signals, axis=0)
-
-        return audio
+        return np.sum(new_signals, axis=0)
 
     def _get_carrier(self, audio: Audio) -> Audio:
         t = np.arange(len(audio)) * audio.sample_period
