@@ -1,19 +1,17 @@
 __all__ = ['RingMod']
 
-from dataclasses import dataclass
 from math import pi
 from typing import Callable
 
 import numpy as np
 
 from voicebox.audio import Audio
-from voicebox.effects.effect import Effect
+from voicebox.effects.effect import EffectWithDryWet
 
 WaveFunc = Callable[[np.ndarray], np.ndarray]
 
 
-@dataclass
-class RingMod(Effect):
+class RingMod(EffectWithDryWet):
     """
     Ring modulation effect.
 
@@ -25,20 +23,30 @@ class RingMod(Effect):
     Args:
         carrier_freq (float):
             Carrier wave frequency in Hz.
-        blend (float):
-            Blend between the original and modulated signals.
-            0 is all original, 1 is all modulated.
         carrier_wave:
             Carrier wave function. Defaults to ``np.sin``.
+        dry:
+            Dry (input) signal level. 0 is none, 1 is unity. Default is .5.
+        wet:
+            Wet (affected) signal level. 0 is none, 1 is unity. Default is .5.
     """
 
     carrier_freq: float = 20.
-    blend: float = 0.5
     carrier_wave: WaveFunc = np.sin
 
-    def apply(self, audio: Audio) -> Audio:
+    def __init__(
+            self,
+            carrier_freq: float = 20.,
+            carrier_wave: WaveFunc = np.sin,
+            dry: float = 0.5,
+            wet: float = 0.5,
+    ):
+        super().__init__(dry, wet)
+
+        self.carrier_freq = carrier_freq
+        self.carrier_wave = carrier_wave
+
+    def get_wet_signal(self, audio: Audio) -> np.ndarray:
         t = np.arange(len(audio.signal)) / audio.sample_rate
         carrier_signal = self.carrier_wave(2 * pi * self.carrier_freq * t)
-        mod_signal = audio.signal * carrier_signal
-        audio.signal = (1 - self.blend) * audio.signal + self.blend * mod_signal
-        return audio
+        return audio.signal * carrier_signal

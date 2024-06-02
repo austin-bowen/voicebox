@@ -41,7 +41,7 @@ def build_battle_droid_effects() -> Effects:
 
     return [
         vocoder,
-        RingMod(carrier_freq=40, blend=.25),
+        RingMod(carrier_freq=40, dry=.75, wet=.25),
         Normalize(),
     ]
 

@@ -1,7 +1,6 @@
 __all__ = ['Flanger']
 
 import time
-from dataclasses import dataclass
 from typing import Callable, Optional
 
 import numpy as np
@@ -10,7 +9,6 @@ from voicebox.audio import Audio
 from voicebox.effects.effect import EffectWithDryWet
 
 
-@dataclass
 class Flanger(EffectWithDryWet):
     """
     Flanger effect with a very metallic sound.
