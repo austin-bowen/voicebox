@@ -19,7 +19,7 @@ class ESpeakConfig:
 
     amplitude: int = None
     word_gap_seconds: float = None
-    # TODO -k
+    capitals: int = None
     line_length: int = None
     pitch: int = None
     speed: int = None
@@ -94,6 +94,9 @@ class ESpeakNG(TTS):
             # Units of 10ms
             word_gap = round(c.word_gap_seconds * 100)
             args.extend(('-g', str(word_gap)))
+
+        if c.capitals is not None:
+            args.extend(('-k', str(c.capitals)))
 
         if c.line_length is not None:
             args.extend(('-l', str(c.line_length)))

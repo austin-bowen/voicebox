@@ -47,6 +47,7 @@ class ESpeakNGTest(unittest.TestCase):
         config = ESpeakConfig(
             amplitude=1,
             word_gap_seconds=2.3,
+            capitals=20,
             line_length=4,
             pitch=5,
             speed=6,
@@ -71,6 +72,7 @@ class ESpeakNGTest(unittest.TestCase):
             '--stdout',
             '-a', '1',
             '-g', '230',
+            '-k', '20',
             '-l', '4',
             '-p', '5',
             '-s', '6',
