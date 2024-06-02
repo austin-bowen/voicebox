@@ -13,18 +13,7 @@ from voicebox.effects.effect import Effect
 @dataclass
 class Flanger(Effect):
     """
-    DEPRECATED: Use the ``pedalboard.Chorus`` effect instead.
-    This will be removed in the future.
-
-    TODO: Replace this with a Chorus pedalboard effect.
-    These settings are close:
-        PedalboardEffect(pedalboard.Chorus(
-            rate_hz=0.15,
-            depth=.04,
-            centre_delay_ms=1.5,
-            feedback=.9,
-            mix=.8,
-        ))
+    Flanger effect with a very metallic sound.
     """
 
     rate: float = .15
@@ -42,7 +31,7 @@ class Flanger(Effect):
     dry: float = .5
     """Dry (input) signal level. 0 is none, 1 is unity."""
 
-    wet: float = 1.
+    wet: float = .5
     """Wet (affected) signal level. 0 is none, 1 is unity."""
 
     t_offset: float = 0.
