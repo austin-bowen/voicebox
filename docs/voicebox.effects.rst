@@ -20,14 +20,6 @@ voicebox.effects.dc\_offset module
    :undoc-members:
    :show-inheritance:
 
-voicebox.effects.delay module
------------------------------
-
-.. automodule:: voicebox.effects.delay
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 voicebox.effects.effect module
 ------------------------------
 
@@ -60,14 +52,6 @@ voicebox.effects.glitch module
    :undoc-members:
    :show-inheritance:
 
-voicebox.effects.modulation module
-----------------------------------
-
-.. automodule:: voicebox.effects.modulation
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 voicebox.effects.normalize module
 ---------------------------------
 
@@ -80,6 +64,14 @@ voicebox.effects.pedalboard module
 ----------------------------------
 
 .. automodule:: voicebox.effects.pedalboard
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+voicebox.effects.ring\_mod module
+---------------------------------
+
+.. automodule:: voicebox.effects.ring_mod
    :members:
    :undoc-members:
    :show-inheritance:
