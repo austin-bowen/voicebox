@@ -4,7 +4,7 @@ from voicebox.effects.effect import Effects
 from voicebox.effects.eq import *
 from voicebox.effects.flanger import *
 from voicebox.effects.glitch import *
-from voicebox.effects.modulation import *
+from voicebox.effects.ring_mod import *
 from voicebox.effects.normalize import *
 from voicebox.effects.pedalboard import *
 from voicebox.effects.tail import *
