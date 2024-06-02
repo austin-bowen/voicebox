@@ -1,6 +1,5 @@
 from voicebox.effects.chain import *
 from voicebox.effects.dc_offset import *
-from voicebox.effects.delay import *
 from voicebox.effects.effect import Effects
 from voicebox.effects.eq import *
 from voicebox.effects.flanger import *
