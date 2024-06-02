@@ -7,49 +7,63 @@ from typing import Callable, Optional
 import numpy as np
 
 from voicebox.audio import Audio
-from voicebox.effects.effect import Effect
+from voicebox.effects.effect import EffectWithDryWet
 
 
 @dataclass
-class Flanger(Effect):
+class Flanger(EffectWithDryWet):
     """
     Flanger effect with a very metallic sound.
+
+    Args:
+        rate:
+            LFO rate in Hz. Default is .15.
+        min_delay:
+            Minimum delay time in seconds. Default is .0025.
+        max_delay:
+            Maximum delay time in seconds. Default is .0035.
+        feedback:
+            Delay feedback. Should be in range (0, 1). Default is .9.
+        t_offset:
+            Offset time to add to the LFO time, in seconds. Default is 0.
+        t_offset_func:
+            Optional function that returns a time by which to offset the LFO time
+            (in addition to ``t_offset``). Defaults to a function that returns the
+            current time, which makes the LFO phase consistent over time between runs.
+        dry:
+            Dry (input) signal level. 0 is none, 1 is unity. Default is .5.
+        wet:
+            Wet (affected) signal level. 0 is none, 1 is unity. Default is .5.
     """
 
-    rate: float = .15
-    """LFO rate in Hz."""
+    rate: float
+    min_delay: float
+    max_delay: float
+    feedback: float
+    t_offset: float
+    t_offset_func: Optional[Callable[[], float]]
 
-    min_delay: float = .0025
-    """Minimum delay time in seconds."""
+    def __init__(
+            self,
+            rate: float = .15,
+            min_delay: float = .0025,
+            max_delay: float = .0035,
+            feedback: float = .9,
+            t_offset: float = 0.,
+            t_offset_func: Optional[Callable[[], float]] = time.monotonic,
+            dry: float = .5,
+            wet: float = .5,
+    ):
+        super().__init__(dry, wet)
 
-    max_delay: float = .0035
-    """Maximum delay time in seconds."""
+        self.rate = rate
+        self.min_delay = min_delay
+        self.max_delay = max_delay
+        self.feedback = feedback
+        self.t_offset = t_offset
+        self.t_offset_func = t_offset_func
 
-    feedback: float = .9
-    """Delay feedback. Should be in range (0, 1)."""
-
-    dry: float = .5
-    """Dry (input) signal level. 0 is none, 1 is unity."""
-
-    wet: float = .5
-    """Wet (affected) signal level. 0 is none, 1 is unity."""
-
-    t_offset: float = 0.
-    """Offset time to add to the LFO time, in seconds."""
-
-    t_offset_func: Optional[Callable[[], float]] = time.monotonic
-    """
-    Optional function that returns a time by which to offset the LFO time
-    (in addition to ``t_offset``). Defaults to a function that returns the
-    current time, which makes the LFO phase consistent over time between runs.
-    """
-
-    def apply(self, audio: Audio) -> Audio:
-        wet_signal = self._get_wet_signal(audio)
-        out = self.dry * audio.signal + self.wet * wet_signal
-        return audio.copy(signal=out)
-
-    def _get_wet_signal(self, audio: Audio) -> np.ndarray:
+    def get_wet_signal(self, audio: Audio) -> np.ndarray:
         delay_offsets = self._get_delay_offsets(audio)
 
         wet = np.zeros_like(audio.signal)
