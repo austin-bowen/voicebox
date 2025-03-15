@@ -14,7 +14,7 @@ python3 -m venv venv
 # Install dependencies
 pip install --editable .[all]
 sudo apt install -y libportaudio2
-python -m nltk.downloader punkt -d ./venv/nltk_data
+python -m nltk.downloader punkt_tab -d ./venv/nltk_data
 
 # Run tests and generate coverage report
 invoke test cov

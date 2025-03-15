@@ -5,10 +5,11 @@ from typing import Iterable, Union
 
 import nltk
 import nltk.data
+from nltk.tokenize import PunktTokenizer
 from nltk.tokenize.api import TokenizerI
 
 from voicebox.ssml import SSML
-from voicebox.types import KWArgs, StrOrSSML
+from voicebox.types import StrOrSSML
 
 
 class Splitter(ABC):
@@ -96,33 +97,24 @@ class PunktSentenceSplitter(NltkTokenizerSplitter):
 
     or
 
-        >>> import nltk; nltk.download('punkt')
+        >>> import nltk; nltk.download('punkt_tab')
 
     or
 
-        $ python -m nltk.downloader punkt
+        $ python -m nltk.downloader punkt_tab
 
     See here for all NLTK Data installation methods:
     https://www.nltk.org/data.html
     """
 
-    def __init__(self, language: str = 'english', **kwargs):
-        tokenizer = self._load_tokenizer(language, kwargs)
+    def __init__(self, language: str = 'english'):
+        tokenizer = PunktTokenizer(language)
         super().__init__(tokenizer)
-
-    def _load_tokenizer(self, language: str, kwargs: KWArgs) -> TokenizerI:
-        return nltk.data.load(
-            self._get_punkt_resource_url(language),
-            **kwargs,
-        )
-
-    def _get_punkt_resource_url(self, language: str) -> str:
-        return f'tokenizers/punkt/{language}.pickle'
 
     @staticmethod
     def download_resources(**kwargs):
         """Download the Punkt NLTK resources."""
-        nltk.download('punkt', **kwargs)  # pragma: no cover
+        nltk.download('punkt_tab', **kwargs)  # pragma: no cover
 
 
 def default_splitter() -> Splitter:
