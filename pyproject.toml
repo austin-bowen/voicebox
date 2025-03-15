@@ -48,6 +48,7 @@ all = [
     "voicebox-tts[elevenlabs]",
     "voicebox-tts[google-cloud-tts]",
     "voicebox-tts[gtts]",
+    "voicebox-tts[parler-tts]",
     "voicebox-tts[pyttsx3]",
 ]
 dev = [
@@ -80,6 +81,9 @@ google-cloud-tts = [
 gtts = [
     "gTTS",
     "pydub",
+]
+parler-tts = [
+    "parler_tts @ git+https://github.com/huggingface/parler-tts.git",
 ]
 pyttsx3 = [
     "pyttsx3",
