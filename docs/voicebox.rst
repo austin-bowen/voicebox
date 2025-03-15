@@ -21,45 +21,45 @@ voicebox.audio module
 
 .. automodule:: voicebox.audio
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.ssml module
 --------------------
 
 .. automodule:: voicebox.ssml
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.types module
 ---------------------
 
 .. automodule:: voicebox.types
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.utils module
 ---------------------
 
 .. automodule:: voicebox.utils
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.version module
 -----------------------
 
 .. automodule:: voicebox.version
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Module contents
 ---------------
 
 .. automodule:: voicebox
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:

@@ -9,93 +9,93 @@ voicebox.tts.amazonpolly module
 
 .. automodule:: voicebox.tts.amazonpolly
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.cache module
 -------------------------
 
 .. automodule:: voicebox.tts.cache
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.elevenlabs module
 ------------------------------
 
 .. automodule:: voicebox.tts.elevenlabs
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.espeakng module
 ----------------------------
 
 .. automodule:: voicebox.tts.espeakng
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.googlecloudtts module
 ----------------------------------
 
 .. automodule:: voicebox.tts.googlecloudtts
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.gtts module
 ------------------------
 
 .. automodule:: voicebox.tts.gtts
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.parlertts module
 -----------------------------
 
 .. automodule:: voicebox.tts.parlertts
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.picotts module
 ---------------------------
 
 .. automodule:: voicebox.tts.picotts
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.pyttsx3 module
 ---------------------------
 
 .. automodule:: voicebox.tts.pyttsx3
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.tts module
 -----------------------
 
 .. automodule:: voicebox.tts.tts
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 voicebox.tts.utils module
 -------------------------
 
 .. automodule:: voicebox.tts.utils
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
 
 Module contents
 ---------------
 
 .. automodule:: voicebox.tts
    :members:
-   :undoc-members:
    :show-inheritance:
+   :undoc-members:
