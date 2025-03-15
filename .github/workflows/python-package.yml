@@ -28,7 +28,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8
         pip install --editable .[all]
-        sudo apt install -y libportaudio2
+        sudo apt install -y espeak-ng libportaudio2
         python -m nltk.downloader punkt_tab
     - name: Lint with flake8
       run: |
