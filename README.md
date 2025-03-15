@@ -92,7 +92,7 @@ Offline TTS engine released by Hugging Face that uses a promptable
 deep learning model to generate speech.
 
 - Class: [`voicebox.tts.ParlerTTS`](voicebox.tts.parlertts.ParlerTTS)
-- Setup: `pip install "voicebox-tts[parler-tts]"`
+- Setup: `pip install git+https://github.com/huggingface/parler-tts.git`
 
 ### Pico TTS
 
