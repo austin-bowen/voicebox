@@ -44,9 +44,9 @@ class WaveFileTest(unittest.TestCase):
 
 class WriteAudioToWavTest(unittest.TestCase):
     @parameterized.expand([
-        (1, [-1., 0., .5, 0.992187]),
-        (2, [-1., 0., .5, 0.9999695]),
-        (4, [-1., 0., .5, 1.]),
+        (1, [-0.992188, 0., 0.492188, 0.992187]),
+        (2, [-0.999970, 0., 0.499970, 0.999970]),
+        (4, [-1., 0., 0.5, 1.]),
     ])
     def test(self, sample_width: int, expected_signal):
         audio = Audio(

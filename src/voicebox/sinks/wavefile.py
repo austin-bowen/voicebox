@@ -74,9 +74,9 @@ def write_audio_to_wav(
     dtype = sample_width_to_dtype[sample_width]
 
     # Assuming signal is in range[-1, 1], scale to [-max_value, max_value)
-    max_value = 2 ** (8 * sample_width - 1)
-    signal = np.round(signal * max_value)
-    signal = signal.clip(max=max_value - 1)
+    max_value = 2 ** (8 * sample_width - 1) - 1
+    signal = signal.astype(np.float64)
+    signal *= max_value
     signal = signal.astype(dtype)
     signal_bytes = signal.tobytes()
 
