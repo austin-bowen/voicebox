@@ -13,6 +13,7 @@ python3 -m venv venv
 
 # Install dependencies
 pip install --editable .[all]
+pip install git+https://github.com/huggingface/parler-tts.git
 sudo apt install -y libportaudio2
 python -m nltk.downloader punkt_tab -d ./venv/nltk_data
 
