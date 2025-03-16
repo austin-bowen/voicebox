@@ -1,18 +1,15 @@
-from dataclasses import dataclass, field
-from io import BytesIO
-from typing import Union, Iterator
+from pathlib import Path
+from typing import Iterator, Union
 
-from elevenlabs import Voice, Model
+from elevenlabs import Model, Voice
 from elevenlabs.client import ElevenLabs
 
-from voicebox.audio import Audio
-from voicebox.tts import TTS
-from voicebox.tts.utils import get_audio_from_mp3, add_optional_items
+from voicebox.tts import Mp3FileTTS
+from voicebox.tts.utils import add_optional_items
 from voicebox.types import StrOrSSML
 
 
-@dataclass
-class ElevenLabsTTS(TTS):
+class ElevenLabsTTS(Mp3FileTTS):
     """
     TTS using the `ElevenLabs API <https://elevenlabs.io/>`_.
 
@@ -37,18 +34,35 @@ class ElevenLabsTTS(TTS):
             a list of valid model IDs. If not given, the default model is used.
     """
 
-    client: ElevenLabs = field(default_factory=ElevenLabs)
-    voice: Union[str, Voice] = None
-    model: Union[str, Model] = None
+    client: ElevenLabs
+    voice: Union[str, Voice, None]
+    model: Union[str, Model, None]
 
-    def get_speech(self, text: StrOrSSML) -> Audio:
+    def __init__(
+            self,
+            client: ElevenLabs = None,
+            voice: Union[str, Voice] = None,
+            model: Union[str, Model] = None,
+            temp_file_dir: str = None,
+            temp_file_prefix: str = 'voicebox-elevenlabs-',
+    ):
+        super().__init__(temp_file_dir, temp_file_prefix)
+        self.client = client or ElevenLabs()
+        self.voice = voice
+        self.model = model
+
+    def generate_speech_audio_file(self, text: StrOrSSML, audio_file_path: Path) -> None:
         mp3_data = self.client.generate(**self._get_generate_args(text))
 
         if isinstance(mp3_data, Iterator):
             mp3_data = b"".join(mp3_data)
 
-        with BytesIO(mp3_data) as mp3_data:
-            return get_audio_from_mp3(mp3_data)
+        with open(audio_file_path, 'wb') as f:
+            if isinstance(mp3_data, Iterator):
+                for chunk in mp3_data:
+                    f.write(chunk)
+            else:
+                f.write(mp3_data)
 
     def _get_generate_args(self, text: StrOrSSML) -> dict:
         return add_optional_items(

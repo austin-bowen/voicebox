@@ -2,16 +2,11 @@ import wave
 from pathlib import Path
 from typing import TypeVar, Iterable, Optional, Tuple
 
+import audioread
 import numpy as np
 
 from voicebox.audio import Audio
 from voicebox.types import FileOrPath
-
-try:
-    import pydub
-    from pydub import AudioSegment
-except ImportError:
-    pydub = None
 
 K = TypeVar('K')
 V = TypeVar('V')
@@ -28,21 +23,15 @@ sample_width_to_dtype = {
     4: np.int32,
 }
 
-if pydub:
-    def get_audio_from_audio_segment(audio_segment: AudioSegment) -> Audio:
-        """
-        Returns an :class:`Audio` instance from a :class:`pydub.AudioSegment`
-        instance.
-        """
 
-        dtype = sample_width_to_dtype[audio_segment.frame_width]
-        samples = np.array(audio_segment.get_array_of_samples(), dtype=dtype)
-        return get_audio_from_samples(samples, audio_segment.frame_rate)
+def get_audio_from_mp3(file) -> Audio:
+    """Returns an :class:`Audio` instance from an MP3 file."""
 
+    with audioread.audio_open(file) as f:
+        sample_rate = f.samplerate
+        samples = np.frombuffer(b''.join(f.read_data()), dtype=np.int16)
 
-    def get_audio_from_mp3(file) -> Audio:
-        """Returns an :class:`Audio` instance from an MP3 file."""
-        return get_audio_from_audio_segment(AudioSegment.from_mp3(file))
+    return get_audio_from_samples(samples, sample_rate)
 
 
 def get_audio_from_samples(samples: np.ndarray, sample_rate: int) -> Audio:

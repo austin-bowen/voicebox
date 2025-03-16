@@ -53,7 +53,7 @@ Online TTS engine with very realistic voices and support for voice cloning.
 - Class: [`voicebox.tts.ElevenLabsTTS`](voicebox.tts.elevenlabs.ElevenLabsTTS)
 - Setup:
   1. `pip install "voicebox-tts[elevenlabs]"`
-  2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
+  2. Install ffmpeg for audio decoding.
   3. (Optional) Use an [API key](https://elevenlabs.io/docs/api-reference/authentication):
      ```python
      from elevenlabs.client import ElevenLabs
@@ -84,7 +84,7 @@ Online TTS engine used by Google Translate.
 - Class: [`voicebox.tts.gTTS`](voicebox.tts.gtts.gTTS)
 - Setup:
   1. `pip install "voicebox-tts[gtts]"`
-  2. Install ffmpeg or libav for `pydub` ([docs](https://github.com/jiaaro/pydub#getting-ffmpeg-set-up))
+  2. Install ffmpeg for audio decoding.
 
 ### 🤗 Parler TTS [🌐](https://github.com/huggingface/parler-tts)
 

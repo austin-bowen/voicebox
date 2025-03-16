@@ -31,6 +31,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
+    "audioread",
     "cachetools",
     "nltk",
     "numpy",
@@ -72,14 +73,12 @@ amazon-polly = [
 ]
 elevenlabs = [
     "elevenlabs",
-    "pydub",
 ]
 google-cloud-tts = [
     "google-cloud-texttospeech",
 ]
 gtts = [
     "gTTS",
-    "pydub",
 ]
 pyttsx3 = [
     "pyttsx3",

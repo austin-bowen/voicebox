@@ -7,13 +7,8 @@ from tempfile import NamedTemporaryFile
 from typing import Sequence, Type, Tuple, Optional
 
 from voicebox.audio import Audio
-from voicebox.tts.utils import get_audio_from_wav_file
+from voicebox.tts.utils import get_audio_from_mp3, get_audio_from_wav_file
 from voicebox.types import StrOrSSML
-
-try:
-    from voicebox.tts.utils import get_audio_from_mp3
-except ImportError:
-    get_audio_from_mp3 = None
 
 log = logging.getLogger(__name__)
 
@@ -71,13 +66,12 @@ class AudioFileTTS(TTS, ABC):
         ...  # pragma: no cover
 
 
-if get_audio_from_mp3:
-    class Mp3FileTTS(AudioFileTTS, ABC):
-        def get_audio_file_type(self) -> str:
-            return 'mp3'
+class Mp3FileTTS(AudioFileTTS, ABC):
+    def get_audio_file_type(self) -> str:
+        return 'mp3'
 
-        def get_audio_from_file(self, file_path: Path) -> Audio:
-            return get_audio_from_mp3(file_path)
+    def get_audio_from_file(self, file_path: Path) -> Audio:
+        return get_audio_from_mp3(file_path)
 
 
 class WavFileTTS(AudioFileTTS, ABC):
