@@ -27,12 +27,12 @@ class gTTS(Mp3FileTTS):
 
     def __init__(
             self,
-            gtts_kwargs: dict[str, Any] = None,
             temp_file_dir: str = None,
             temp_file_prefix: str = 'voicebox-gtts-',
+            **gtts_kwargs: dict[str, Any],
     ):
         super().__init__(temp_file_dir, temp_file_prefix)
-        self.gtts_kwargs = gtts_kwargs or {}
+        self.gtts_kwargs = gtts_kwargs
 
     def generate_speech_audio_file(self, text: StrOrSSML, audio_file_path: Path) -> None:
         if isinstance(text, SSML):

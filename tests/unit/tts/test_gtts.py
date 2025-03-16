@@ -15,7 +15,7 @@ class gTTSTest(unittest.TestCase):
         tts = gTTS(foo='bar', one=1)
         self.assertDictEqual(dict(foo='bar', one=1), tts.gtts_kwargs)
 
-    @patch('voicebox.tts.gtts.get_audio_from_mp3')
+    @patch('voicebox.tts.tts.get_audio_from_mp3')
     @patch('voicebox.tts.gtts.gTTS_')
     def test_get_speech(self, mock_gTTS, mock_get_audio_from_mp3):
         audio = build_audio()
