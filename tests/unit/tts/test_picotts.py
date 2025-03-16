@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from unit.utils import build_audio, assert_first_call
+from unit.utils import assert_first_call, build_audio
 from voicebox.ssml import SSML
 from voicebox.tts.picotts import PicoTTS
 
@@ -12,7 +12,7 @@ class PicoTTSTest(unittest.TestCase):
         self.mock_proc = Mock()
         self.audio = build_audio()
 
-        self.tmp_file = str(Path('/some/tmp/file.wav'))
+        self.tmp_file = '/some/tmp/file.wav'
 
         self.tts = PicoTTS()
 
@@ -20,8 +20,8 @@ class PicoTTSTest(unittest.TestCase):
         tts = self.tts
         self.assertEqual('pico2wave', tts.pico2wave_path)
         self.assertIsNone(tts.language)
-        self.assertEqual('voicebox-pico-tts-', tts.temp_file_prefix)
         self.assertIsNone(tts.temp_file_dir)
+        self.assertEqual('voicebox-pico-tts-', tts.temp_file_prefix)
 
     @patch('voicebox.tts.tts.NamedTemporaryFile')
     @patch('voicebox.tts.tts.get_audio_from_wav_file')

@@ -10,7 +10,7 @@ class PicoTTSTest(unittest.TestCase):
     def setUp(self):
         self.audio = build_audio()
 
-        self.tmp_file = str(Path('/some/tmp/file.wav'))
+        self.tmp_file = '/some/tmp/file.wav'
 
         self.mock_engine = Mock()
         self.text = 'foo bar'

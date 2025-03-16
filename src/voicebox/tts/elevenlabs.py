@@ -54,9 +54,6 @@ class ElevenLabsTTS(Mp3FileTTS):
     def generate_speech_audio_file(self, text: StrOrSSML, audio_file_path: Path) -> None:
         mp3_data = self.client.generate(**self._get_generate_args(text))
 
-        if isinstance(mp3_data, Iterator):
-            mp3_data = b"".join(mp3_data)
-
         with open(audio_file_path, 'wb') as f:
             if isinstance(mp3_data, Iterator):
                 for chunk in mp3_data:
