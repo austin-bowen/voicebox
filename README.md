@@ -57,8 +57,7 @@ Online TTS engine with realistic voices and support for voice cloning.
 - Class: [`voicebox.tts.ElevenLabsTTS`](voicebox.tts.elevenlabs.ElevenLabsTTS)
 - Setup:
   1. `pip install "voicebox-tts[elevenlabs]"`
-  2. Install ffmpeg for audio decoding.
-  3. Get an [API key](https://elevenlabs.io/app/developers/api-keys).
+  2. Get an [API key](https://elevenlabs.io/app/developers/api-keys).
 
 Minimal example:
 ```python
