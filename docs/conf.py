@@ -9,7 +9,7 @@ from voicebox import __version__
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'voicebox'
-copyright = '2023 Austin Bowen'
+copyright = '2023-2026 Austin Bowen'
 author = 'Austin Bowen'
 
 version = __version__
