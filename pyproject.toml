@@ -66,6 +66,7 @@ test = [
     "coverage",
     "parameterized",
     "pytest",
+    "python-dotenv",
 ]
 amazon-polly = [
     "boto3",
