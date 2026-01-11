@@ -1,10 +1,10 @@
-from typing import Type
 import os
+from typing import Type
 
 import boto3
+from dotenv import load_dotenv
 from google.cloud.texttospeech import TextToSpeechClient, VoiceSelectionParams
 from parameterized import parameterized
-from dotenv import load_dotenv
 
 from voicebox.tts import *
 
@@ -35,6 +35,12 @@ def test_get_speech(tts_class: Type[TTS]):
         session = boto3.Session(region_name='us-east-1', profile_name='polly')
         client = session.client('polly')
         tts = AmazonPolly(client=client, voice_id='Aditi')
+
+    elif tts_class is ElevenLabsTTS:
+        tts = ElevenLabsTTS(
+            voice_id="JBFqnCBsd6RMkjVDRZzb",
+            api_key=os.getenv("ELEVENLABS_API_KEY"),
+        )
 
     elif tts_class is GoogleCloudTTS:
         tts = GoogleCloudTTS(
