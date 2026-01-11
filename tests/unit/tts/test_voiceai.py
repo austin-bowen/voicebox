@@ -1,6 +1,8 @@
 import unittest
 from unittest.mock import Mock, patch
 
+from requests import HTTPError
+
 from unit.utils import build_audio
 from voicebox.tts.voiceai import VoiceAiTTS
 
@@ -86,7 +88,6 @@ class VoiceAiTest(unittest.TestCase):
             request_kwarg="REQUEST_KWARG",
         )
 
-        response.raise_for_status.assert_called_once()
         mock_get_audio_from_wav_file.assert_called_once()
 
     @patch("voicebox.tts.voiceai.get_audio_from_wav_file")
@@ -117,5 +118,15 @@ class VoiceAiTest(unittest.TestCase):
             },
         )
 
-        response.raise_for_status.assert_called_once()
         mock_get_audio_from_wav_file.assert_called_once()
+
+    @patch("voicebox.tts.voiceai.requests")
+    def test_get_speech_raises_HTTPError(self, mock_requests):
+        response = Mock()
+        response.raise_for_status.side_effect = HTTPError()
+
+        mock_requests.post.return_value = response
+
+        self.assertRaises(HTTPError, self.tts.get_speech, "hello world")
+
+        mock_requests.post.assert_called_once()
