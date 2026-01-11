@@ -57,22 +57,25 @@ class AmazonPolly(TTS):
 
     def get_speech(self, text: StrOrSSML) -> Audio:
         kwargs = dict(
-            OutputFormat='pcm',
+            OutputFormat="pcm",
             Text=text,
             VoiceId=self.voice_id,
             SampleRate=str(self.sample_rate),
-            TextType='ssml' if isinstance(text, SSML) else 'text',
+            TextType="ssml" if isinstance(text, SSML) else "text",
         )
 
-        add_optional_items(kwargs, [
-            ('Engine', self.engine),
-            ('LanguageCode', self.language_code),
-            ('LexiconNames', self.lexicon_names),
-        ])
+        add_optional_items(
+            kwargs,
+            [
+                ("Engine", self.engine),
+                ("LanguageCode", self.language_code),
+                ("LexiconNames", self.lexicon_names),
+            ],
+        )
 
         response = self.client.synthesize_speech(**kwargs)
 
-        with closing(response['AudioStream']) as audio_stream:
+        with closing(response["AudioStream"]) as audio_stream:
             signal_bytes = audio_stream.read()
 
         samples = np.frombuffer(signal_bytes, dtype=np.int16)

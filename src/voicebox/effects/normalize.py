@@ -1,4 +1,4 @@
-__all__ = ['Normalize']
+__all__ = ["Normalize"]
 
 from dataclasses import dataclass
 

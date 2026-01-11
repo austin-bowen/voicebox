@@ -10,20 +10,20 @@ class PicoTTSTest(unittest.TestCase):
     def setUp(self):
         self.audio = build_audio()
 
-        self.tmp_file = '/some/tmp/file.wav'
+        self.tmp_file = "/some/tmp/file.wav"
 
         self.mock_engine = Mock()
-        self.text = 'foo bar'
+        self.text = "foo bar"
 
         self.tts = Pyttsx3TTS(engine=self.mock_engine)
 
     def test_constructor_defaults(self):
         self.assertIs(self.tts.engine, self.mock_engine)
-        self.assertEqual('voicebox-pyttsx3-', self.tts.temp_file_prefix)
+        self.assertEqual("voicebox-pyttsx3-", self.tts.temp_file_prefix)
         self.assertIsNone(self.tts.temp_file_dir)
 
-    @patch('voicebox.tts.tts.NamedTemporaryFile')
-    @patch('voicebox.tts.tts.get_audio_from_wav_file')
+    @patch("voicebox.tts.tts.NamedTemporaryFile")
+    @patch("voicebox.tts.tts.get_audio_from_wav_file")
     def test_get_speech_with_constructor_defaults(self, *mocks):
         self._setup_mocks(*mocks)
 
@@ -34,9 +34,9 @@ class PicoTTSTest(unittest.TestCase):
         self._check_mock_calls()
 
     def _setup_mocks(
-            self,
-            mock_get_audio_from_wav_file,
-            mock_NamedTemporaryFile,
+        self,
+        mock_get_audio_from_wav_file,
+        mock_NamedTemporaryFile,
     ):
         mock_get_audio_from_wav_file.return_value = self.audio
         self.mock_get_audio_from_wav_file = mock_get_audio_from_wav_file

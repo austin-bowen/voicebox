@@ -1,4 +1,4 @@
-__all__ = ['Vocoder']
+__all__ = ["Vocoder"]
 
 import warnings
 from dataclasses import dataclass, field
@@ -45,9 +45,9 @@ class RandomSawtoothWave:
         out = np.zeros_like(times)
         for i in range(0, len(times), chunk_size):
             f = self.min_freq * 2 ** (alpha * self.rng.random())
-            time_chunk = times[i:i + chunk_size]
+            time_chunk = times[i : i + chunk_size]
             radians = 2 * np.pi * f * time_chunk
-            out[i:i + chunk_size] = sawtooth_wave(radians)
+            out[i : i + chunk_size] = sawtooth_wave(radians)
 
         return out
 
@@ -62,12 +62,12 @@ class EnvelopeFollower(Effect):
 
     @classmethod
     def build(
-            cls,
-            freq: float = 50,
-            order: int = 1,
-            **filter_kwargs,
-    ) -> 'EnvelopeFollower':
-        lpf = Filter.build('lowpass', freq, order=order, **filter_kwargs)
+        cls,
+        freq: float = 50,
+        order: int = 1,
+        **filter_kwargs,
+    ) -> "EnvelopeFollower":
+        lpf = Filter.build("lowpass", freq, order=order, **filter_kwargs)
         return cls(lpf)
 
     def apply(self, audio: Audio) -> Audio:
@@ -91,13 +91,13 @@ class Vocoder(EffectWithDryWet):
     max_freq: float
 
     def __init__(
-            self,
-            carrier_wave: Callable[[np.ndarray], np.ndarray],
-            bandpass_filters: Sequence[Filter],
-            envelope_follower: EnvelopeFollower,
-            max_freq: float,
-            dry: float,
-            wet: float,
+        self,
+        carrier_wave: Callable[[np.ndarray], np.ndarray],
+        bandpass_filters: Sequence[Filter],
+        envelope_follower: EnvelopeFollower,
+        max_freq: float,
+        dry: float,
+        wet: float,
     ):
         super().__init__(dry, wet)
 
@@ -108,21 +108,21 @@ class Vocoder(EffectWithDryWet):
 
     @classmethod
     def build(
-            cls,
-            carrier_freq: float = 160.,
-            carrier_wave_builder=SawtoothWave,
-            carrier_wave=None,
-            min_freq: float = 80.,
-            max_freq: float = 8000.,
-            bands: int = 40,
-            bandwidth: float = 0.8,
-            bandpass_filter_order: int = 3,
-            bandpass_filter_kwargs: KWArgs = None,
-            envelope_follower_freq: float = 50.,
-            envelope_follower_kwargs: KWArgs = None,
-            dry: float = 0.,
-            wet: float = 1.,
-    ) -> 'Vocoder':
+        cls,
+        carrier_freq: float = 160.0,
+        carrier_wave_builder=SawtoothWave,
+        carrier_wave=None,
+        min_freq: float = 80.0,
+        max_freq: float = 8000.0,
+        bands: int = 40,
+        bandwidth: float = 0.8,
+        bandpass_filter_order: int = 3,
+        bandpass_filter_kwargs: KWArgs = None,
+        envelope_follower_freq: float = 50.0,
+        envelope_follower_kwargs: KWArgs = None,
+        dry: float = 0.0,
+        wet: float = 1.0,
+    ) -> "Vocoder":
         """
         Builds a Vocoder instance.
 
@@ -172,7 +172,7 @@ class Vocoder(EffectWithDryWet):
 
             bandpass_filters.append(
                 Filter.build(
-                    'bandpass',
+                    "bandpass",
                     freq=center_to_band(f, width),
                     order=bandpass_filter_order,
                     **(bandpass_filter_kwargs or {}),
@@ -208,19 +208,21 @@ class Vocoder(EffectWithDryWet):
         carrier = self.carrier_wave(t)
         return audio.copy(signal=carrier)
 
-    def _get_carrier_signal_for_band(self, modulator: Audio, carrier: Audio, bpf: Filter) -> np.ndarray:
+    def _get_carrier_signal_for_band(
+        self, modulator: Audio, carrier: Audio, bpf: Filter
+    ) -> np.ndarray:
         try:
             filtered_modulator = bpf(modulator.copy())
         except ValueError:
             sample_rate = modulator.sample_rate
             warnings.warn(
-                f'Received audio with sample_rate={sample_rate}, which is too '
-                f'low for Vocoder with max_freq={self.max_freq}; '
-                f'band(s) will be dropped, reducing quality. '
-                f'To fix, either 1) build the Vocoder with '
-                f'max_freq <= sample_rate / 2 = {sample_rate / 2}, '
-                f'or 2) use a TTS engine with a '
-                f'sample_rate >= 2 * max_freq = {2 * self.max_freq}.'
+                f"Received audio with sample_rate={sample_rate}, which is too "
+                f"low for Vocoder with max_freq={self.max_freq}; "
+                f"band(s) will be dropped, reducing quality. "
+                f"To fix, either 1) build the Vocoder with "
+                f"max_freq <= sample_rate / 2 = {sample_rate / 2}, "
+                f"or 2) use a TTS engine with a "
+                f"sample_rate >= 2 * max_freq = {2 * self.max_freq}."
             )
 
             return np.zeros_like(modulator.signal)

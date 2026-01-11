@@ -17,6 +17,9 @@ pip install git+https://github.com/huggingface/parler-tts.git
 sudo apt install -y libportaudio2
 python -m nltk.downloader punkt_tab -d ./venv/nltk_data
 
+# Format code
+invoke format
+
 # Run tests and generate coverage report
 invoke test cov
 

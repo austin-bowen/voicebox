@@ -28,7 +28,7 @@ class WaveFileTest(unittest.TestCase):
         self.assertTrue(sink.append)
         self.assertEqual(4, sink.sample_width)
 
-    @patch('voicebox.sinks.wavefile.write_audio_to_wav')
+    @patch("voicebox.sinks.wavefile.write_audio_to_wav")
     def test_play(self, mock_write_audio_to_wav):
         audio = Mock()
 
@@ -43,14 +43,16 @@ class WaveFileTest(unittest.TestCase):
 
 
 class WriteAudioToWavTest(unittest.TestCase):
-    @parameterized.expand([
-        (1, [-0.992188, 0., 0.492188, 0.992187]),
-        (2, [-0.999970, 0., 0.499970, 0.999970]),
-        (4, [-1., 0., 0.5, 1.]),
-    ])
+    @parameterized.expand(
+        [
+            (1, [-0.992188, 0.0, 0.492188, 0.992187]),
+            (2, [-0.999970, 0.0, 0.499970, 0.999970]),
+            (4, [-1.0, 0.0, 0.5, 1.0]),
+        ]
+    )
     def test(self, sample_width: int, expected_signal):
         audio = Audio(
-            signal=np.float32([-1., 0., .5, 1.]),
+            signal=np.float32([-1.0, 0.0, 0.5, 1.0]),
             sample_rate=44100,
         )
 

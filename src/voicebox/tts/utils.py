@@ -8,13 +8,13 @@ import numpy as np
 from voicebox.audio import Audio
 from voicebox.types import FileOrPath
 
-K = TypeVar('K')
-V = TypeVar('V')
+K = TypeVar("K")
+V = TypeVar("V")
 
 dtype_to_sample_width = {
-    np.dtype('int8'): 1,
-    np.dtype('int16'): 2,
-    np.dtype('int32'): 4,
+    np.dtype("int8"): 1,
+    np.dtype("int16"): 2,
+    np.dtype("int32"): 4,
 }
 
 sample_width_to_dtype = {
@@ -29,7 +29,7 @@ def get_audio_from_mp3(file) -> Audio:
 
     with audioread.audio_open(file) as f:
         sample_rate = f.samplerate
-        samples = np.frombuffer(b''.join(f.read_data()), dtype=np.int16)
+        samples = np.frombuffer(b"".join(f.read_data()), dtype=np.int16)
 
     return get_audio_from_samples(samples, sample_rate)
 
@@ -64,7 +64,7 @@ def get_audio_from_wav_file(file_or_path: FileOrPath) -> Audio:
     if isinstance(file_or_path, Path):
         file_or_path = str(file_or_path)
 
-    with wave.open(file_or_path, 'rb') as wav_file:
+    with wave.open(file_or_path, "rb") as wav_file:
         bytes_per_sample = wav_file.getsampwidth()
         sample_bytes = wav_file.readframes(-1)
         sample_rate = wav_file.getframerate()

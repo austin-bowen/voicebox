@@ -21,14 +21,14 @@ from voicebox.audio import Audio
 from voicebox.effects.effect import Effect
 
 __all__ = [
-    'center_to_band',
-    'Filter',
-    'FilterParamBuilder',
-    'IIRFilterParamBuilder',
+    "center_to_band",
+    "Filter",
+    "FilterParamBuilder",
+    "IIRFilterParamBuilder",
 ]
 
-BType = Literal['lowpass', 'highpass', 'bandpass', 'bandstop']
-FType = Literal['butter', 'cheby1', 'cheby2', 'ellip', 'bessel']
+BType = Literal["lowpass", "highpass", "bandpass", "bandstop"]
+FType = Literal["butter", "cheby1", "cheby2", "ellip", "bessel"]
 Freq = Union[int, float]
 Band = Tuple[Freq, Freq]
 FreqOrBand = Union[Freq, Band]
@@ -68,7 +68,7 @@ class IIRFilterParamBuilder(FilterParamBuilder):
             btype=self.btype,
             analog=False,
             ftype=self.ftype,
-            output='sos',
+            output="sos",
             fs=sample_rate,
         )
 
@@ -79,14 +79,14 @@ class Filter(Effect):
 
     @classmethod
     def build(
-            cls,
-            btype: BType,
-            freq: FreqOrBand,
-            order: int = 1,
-            rp: float = None,
-            rs: float = None,
-            ftype: FType = 'butter',
-    ) -> 'Filter':
+        cls,
+        btype: BType,
+        freq: FreqOrBand,
+        order: int = 1,
+        rp: float = None,
+        rs: float = None,
+        ftype: FType = "butter",
+    ) -> "Filter":
         """
         Builds a filter using ``scipy.signal.iirfilter``.
 

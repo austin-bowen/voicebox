@@ -44,17 +44,17 @@ class VoiceAiTTS(TTS):
     """
 
     def __init__(
-            self,
-            api_key: str,
-            voice_id: str = None,
-            temperature: float = None,
-            top_p: float = None,
-            model: str = None,
-            language: str = None,
-            api_url: str = DEFAULT_VOICE_AI_API_URL,
-            extra_json: dict[str, Any] = None,
-            extra_headers: dict[str, str] = None,
-            request_kwargs: dict[str, Any] = None,
+        self,
+        api_key: str,
+        voice_id: str = None,
+        temperature: float = None,
+        top_p: float = None,
+        model: str = None,
+        language: str = None,
+        api_url: str = DEFAULT_VOICE_AI_API_URL,
+        extra_json: dict[str, Any] = None,
+        extra_headers: dict[str, str] = None,
+        request_kwargs: dict[str, Any] = None,
     ):
         self.api_key = api_key
 
@@ -94,13 +94,16 @@ class VoiceAiTTS(TTS):
             "audio_format": "wav",
         }
 
-        add_optional_items(json, [
-            ("voice_id", self.voice_id),
-            ("temperature", self.temperature),
-            ("top_p", self.top_p),
-            ("model", self.model),
-            ("language", self.language),
-        ])
+        add_optional_items(
+            json,
+            [
+                ("voice_id", self.voice_id),
+                ("temperature", self.temperature),
+                ("top_p", self.top_p),
+                ("model", self.model),
+                ("language", self.language),
+            ],
+        )
 
         json.update(self.extra_json)
 

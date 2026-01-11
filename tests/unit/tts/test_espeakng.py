@@ -18,8 +18,8 @@ class ESpeakNGTest(unittest.TestCase):
         tts = ESpeakNG()
         self.assertEqual(ESpeakConfig(), tts.config)
 
-    @patch('voicebox.tts.espeakng.get_audio_from_wav_file')
-    @patch('subprocess.Popen')
+    @patch("voicebox.tts.espeakng.get_audio_from_wav_file")
+    @patch("subprocess.Popen")
     def test_get_speech_with_default_config(self, *mocks):
         self._setup_mocks(*mocks)
 
@@ -28,30 +28,33 @@ class ESpeakNGTest(unittest.TestCase):
 
         self.assertIs(tts.config, config)
 
-        result = tts.get_speech('foo')
+        result = tts.get_speech("foo")
 
         self.assertIs(result, self.audio)
 
         expected_args = [
-            'espeak-ng',
-            '--stdin',
-            '-b', '1',
-            '--stdout',
+            "espeak-ng",
+            "--stdin",
+            "-b",
+            "1",
+            "--stdout",
         ]
 
         self._check_mock_calls(expected_args, config)
 
-    @parameterized.expand([
-        ('.!?', '--punct=".!?"'),
-        (True, '--punct'),
-    ])
-    @patch('voicebox.tts.espeakng.get_audio_from_wav_file')
-    @patch('subprocess.Popen')
+    @parameterized.expand(
+        [
+            (".!?", '--punct=".!?"'),
+            (True, "--punct"),
+        ]
+    )
+    @patch("voicebox.tts.espeakng.get_audio_from_wav_file")
+    @patch("subprocess.Popen")
     def test_get_speech_with_custom_config_and_SSML_text(
-            self,
-            config_punctuation,
-            expected_punctuation,
-            *mocks,
+        self,
+        config_punctuation,
+        expected_punctuation,
+        *mocks,
     ):
         self._setup_mocks(*mocks)
 
@@ -62,10 +65,10 @@ class ESpeakNGTest(unittest.TestCase):
             line_length=4,
             pitch=5,
             speed=6,
-            voice='test voice',
+            voice="test voice",
             no_final_pause=True,
             speak_punctuation=config_punctuation,
-            exe_path='/path/to/espeak-ng',
+            exe_path="/path/to/espeak-ng",
             timeout=7.8,
         )
 
@@ -73,43 +76,53 @@ class ESpeakNGTest(unittest.TestCase):
 
         self.assertIs(tts.config, config)
 
-        result = tts.get_speech(SSML('foo'))
+        result = tts.get_speech(SSML("foo"))
 
         self.assertIs(result, self.audio)
 
         expected_args = [
-            '/path/to/espeak-ng',
-            '--stdin',
-            '-b', '1',
-            '--stdout',
-            '-a', '1',
-            '-g', '230',
-            '-k', '20',
-            '-l', '4',
-            '-p', '5',
-            '-s', '6',
-            '-v', 'test voice',
-            '-z',
-            '-m',
+            "/path/to/espeak-ng",
+            "--stdin",
+            "-b",
+            "1",
+            "--stdout",
+            "-a",
+            "1",
+            "-g",
+            "230",
+            "-k",
+            "20",
+            "-l",
+            "4",
+            "-p",
+            "5",
+            "-s",
+            "6",
+            "-v",
+            "test voice",
+            "-z",
+            "-m",
             expected_punctuation,
         ]
 
         self._check_mock_calls(expected_args, config)
 
-    @patch('voicebox.tts.espeakng.get_audio_from_wav_file')
-    @patch('subprocess.Popen')
-    def test_get_speech_without_espeakng_installed_raises_FileNotFoundError(self, *mocks):
+    @patch("voicebox.tts.espeakng.get_audio_from_wav_file")
+    @patch("subprocess.Popen")
+    def test_get_speech_without_espeakng_installed_raises_FileNotFoundError(
+        self, *mocks
+    ):
         self._setup_mocks(*mocks)
-        self.mock_Popen.side_effect = FileNotFoundError('File not found')
+        self.mock_Popen.side_effect = FileNotFoundError("File not found")
 
         tts = ESpeakNG()
 
-        self.assertRaises(FileNotFoundError, tts.get_speech, 'foo')
+        self.assertRaises(FileNotFoundError, tts.get_speech, "foo")
 
     def _setup_mocks(
-            self,
-            mock_Popen,
-            mock_get_audio_from_wav_file,
+        self,
+        mock_Popen,
+        mock_get_audio_from_wav_file,
     ):
         mock_Popen.return_value = self.mock_proc
         self.mock_Popen = mock_Popen
@@ -125,12 +138,10 @@ class ESpeakNGTest(unittest.TestCase):
             stdout=subprocess.PIPE,
         )
 
-        self.mock_proc.stdin.write.assert_called_once_with(b'foo')
+        self.mock_proc.stdin.write.assert_called_once_with(b"foo")
         self.mock_proc.stdin.close.assert_called_once()
 
-        self.mock_get_audio_from_wav_file.assert_called_once_with(
-            self.mock_proc.stdout
-        )
+        self.mock_get_audio_from_wav_file.assert_called_once_with(self.mock_proc.stdout)
 
         self.mock_proc.wait.assert_called_once()
         self.mock_proc.wait.assert_called_once_with(timeout=config.timeout)

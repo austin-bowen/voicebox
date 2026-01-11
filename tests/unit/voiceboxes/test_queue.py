@@ -19,8 +19,8 @@ class QueueTest(unittest.TestCase):
 
     @parameterized.expand([0, -1])
     def test_join_with_non_negative_timeout_raises_ValueError(
-            self,
-            timeout: float,
+        self,
+        timeout: float,
     ):
         queue = Queue()
 

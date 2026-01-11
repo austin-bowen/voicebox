@@ -32,18 +32,18 @@ class AudioFileTTS(TTS, ABC):
     temp_file_prefix: str
 
     def __init__(
-            self,
-            temp_file_dir: Optional[str],
-            temp_file_prefix: str,
+        self,
+        temp_file_dir: Optional[str],
+        temp_file_prefix: str,
     ):
         self.temp_file_dir = temp_file_dir
         self.temp_file_prefix = temp_file_prefix
 
     def get_speech(self, text: StrOrSSML) -> Audio:
         with NamedTemporaryFile(
-                prefix=self.temp_file_prefix,
-                suffix='.' + self.get_audio_file_type(),
-                dir=self.temp_file_dir,
+            prefix=self.temp_file_prefix,
+            suffix="." + self.get_audio_file_type(),
+            dir=self.temp_file_dir,
         ) as audio_file:
             audio_file.close()
             audio_file_path = Path(audio_file.name)
@@ -56,7 +56,9 @@ class AudioFileTTS(TTS, ABC):
         ...  # pragma: no cover
 
     @abstractmethod
-    def generate_speech_audio_file(self, text: StrOrSSML, audio_file_path: Path) -> None:
+    def generate_speech_audio_file(
+        self, text: StrOrSSML, audio_file_path: Path
+    ) -> None:
         """Generates a speech audio file from the given text."""
         ...  # pragma: no cover
 
@@ -68,7 +70,7 @@ class AudioFileTTS(TTS, ABC):
 
 class Mp3FileTTS(AudioFileTTS, ABC):
     def get_audio_file_type(self) -> str:
-        return 'mp3'
+        return "mp3"
 
     def get_audio_from_file(self, file_path: Path) -> Audio:
         return get_audio_from_mp3(file_path)
@@ -76,7 +78,7 @@ class Mp3FileTTS(AudioFileTTS, ABC):
 
 class WavFileTTS(AudioFileTTS, ABC):
     def get_audio_file_type(self) -> str:
-        return 'wav'
+        return "wav"
 
     def get_audio_from_file(self, file_path: Path) -> Audio:
         return get_audio_from_wav_file(file_path)
@@ -119,10 +121,10 @@ class FallbackTTS(TTS):
                 if is_last or not should_catch:
                     raise
 
-        raise ValueError('self.ttss is empty')
+        raise ValueError("self.ttss is empty")
 
     def handle_exception(self, e: BaseException, tts: TTS, tts_index: int) -> None:
-        message = f'Exception occurred calling TTS={tts} (index {tts_index})'
+        message = f"Exception occurred calling TTS={tts} (index {tts_index})"
         self.log.exception(message, exc_info=e)
 
 
@@ -163,9 +165,10 @@ class RetryTTS(TTS):
                 if is_last_attempt or not should_catch:
                     raise
 
-        raise ValueError(f'self.max_attempts must be > 0; '
-                         f'max_attempts={self.max_attempts}')
+        raise ValueError(
+            f"self.max_attempts must be > 0; " f"max_attempts={self.max_attempts}"
+        )
 
     def handle_exception(self, e: BaseException, attempt: int) -> None:
-        message = f'TTS attempt {attempt}/{self.max_attempts} failed'
+        message = f"TTS attempt {attempt}/{self.max_attempts} failed"
         self.log.exception(message, exc_info=e)

@@ -1,7 +1,7 @@
 __all__ = [
-    'Effect',
-    'EffectWithDryWet',
-    'Effects',
+    "Effect",
+    "EffectWithDryWet",
+    "Effects",
 ]
 
 from abc import ABC, abstractmethod

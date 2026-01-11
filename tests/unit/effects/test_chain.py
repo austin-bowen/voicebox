@@ -11,7 +11,7 @@ from voicebox.effects.chain import SeriesChain, ParallelChain
 
 class SeriesChainTest(unittest.TestCase):
     def test_apply(self):
-        audio = Audio(np.array([1., 2., 3., 4.]), sample_rate=44100)
+        audio = Audio(np.array([1.0, 2.0, 3.0, 4.0]), sample_rate=44100)
 
         chain = SeriesChain(
             mock_effect(lambda a: a.copy(signal=a.signal + 1)),
@@ -36,7 +36,7 @@ class SeriesChainTest(unittest.TestCase):
 
 class ParallelChainTest(unittest.TestCase):
     def setUp(self):
-        self.audio = Audio(np.array([1., 2., 3., 4.]), sample_rate=44100)
+        self.audio = Audio(np.array([1.0, 2.0, 3.0, 4.0]), sample_rate=44100)
 
         self.chain = ParallelChain(
             mock_effect(lambda a: a.copy(signal=a.signal + 1)),
@@ -45,7 +45,7 @@ class ParallelChainTest(unittest.TestCase):
 
     def test_constructor_defaults(self):
         chain = ParallelChain()
-        self.assertEqual(0., chain.dry_gain)
+        self.assertEqual(0.0, chain.dry_gain)
         self.assertIs(chain.combine_func, np.sum)
 
     @parameterized.expand([0, 0.5, 1, -1])
@@ -83,15 +83,13 @@ class ParallelChainTest(unittest.TestCase):
     def test_apply_outputs_signal_with_length_of_longest_subsignal(self):
         chain = ParallelChain(
             mock_effect(lambda a: a.copy(signal=a.signal + 1)),
-            mock_effect(lambda a: a.copy(
-                signal=np.concatenate([a.signal, a.signal])
-            )),
+            mock_effect(lambda a: a.copy(signal=np.concatenate([a.signal, a.signal]))),
         )
 
         result = chain.apply(self.audio.copy())
 
-        signal_1 = np.array([2., 3., 4., 5., 0., 0., 0., 0.])
-        signal_2 = np.array([1., 2., 3., 4., 1., 2., 3., 4.])
+        signal_1 = np.array([2.0, 3.0, 4.0, 5.0, 0.0, 0.0, 0.0, 0.0])
+        signal_2 = np.array([1.0, 2.0, 3.0, 4.0, 1.0, 2.0, 3.0, 4.0])
         expected_signal = signal_1 + signal_2
 
         expected = Audio(expected_signal, sample_rate=self.audio.sample_rate)

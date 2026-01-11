@@ -1,4 +1,4 @@
-__all__ = ['SeriesChain', 'ParallelChain']
+__all__ = ["SeriesChain", "ParallelChain"]
 
 from typing import Sequence, Callable
 
@@ -45,10 +45,10 @@ class ParallelChain(Effect):
     combine_func: Callable[[np.ndarray], np.ndarray]
 
     def __init__(
-            self,
-            *effects: Effect,
-            dry_gain: float = 0.,
-            combine_func: Callable[..., np.ndarray] = np.sum,
+        self,
+        *effects: Effect,
+        dry_gain: float = 0.0,
+        combine_func: Callable[..., np.ndarray] = np.sum,
     ):
         self.effects = effects
         self.dry_gain = dry_gain
@@ -67,13 +67,15 @@ class ParallelChain(Effect):
 
         sample_rates = set(a.sample_rate for a in audios)
         if len(sample_rates) != 1:
-            raise RuntimeError(f'All sample rates must be the same; got sample rates: {sample_rates}')
+            raise RuntimeError(
+                f"All sample rates must be the same; got sample rates: {sample_rates}"
+            )
         sample_rate = next(iter(sample_rates))
 
         max_length = max(len(a) for a in audios)
         signals = np.zeros((len(audios), max_length))
         for i, a in enumerate(audios):
-            signals[i, :len(a)] = a.signal
+            signals[i, : len(a)] = a.signal
 
         signal = self.combine_func(signals, axis=0)
         assert len(signal) == max_length

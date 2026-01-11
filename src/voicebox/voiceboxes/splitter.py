@@ -39,7 +39,9 @@ class RegexSplitter(Splitter):
     join_split_group: bool
 
     def __init__(self, pattern: Union[str, re.Pattern], join_split_group: bool = True):
-        self.pattern = pattern if isinstance(pattern, re.Pattern) else re.compile(pattern)
+        self.pattern = (
+            pattern if isinstance(pattern, re.Pattern) else re.compile(pattern)
+        )
         self.join_split_group = join_split_group
 
     def split(self, text: StrOrSSML) -> Iterable[StrOrSSML]:
@@ -52,9 +54,9 @@ class RegexSplitter(Splitter):
         result = filter(bool, result)
 
         if self.join_split_group:
-            result = list(result) + ['']
+            result = list(result) + [""]
             pairs = zip(result[0::2], result[1::2])
-            result = (''.join(pair) for pair in pairs)
+            result = ("".join(pair) for pair in pairs)
 
         return result
 
@@ -63,7 +65,7 @@ class SimpleSentenceSplitter(RegexSplitter):
     """Splits text on sentence punctuation '.', '!', and '?'."""
 
     def __init__(self):
-        super().__init__(r'([.!?]+(?:\s+|$))')
+        super().__init__(r"([.!?]+(?:\s+|$))")
 
 
 @dataclass
@@ -76,10 +78,7 @@ class NltkTokenizerSplitter(Splitter):
     tokenizer: TokenizerI
 
     def split(self, text: StrOrSSML) -> Iterable[StrOrSSML]:
-        return (
-            [text] if isinstance(text, SSML) else
-            self.tokenizer.tokenize(text)
-        )
+        return [text] if isinstance(text, SSML) else self.tokenizer.tokenize(text)
 
 
 class PunktSentenceSplitter(NltkTokenizerSplitter):
@@ -107,14 +106,14 @@ class PunktSentenceSplitter(NltkTokenizerSplitter):
     https://www.nltk.org/data.html
     """
 
-    def __init__(self, language: str = 'english'):
+    def __init__(self, language: str = "english"):
         tokenizer = PunktTokenizer(language)
         super().__init__(tokenizer)
 
     @staticmethod
     def download_resources(**kwargs):
         """Download the Punkt NLTK resources."""
-        nltk.download('punkt_tab', **kwargs)  # pragma: no cover
+        nltk.download("punkt_tab", **kwargs)  # pragma: no cover
 
 
 def default_splitter() -> Splitter:

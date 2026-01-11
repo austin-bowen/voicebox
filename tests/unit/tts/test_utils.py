@@ -14,28 +14,30 @@ from voicebox.tts.utils import (
 
 
 class GetAudioFromWavFileTest(unittest.TestCase):
-    @parameterized.expand([
-        (
+    @parameterized.expand(
+        [
+            (
                 1,
                 np.int8([0, 1, -2, 127, -128]),
-                [0., 0.0078125, -0.015625, 0.9921875, -1.],
-        ),
-        (
+                [0.0, 0.0078125, -0.015625, 0.9921875, -1.0],
+            ),
+            (
                 2,
                 np.int16([0, 1024, -2048, 32767, -32768]),
-                [0., 0.03125, -0.0625, 0.999969482, -1.],
-        ),
-        (
+                [0.0, 0.03125, -0.0625, 0.999969482, -1.0],
+            ),
+            (
                 4,
                 np.int32([0, 33554432, -67108864, 2147483647, -2147483648]),
-                [0., 0.015625, -0.03125, 1., -1.],
-        ),
-    ])
+                [0.0, 0.015625, -0.03125, 1.0, -1.0],
+            ),
+        ]
+    )
     def test(
-            self,
-            sampwidth: int,
-            frames: np.ndarray,
-            expected_signal: List[float],
+        self,
+        sampwidth: int,
+        frames: np.ndarray,
+        expected_signal: List[float],
     ):
         framerate = 10_000
 
@@ -52,8 +54,8 @@ class GetAudioFromWavFileTest(unittest.TestCase):
         self.assertEqual(framerate, result.sample_rate)
 
     def test_raises_KeyError_when_given_unsupported_sample_width(
-            self,
-            sampwidth: int = 3,
+        self,
+        sampwidth: int = 3,
     ):
         wav_file = self.build_wav(
             sampwidth,
@@ -67,7 +69,7 @@ class GetAudioFromWavFileTest(unittest.TestCase):
     def build_wav(sampwidth: int, framerate: int, frames: np.ndarray) -> BytesIO:
         wav_data = BytesIO()
 
-        with wave.open(wav_data, 'wb') as wav_file:
+        with wave.open(wav_data, "wb") as wav_file:
             wav_file.setnchannels(1)
             wav_file.setsampwidth(sampwidth)
             wav_file.setframerate(framerate)
@@ -80,9 +82,9 @@ class GetAudioFromWavFileTest(unittest.TestCase):
 
 class AddOptionalItemsTest(unittest.TestCase):
     def test(self):
-        d = {'foo': 1}
+        d = {"foo": 1}
 
-        result = add_optional_items(d, [('bar', None), ('baz', 3)])
+        result = add_optional_items(d, [("bar", None), ("baz", 3)])
 
         self.assertIs(result, d)
-        self.assertDictEqual({'foo': 1, 'baz': 3}, d)
+        self.assertDictEqual({"foo": 1, "baz": 3}, d)

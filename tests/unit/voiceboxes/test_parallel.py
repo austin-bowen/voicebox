@@ -19,8 +19,8 @@ class ParallelVoiceboxTest(unittest.TestCase):
 
         self.tts = Mock()
         self.tts.get_speech.side_effect = lambda it: {
-            'foo': self.foo_audio,
-            'bar': self.bar_audio,
+            "foo": self.foo_audio,
+            "bar": self.bar_audio,
         }[it]
 
         self.effect = Mock()
@@ -88,12 +88,12 @@ class ParallelVoiceboxTest(unittest.TestCase):
         self.assertTrue(self.voicebox.is_alive())
 
     def test_say(self):
-        self.voicebox.say('foo')
-        self.voicebox.say('bar')
+        self.voicebox.say("foo")
+        self.voicebox.say("bar")
         self.check()
 
     def test_say_all(self):
-        self.voicebox.say_all(['foo', 'bar'])
+        self.voicebox.say_all(["foo", "bar"])
         self.check()
 
     @parameterized.expand([True, False])
@@ -119,12 +119,12 @@ class ParallelVoiceboxTest(unittest.TestCase):
 
         assert_called_with_exactly(
             self.text_splitter.split,
-            [call('foo'), call('bar')],
+            [call("foo"), call("bar")],
         )
 
         assert_called_with_exactly(
             self.tts.get_speech,
-            [call('foo'), call('bar')],
+            [call("foo"), call("bar")],
         )
 
         assert_called_with_exactly(

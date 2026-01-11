@@ -40,8 +40,11 @@ class GoogleCloudTTS(TTS):
     def get_speech(self, text: StrOrSSML) -> Audio:
         self.audio_config.audio_encoding = AudioEncoding.LINEAR16
 
-        input_ = (SynthesisInput(ssml=text) if isinstance(text, SSML) else
-                  SynthesisInput(text=text))
+        input_ = (
+            SynthesisInput(ssml=text)
+            if isinstance(text, SSML)
+            else SynthesisInput(text=text)
+        )
 
         response = self.client.synthesize_speech(
             input=input_,

@@ -1,4 +1,4 @@
-__all__ = ['reliable_tts']
+__all__ = ["reliable_tts"]
 
 from typing import Union, Iterable, Literal
 
@@ -7,10 +7,10 @@ from voicebox.tts.cache import Size, SizeFunc
 
 
 def reliable_tts(
-        ttss: Union[TTS, Iterable[TTS]] = None,
-        retry_max_attempts: int = 3,
-        cache_max_size: Size = 60,
-        cache_size_func: Union[Literal['bytes', 'count', 'seconds'], SizeFunc] = 'seconds',
+    ttss: Union[TTS, Iterable[TTS]] = None,
+    retry_max_attempts: int = 3,
+    cache_max_size: Size = 60,
+    cache_size_func: Union[Literal["bytes", "count", "seconds"], SizeFunc] = "seconds",
 ) -> TTS:
     """
     Takes zero or more TTS instances and returns a single TTS that will attempt
@@ -32,11 +32,14 @@ def reliable_tts(
 
     ttss = [RetryTTS(tts, max_attempts=retry_max_attempts) for tts in ttss]
 
-    ttss = [CachedTTS.build(
-        tts,
-        max_size=cache_max_size,
-        size_func=cache_size_func,
-    ) for tts in ttss]
+    ttss = [
+        CachedTTS.build(
+            tts,
+            max_size=cache_max_size,
+            size_func=cache_size_func,
+        )
+        for tts in ttss
+    ]
 
     ttss = FallbackTTS(ttss)
 

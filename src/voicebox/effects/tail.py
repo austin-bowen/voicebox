@@ -1,4 +1,4 @@
-__all__ = ['Tail']
+__all__ = ["Tail"]
 
 from dataclasses import dataclass
 
@@ -18,7 +18,7 @@ class Tail(Effect):
     decay naturally instead of being abruptly cut off.
     """
 
-    seconds: float = 1.
+    seconds: float = 1.0
 
     def apply(self, audio: Audio) -> Audio:
         samples = round(self.seconds * audio.sample_rate)

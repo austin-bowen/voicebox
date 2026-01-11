@@ -42,10 +42,10 @@ class WaveFile(Sink):
 
 
 def write_audio_to_wav(
-        audio: Audio,
-        file_or_path: FileOrPath,
-        append: bool = False,
-        sample_width: int = 2,
+    audio: Audio,
+    file_or_path: FileOrPath,
+    append: bool = False,
+    sample_width: int = 2,
 ) -> None:
     audio.check()
 
@@ -61,10 +61,10 @@ def write_audio_to_wav(
 
         if audio.sample_rate != existing_audio.sample_rate:
             raise ValueError(
-                f'Cannot append audio to existing file {file_or_path}: '
-                f'Sample rates do not match: '
-                f'new={audio.sample_rate}; '
-                f'existing={existing_audio.sample_rate}'
+                f"Cannot append audio to existing file {file_or_path}: "
+                f"Sample rates do not match: "
+                f"new={audio.sample_rate}; "
+                f"existing={existing_audio.sample_rate}"
             )
 
         signal = np.concatenate([existing_audio.signal, audio.signal])
@@ -80,7 +80,7 @@ def write_audio_to_wav(
     signal = signal.astype(dtype)
     signal_bytes = signal.tobytes()
 
-    with wave.open(file_or_path, 'wb') as wav_file:
+    with wave.open(file_or_path, "wb") as wav_file:
         wav_file.setnchannels(1)
         wav_file.setsampwidth(sample_width)
         wav_file.setframerate(audio.sample_rate)

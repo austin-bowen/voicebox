@@ -17,7 +17,7 @@ from voicebox.tts.googlecloudtts import GoogleCloudTTS
 class GoogleCloudTTSTest(unittest.TestCase):
     def setUp(self):
         response = Mock()
-        response.audio_content = b'audio_content'
+        response.audio_content = b"audio_content"
 
         self.client = Mock()
         self.client.synthesize_speech.return_value = response
@@ -49,18 +49,19 @@ class GoogleCloudTTSTest(unittest.TestCase):
         self.assertIs(timeout, tts.timeout)
 
     @parameterized.expand([False, True])
-    @patch('voicebox.tts.googlecloudtts.get_audio_from_wav_file')
+    @patch("voicebox.tts.googlecloudtts.get_audio_from_wav_file")
     def test_get_speech(self, is_ssml: bool, mock_get_audio_from_wav_file):
         audio = build_audio()
         mock_get_audio_from_wav_file.return_value = audio
 
-        text = SSML('foo') if is_ssml else 'foo'
+        text = SSML("foo") if is_ssml else "foo"
         result = self.tts.get_speech(text)
 
         self.assertIs(result, audio)
 
-        expected_input = (SynthesisInput(ssml='foo') if is_ssml else
-                          SynthesisInput(text='foo'))
+        expected_input = (
+            SynthesisInput(ssml="foo") if is_ssml else SynthesisInput(text="foo")
+        )
 
         self.client.synthesize_speech.assert_called_once_with(
             input=expected_input,

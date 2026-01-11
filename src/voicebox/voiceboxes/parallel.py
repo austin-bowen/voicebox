@@ -1,4 +1,4 @@
-__all__ = ['ParallelVoicebox']
+__all__ = ["ParallelVoicebox"]
 
 from abc import abstractmethod
 from queue import Empty
@@ -14,7 +14,7 @@ from voicebox.voiceboxes.base import VoiceboxWithTextSplitter
 from voicebox.voiceboxes.queue import Queue
 from voicebox.voiceboxes.splitter import Splitter
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class _QueueThread(Thread):
@@ -24,11 +24,11 @@ class _QueueThread(Thread):
     _stop_event: Event
 
     def __init__(
-            self,
-            start: bool = True,
-            queue_max_size: int = 0,
-            queue_get_timeout: float = 1.,
-            **kwargs,
+        self,
+        start: bool = True,
+        queue_max_size: int = 0,
+        queue_get_timeout: float = 1.0,
+        **kwargs,
     ):
         super().__init__(**kwargs)
 
@@ -70,8 +70,7 @@ class _QueueThread(Thread):
                 continue
 
     @abstractmethod
-    def _process_item(self, item: T) -> None:
-        ...  # pragma: no cover
+    def _process_item(self, item: T) -> None: ...  # pragma: no cover
 
 
 class _SinkQueueThread(_QueueThread):
@@ -91,11 +90,11 @@ class _TTSAndEffectsQueueThread(_QueueThread):
     sink_queue_thread: _SinkQueueThread
 
     def __init__(
-            self,
-            tts: TTS,
-            effects: Effects,
-            sink_queue_thread: _SinkQueueThread,
-            **kwargs,
+        self,
+        tts: TTS,
+        effects: Effects,
+        sink_queue_thread: _SinkQueueThread,
+        **kwargs,
     ):
         self.tts = tts
         self.effects = effects
@@ -155,14 +154,14 @@ class ParallelVoicebox(VoiceboxWithTextSplitter):
     _sink_queue_thread: _SinkQueueThread
 
     def __init__(
-            self,
-            tts: TTS = None,
-            effects: Effects = None,
-            sink: Sink = None,
-            text_splitter: Splitter = None,
-            start: bool = True,
-            queue_get_timeout: float = 1.,
-            daemon: bool = True,
+        self,
+        tts: TTS = None,
+        effects: Effects = None,
+        sink: Sink = None,
+        text_splitter: Splitter = None,
+        start: bool = True,
+        queue_get_timeout: float = 1.0,
+        daemon: bool = True,
     ):
         super().__init__(text_splitter)
 
@@ -229,8 +228,8 @@ class ParallelVoicebox(VoiceboxWithTextSplitter):
         """Return whether the threads are alive."""
 
         return (
-                self._tts_and_effects_queue_thread.is_alive()
-                and self._sink_queue_thread.is_alive()
+            self._tts_and_effects_queue_thread.is_alive()
+            and self._sink_queue_thread.is_alive()
         )
 
     def join(self, timeout: float = None) -> None:
