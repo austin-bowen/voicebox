@@ -50,6 +50,7 @@ all = [
     "voicebox-tts[google-cloud-tts]",
     "voicebox-tts[gtts]",
     "voicebox-tts[pyttsx3]",
+    "voicebox-tts[voice-ai]",
 ]
 dev = [
     "build",
@@ -82,6 +83,9 @@ gtts = [
 ]
 pyttsx3 = [
     "pyttsx3",
+]
+voice-ai = [
+    "requests",
 ]
 
 [project.urls]

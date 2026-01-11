@@ -1,5 +1,6 @@
 .coverage
 .idea/
+.env
 .pypirc*
 __pycache__/
 build/
