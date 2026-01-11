@@ -15,8 +15,8 @@ class SimpleVoiceboxTest(unittest.TestCase):
 
         self.tts = Mock()
         self.tts.get_speech.side_effect = lambda t: {
-            'foo': self.foo_audio,
-            'bar': self.bar_audio,
+            "foo": self.foo_audio,
+            "bar": self.bar_audio,
         }[t]
 
         self.effect = Mock()
@@ -39,21 +39,19 @@ class SimpleVoiceboxTest(unittest.TestCase):
         self.assertIsInstance(voicebox.sink, SoundDevice)
 
     def test_say(self):
-        self.voicebox.say('foo')
+        self.voicebox.say("foo")
 
-        self.tts.get_speech.assert_called_once_with('foo')
+        self.tts.get_speech.assert_called_once_with("foo")
         self.effect.apply.assert_called_once_with(self.foo_audio)
         self.sink.play.assert_called_once_with(self.foo_audio)
 
     def test_say_all(self):
-        self.voicebox.say_all(['foo', 'bar'])
+        self.voicebox.say_all(["foo", "bar"])
 
-        assert_called_with_exactly(self.tts.get_speech, [
-            call('foo'), call('bar')
-        ])
-        assert_called_with_exactly(self.effect.apply, [
-            call(self.foo_audio), call(self.bar_audio)
-        ])
-        assert_called_with_exactly(self.sink.play, [
-            call(self.foo_audio), call(self.bar_audio)
-        ])
+        assert_called_with_exactly(self.tts.get_speech, [call("foo"), call("bar")])
+        assert_called_with_exactly(
+            self.effect.apply, [call(self.foo_audio), call(self.bar_audio)]
+        )
+        assert_called_with_exactly(
+            self.sink.play, [call(self.foo_audio), call(self.bar_audio)]
+        )

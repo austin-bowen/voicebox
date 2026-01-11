@@ -1,6 +1,6 @@
 __all__ = [
-    'Voicebox',
-    'VoiceboxWithTextSplitter',
+    "Voicebox",
+    "VoiceboxWithTextSplitter",
 ]
 
 import asyncio
@@ -29,10 +29,10 @@ class Voicebox(ABC):
             self.say(text)
 
     async def say_all_async(
-            self,
-            texts: Iterable[str],
-            loop=None,
-            executor=None,
+        self,
+        texts: Iterable[str],
+        loop=None,
+        executor=None,
     ) -> None:
         """Say all the given texts, in order, asynchronously."""
         loop = loop or asyncio.get_running_loop()

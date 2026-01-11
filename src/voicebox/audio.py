@@ -32,13 +32,13 @@ class Audio:
     @property
     def sample_period(self) -> float:
         """Sample period in seconds."""
-        return 1. / self.sample_rate
+        return 1.0 / self.sample_rate
 
     @sample_period.setter
     def sample_period(self, period: float) -> None:
-        self.sample_rate = round(1. / period)
+        self.sample_rate = round(1.0 / period)
 
-    def __eq__(self, other: 'Audio') -> bool:
+    def __eq__(self, other: "Audio") -> bool:
         return (
             other.signal.shape == self.signal.shape
             and np.allclose(self.signal, other.signal)
@@ -60,13 +60,13 @@ class Audio:
         3. The sample rate must be greater than 0.
         """
 
-        if len(self) and np.any(np.abs(self.signal) > 1.):
-            raise ValueError(f'All values in signal must be in range [-1, 1].')
+        if len(self) and np.any(np.abs(self.signal) > 1.0):
+            raise ValueError(f"All values in signal must be in range [-1, 1].")
 
         if self.sample_rate <= 0:
-            raise ValueError(f'sample_rate must be > 0; sample_rate={self.sample_rate}')
+            raise ValueError(f"sample_rate must be > 0; sample_rate={self.sample_rate}")
 
-    def copy(self, signal: np.ndarray = None, sample_rate: int = None) -> 'Audio':
+    def copy(self, signal: np.ndarray = None, sample_rate: int = None) -> "Audio":
         """Returns a deep copy of self, with optional new property values."""
 
         return Audio(

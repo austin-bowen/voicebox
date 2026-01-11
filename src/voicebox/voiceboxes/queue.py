@@ -1,4 +1,4 @@
-__all__ = ['NotFinished', 'Queue']
+__all__ = ["NotFinished", "Queue"]
 
 from queue import Queue as Queue_
 from time import monotonic as time
@@ -35,7 +35,7 @@ class Queue(Queue_):
             return super().join()
         elif timeout <= 0:
             raise ValueError(
-                f'timeout must be a non-negative number; timeout={timeout}'
+                f"timeout must be a non-negative number; timeout={timeout}"
             )
 
         end_time = time() + timeout

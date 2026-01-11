@@ -53,6 +53,7 @@ all = [
     "voicebox-tts[voice-ai]",
 ]
 dev = [
+    "black",
     "build",
     "invoke",
     "twine",

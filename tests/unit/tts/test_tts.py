@@ -21,11 +21,11 @@ class TTSTest(unittest.TestCase):
         tts.get_speech = Mock()
         tts.get_speech.side_effect = lambda _: audio
 
-        result = tts('foo')
+        result = tts("foo")
 
         self.assertEqual(result, audio)
 
-        tts.get_speech.assert_called_once_with('foo')
+        tts.get_speech.assert_called_once_with("foo")
 
 
 class FallbackTTSTest(unittest.TestCase):
@@ -45,12 +45,12 @@ class FallbackTTSTest(unittest.TestCase):
             log=log,
         )
 
-        result = tts.get_speech('foo')
+        result = tts.get_speech("foo")
 
         self.assertIs(result, audio)
 
         for mock_tts in [bad_tts_1, bad_tts_2, good_tts_1]:
-            mock_tts.get_speech.assert_called_once_with('foo')
+            mock_tts.get_speech.assert_called_once_with("foo")
 
         good_tts_2.get_speech.assert_not_called()
 
@@ -60,14 +60,14 @@ class FallbackTTSTest(unittest.TestCase):
 
         tts = FallbackTTS([bad_tts_1, bad_tts_2], log=log)
 
-        self.assertRaises(Exception, tts.get_speech, 'foo')
+        self.assertRaises(Exception, tts.get_speech, "foo")
 
-        bad_tts_1.get_speech.assert_called_once_with('foo')
-        bad_tts_2.get_speech.assert_called_once_with('foo')
+        bad_tts_1.get_speech.assert_called_once_with("foo")
+        bad_tts_2.get_speech.assert_called_once_with("foo")
 
     def test_get_speech_with_empty_ttss_raises_ValueError(self):
         tts = FallbackTTS([], log=log)
-        self.assertRaises(ValueError, tts.get_speech, 'foo')
+        self.assertRaises(ValueError, tts.get_speech, "foo")
 
 
 class RetryTTSTest(unittest.TestCase):
@@ -83,7 +83,7 @@ class RetryTTSTest(unittest.TestCase):
             call_count = mock_get_speech.call_count
 
             if call_count == 1:
-                raise Exception('First call fails')
+                raise Exception("First call fails")
             else:
                 return audio
 
@@ -93,11 +93,11 @@ class RetryTTSTest(unittest.TestCase):
 
         tts = RetryTTS(mock_tts, log=log)
 
-        result = tts.get_speech('foo')
+        result = tts.get_speech("foo")
 
         self.assertIs(result, audio)
 
-        calls = [call('foo')] * 2
+        calls = [call("foo")] * 2
         assert_called_with_exactly(mock_tts.get_speech, calls)
 
     def test_get_speech_raises_exception_on_last_failed_attempt(self):
@@ -105,23 +105,23 @@ class RetryTTSTest(unittest.TestCase):
 
         tts = RetryTTS(mock_tts, log=log)
 
-        self.assertRaises(Exception, tts.get_speech, 'foo')
+        self.assertRaises(Exception, tts.get_speech, "foo")
 
-        calls = [call('foo')] * tts.max_attempts
+        calls = [call("foo")] * tts.max_attempts
         assert_called_with_exactly(mock_tts.get_speech, calls)
 
     @parameterized.expand([0, -1])
     def test_get_speech_with_non_positive_max_attempts_raises_ValueError(
-            self,
-            max_attempts: int,
+        self,
+        max_attempts: int,
     ):
         tts = RetryTTS(tts=Mock(), max_attempts=max_attempts, log=log)
-        self.assertRaises(ValueError, tts.get_speech, 'foo')
+        self.assertRaises(ValueError, tts.get_speech, "foo")
 
 
 def build_bad_tts() -> TTS:
     def raise_exception(*unused):
-        raise Exception('Whoopsiedoodle!')
+        raise Exception("Whoopsiedoodle!")
 
     bad_tts = Mock()
     bad_tts.get_speech.side_effect = raise_exception

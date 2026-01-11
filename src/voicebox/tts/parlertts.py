@@ -25,11 +25,11 @@ class ParlerTTS(TTS):
     device: torch.device
 
     def __init__(
-            self,
-            model: torch.nn.Module,
-            tokenizer: AutoTokenizer,
-            device: torch.device,
-            description: str,
+        self,
+        model: torch.nn.Module,
+        tokenizer: AutoTokenizer,
+        device: torch.device,
+        description: str,
     ):
         self.model = model
         self.tokenizer = tokenizer
@@ -49,11 +49,11 @@ class ParlerTTS(TTS):
 
     @classmethod
     def build(
-            cls,
-            description: str = '',
-            model_name: str = 'parler-tts/parler_tts_mini_v0.1',
-            device: Union[str, torch.device] = None,
-            torch_dtype: torch.dtype = None,
+        cls,
+        description: str = "",
+        model_name: str = "parler-tts/parler_tts_mini_v0.1",
+        device: Union[str, torch.device] = None,
+        torch_dtype: torch.dtype = None,
     ):
         """
         Build a new instance of ``ParlerTTS``.
@@ -77,17 +77,17 @@ class ParlerTTS(TTS):
 
         if device is None:
             if torch.cuda.is_available():
-                device = 'cuda:0'
+                device = "cuda:0"
             elif torch.backends.mps.is_available():
-                device = 'mps'
+                device = "mps"
             elif torch.xpu.is_available():
-                device = 'xpu'
+                device = "xpu"
             else:
-                device = 'cpu'
+                device = "cpu"
         device = torch.device(device)
 
         if torch_dtype is None:
-            torch_dtype = torch.float16 if device.type != 'cpu' else torch.float32
+            torch_dtype = torch.float16 if device.type != "cpu" else torch.float32
 
         model = ParlerTTSForConditionalGeneration.from_pretrained(model_name)
         model.to(device, dtype=torch_dtype)
@@ -110,4 +110,4 @@ class ParlerTTS(TTS):
         return Audio(signal, sample_rate)
 
     def _tokenize(self, text: str) -> torch.Tensor:
-        return self.tokenizer(text, return_tensors='pt').input_ids.to(self.device)
+        return self.tokenizer(text, return_tensors="pt").input_ids.to(self.device)

@@ -4,7 +4,11 @@ Voicebox emulating the OOM-9 command battle droid from Star Wars: Episode I.
 Requires the Google Cloud TTS engine.
 """
 
-from google.cloud.texttospeech import TextToSpeechClient, VoiceSelectionParams, AudioConfig
+from google.cloud.texttospeech import (
+    TextToSpeechClient,
+    VoiceSelectionParams,
+    AudioConfig,
+)
 
 from voicebox.effects import Vocoder, Normalize, RingMod
 from voicebox.effects.effect import Effects
@@ -20,11 +24,11 @@ def build_battle_droid_tts(client: TextToSpeechClient = None) -> TTS:
     return GoogleCloudTTS(
         client=client,
         voice_params=VoiceSelectionParams(
-            language_code='en-US',
-            name='en-US-Standard-D',
+            language_code="en-US",
+            name="en-US-Standard-D",
         ),
         audio_config=AudioConfig(
-            speaking_rate=1.,
+            speaking_rate=1.0,
             pitch=0.0,
         ),
     )
@@ -41,18 +45,18 @@ def build_battle_droid_effects() -> Effects:
 
     return [
         vocoder,
-        RingMod(carrier_freq=40, dry=.75, wet=.25),
+        RingMod(carrier_freq=40, dry=0.75, wet=0.25),
         Normalize(),
     ]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     demo(
         description=__doc__,
         tts=build_battle_droid_tts(),
         effects=build_battle_droid_effects(),
         default_messages=[
-            'Roger roger.',
+            "Roger roger.",
             "Yes Viceroy. If they're down here sir, we'll find them.",
             "Viceroy, we have captured the queen.",
             "My troops are in position to start searching the swamps for these rumored "

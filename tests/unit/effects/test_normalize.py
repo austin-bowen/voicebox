@@ -12,20 +12,26 @@ class NormalizeTest(TestCase):
         normalize = Normalize()
         self.assertEqual(1.0, normalize.max_amplitude)
 
-    @parameterized.expand([
-        (1.0, 0., True),
-        (1.0, 0., False),
-        (1.0, 1., True),
-        (1.0, 1., False),
-        (2.0, 0., True),
-        (2.0, 0., False),
-        (2.0, 1., True),
-        (2.0, 1., False),
-    ])
-    def test_apply(self, max_amplitude: float, dc_offset: float, remove_dc_offset: bool):
-        normalize = Normalize(max_amplitude=max_amplitude, remove_dc_offset=remove_dc_offset)
+    @parameterized.expand(
+        [
+            (1.0, 0.0, True),
+            (1.0, 0.0, False),
+            (1.0, 1.0, True),
+            (1.0, 1.0, False),
+            (2.0, 0.0, True),
+            (2.0, 0.0, False),
+            (2.0, 1.0, True),
+            (2.0, 1.0, False),
+        ]
+    )
+    def test_apply(
+        self, max_amplitude: float, dc_offset: float, remove_dc_offset: bool
+    ):
+        normalize = Normalize(
+            max_amplitude=max_amplitude, remove_dc_offset=remove_dc_offset
+        )
 
-        signal = np.array([-1., -.5, 0., .5, 1.]) + dc_offset
+        signal = np.array([-1.0, -0.5, 0.0, 0.5, 1.0]) + dc_offset
         audio = Audio(signal=signal, sample_rate=44100)
 
         result = normalize.apply(audio.copy())
@@ -35,16 +41,16 @@ class NormalizeTest(TestCase):
 
         actual_dc_offset = result.signal.mean()
         if not dc_offset or remove_dc_offset:
-            self.assertAlmostEqual(0., actual_dc_offset)
+            self.assertAlmostEqual(0.0, actual_dc_offset)
         elif dc_offset:
-            self.assertNotAlmostEqual(0., actual_dc_offset)
+            self.assertNotAlmostEqual(0.0, actual_dc_offset)
 
         self.assertEqual(audio.sample_rate, result.sample_rate)
 
     def test_apply_to_zero_signal_returns_zero_signal(self):
         normalize = Normalize()
 
-        audio = Audio(signal=np.array([0., 0., 0.]), sample_rate=44100)
+        audio = Audio(signal=np.array([0.0, 0.0, 0.0]), sample_rate=44100)
 
         result = normalize.apply(audio.copy())
 

@@ -47,19 +47,21 @@ class ElevenLabsTTS(TTS):
     convert_kwargs: dict[str, Any]
 
     def __init__(
-            self,
-            *,
-            voice_id: str,
-            api_key: str = None,
-            client: ElevenLabs = None,
-            sample_rate: int = 32_000,
-            convert_kwargs: dict[str, Any] = None,
+        self,
+        *,
+        voice_id: str,
+        api_key: str = None,
+        client: ElevenLabs = None,
+        sample_rate: int = 32_000,
+        convert_kwargs: dict[str, Any] = None,
     ):
         if api_key and client:
             raise ValueError("Cannot give both api_key and client args.")
 
         self.voice_id = voice_id
-        self.client = client or (ElevenLabs(api_key=api_key) if api_key else ElevenLabs())
+        self.client = client or (
+            ElevenLabs(api_key=api_key) if api_key else ElevenLabs()
+        )
         self.sample_rate = sample_rate
         self.convert_kwargs = convert_kwargs or {}
 

@@ -1,4 +1,4 @@
-__all__ = ['Flanger']
+__all__ = ["Flanger"]
 
 import time
 from typing import Callable, Optional
@@ -42,15 +42,15 @@ class Flanger(EffectWithDryWet):
     t_offset_func: Optional[Callable[[], float]]
 
     def __init__(
-            self,
-            rate: float = .15,
-            min_delay: float = .0025,
-            max_delay: float = .0035,
-            feedback: float = .9,
-            t_offset: float = 0.,
-            t_offset_func: Optional[Callable[[], float]] = time.monotonic,
-            dry: float = .5,
-            wet: float = .5,
+        self,
+        rate: float = 0.15,
+        min_delay: float = 0.0025,
+        max_delay: float = 0.0035,
+        feedback: float = 0.9,
+        t_offset: float = 0.0,
+        t_offset_func: Optional[Callable[[], float]] = time.monotonic,
+        dry: float = 0.5,
+        wet: float = 0.5,
     ):
         super().__init__(dry, wet)
 

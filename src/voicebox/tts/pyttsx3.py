@@ -32,10 +32,10 @@ class Pyttsx3TTS(WavFileTTS):
     """
 
     def __init__(
-            self,
-            engine: Engine = None,
-            temp_file_dir: str = None,
-            temp_file_prefix: str = 'voicebox-pyttsx3-',
+        self,
+        engine: Engine = None,
+        temp_file_dir: str = None,
+        temp_file_prefix: str = "voicebox-pyttsx3-",
     ):
         super().__init__(
             temp_file_dir=temp_file_dir,

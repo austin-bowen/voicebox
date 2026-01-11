@@ -92,7 +92,9 @@ class VoiceAiTest(unittest.TestCase):
 
     @patch("voicebox.tts.voiceai.get_audio_from_wav_file")
     @patch("voicebox.tts.voiceai.requests")
-    def test_get_speech_with_defaults(self, mock_requests, mock_get_audio_from_wav_file):
+    def test_get_speech_with_defaults(
+        self, mock_requests, mock_get_audio_from_wav_file
+    ):
         response = Mock()
         response.content = b"audio"
 

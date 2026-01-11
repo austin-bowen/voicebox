@@ -27,7 +27,7 @@ class ESpeakConfig:
     no_final_pause: bool = False
     speak_punctuation: Union[bool, str] = False
 
-    exe_path: str = 'espeak-ng'
+    exe_path: str = "espeak-ng"
     timeout: float = None
 
 
@@ -70,10 +70,10 @@ class ESpeakNG(TTS):
             )
         except FileNotFoundError as e:
             raise FileNotFoundError(
-                f'{e}; is espeak-ng installed? Try: sudo apt install espeak-ng'
+                f"{e}; is espeak-ng installed? Try: sudo apt install espeak-ng"
             )
 
-        proc.stdin.write(text.encode('utf-8'))
+        proc.stdin.write(text.encode("utf-8"))
         proc.stdin.close()
 
         return proc
@@ -83,44 +83,45 @@ class ESpeakNG(TTS):
 
         args = [
             c.exe_path,
-            '--stdin',  # Get input from stdin
-            '-b', '1',  # Input text encoding UTF-8
-            '--stdout',  # Write output to stdout
+            "--stdin",  # Get input from stdin
+            "-b",
+            "1",  # Input text encoding UTF-8
+            "--stdout",  # Write output to stdout
         ]
 
         if c.amplitude is not None:
-            args.extend(('-a', str(c.amplitude)))
+            args.extend(("-a", str(c.amplitude)))
 
         if c.word_gap_seconds is not None:
             # Units of 10ms
             word_gap = round(c.word_gap_seconds * 100)
-            args.extend(('-g', str(word_gap)))
+            args.extend(("-g", str(word_gap)))
 
         if c.capitals is not None:
-            args.extend(('-k', str(c.capitals)))
+            args.extend(("-k", str(c.capitals)))
 
         if c.line_length is not None:
-            args.extend(('-l', str(c.line_length)))
+            args.extend(("-l", str(c.line_length)))
 
         if c.pitch is not None:
-            args.extend(('-p', str(c.pitch)))
+            args.extend(("-p", str(c.pitch)))
 
         if c.speed is not None:
-            args.extend(('-s', str(c.speed)))
+            args.extend(("-s", str(c.speed)))
 
         if c.voice is not None:
-            args.extend(('-v', c.voice))
+            args.extend(("-v", c.voice))
 
         if c.no_final_pause:
-            args.append('-z')
+            args.append("-z")
 
         if isinstance(text, SSML):
-            args.append('-m')
+            args.append("-m")
 
         if c.speak_punctuation:
             if isinstance(c.speak_punctuation, str):
                 args.append(f'--punct="{c.speak_punctuation}"')
             else:
-                args.append('--punct')
+                args.append("--punct")
 
         return args

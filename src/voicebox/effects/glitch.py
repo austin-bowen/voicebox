@@ -1,4 +1,4 @@
-__all__ = ['Glitch']
+__all__ = ["Glitch"]
 
 from dataclasses import dataclass, field
 from random import Random
@@ -37,7 +37,7 @@ class Glitch(Effect):
 
         new_signal = []
         for i in range(0, len(audio.signal), chunk_size):
-            chunk = audio.signal[i:i + chunk_size]
+            chunk = audio.signal[i : i + chunk_size]
             new_signal.append(chunk)
 
             if self.rng.random() < self.p_repeat:

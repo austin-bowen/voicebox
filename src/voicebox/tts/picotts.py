@@ -17,15 +17,15 @@ class PicoTTS(WavFileTTS):
     Supports `SSML <https://www.w3.org/TR/speech-synthesis/>`_: ✘
     """
 
-    pico2wave_path: str = 'pico2wave'
+    pico2wave_path: str = "pico2wave"
     language: str = None
 
     def __init__(
-            self,
-            pico2wave_path: str = 'pico2wave',
-            language: str = None,
-            temp_file_dir: str = None,
-            temp_file_prefix: str = 'voicebox-pico-tts-',
+        self,
+        pico2wave_path: str = "pico2wave",
+        language: str = None,
+        temp_file_dir: str = None,
+        temp_file_prefix: str = "voicebox-pico-tts-",
     ):
         super().__init__(
             temp_file_dir=temp_file_dir,
@@ -37,15 +37,16 @@ class PicoTTS(WavFileTTS):
 
     def generate_speech_audio_file(self, text: StrOrSSML, file_path: Path) -> None:
         if isinstance(text, SSML):
-            raise ValueError('PicoTTS does not support SSML.')
+            raise ValueError("PicoTTS does not support SSML.")
 
         args = [
             self.pico2wave_path,
-            '-w', str(file_path),
+            "-w",
+            str(file_path),
         ]
 
         if self.language is not None:
-            args.extend(('-l', self.language))
+            args.extend(("-l", self.language))
 
         args.append(text)
 
@@ -53,5 +54,5 @@ class PicoTTS(WavFileTTS):
             subprocess.run(args, check=True)
         except FileNotFoundError as e:
             raise FileNotFoundError(
-                f'{e}; is PicoTTS installed? Try: sudo apt install libttspico-utils'
+                f"{e}; is PicoTTS installed? Try: sudo apt install libttspico-utils"
             )

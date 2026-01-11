@@ -1,4 +1,4 @@
-__all__ = ['SSML']
+__all__ = ["SSML"]
 
 from typing import Union
 
@@ -20,7 +20,7 @@ class SSML(str):
     """
 
     @classmethod
-    def auto(cls, text: str) -> Union['SSML', str]:
+    def auto(cls, text: str) -> Union["SSML", str]:
         """
         Returns the ``text`` as SSML if it starts with ``'<speak>'``,
         otherwise returns the ``text`` unaltered.
@@ -33,5 +33,5 @@ class SSML(str):
             'Hello world'
         """
 
-        is_ssml = text.lstrip().startswith('<speak>')
+        is_ssml = text.lstrip().startswith("<speak>")
         return cls(text) if is_ssml else text

@@ -1,6 +1,6 @@
 __all__ = [
-    'PedalboardEffect',
-    'pedalboard_effects',
+    "PedalboardEffect",
+    "pedalboard_effects",
 ]
 
 from dataclasses import dataclass
@@ -37,7 +37,7 @@ class PedalboardEffect(Effect):
 
 
 def pedalboard_effects(
-        *effects: pedalboard.Plugin,
+    *effects: pedalboard.Plugin,
 ) -> Sequence[PedalboardEffect]:
     """
     Creates a sequence of PedalboardEffect objects from Pedalboard plugins.

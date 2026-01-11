@@ -1,4 +1,4 @@
-__all__ = ['RingMod']
+__all__ = ["RingMod"]
 
 from math import pi
 from typing import Callable
@@ -31,15 +31,15 @@ class RingMod(EffectWithDryWet):
             Wet (affected) signal level. 0 is none, 1 is unity. Default is .5.
     """
 
-    carrier_freq: float = 20.
+    carrier_freq: float = 20.0
     carrier_wave: WaveFunc = np.sin
 
     def __init__(
-            self,
-            carrier_freq: float = 20.,
-            carrier_wave: WaveFunc = np.sin,
-            dry: float = 0.5,
-            wet: float = 0.5,
+        self,
+        carrier_freq: float = 20.0,
+        carrier_wave: WaveFunc = np.sin,
+        dry: float = 0.5,
+        wet: float = 0.5,
     ):
         super().__init__(dry, wet)
 

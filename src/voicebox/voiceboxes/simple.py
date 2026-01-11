@@ -1,4 +1,4 @@
-__all__ = ['SimpleVoicebox']
+__all__ = ["SimpleVoicebox"]
 
 from voicebox.audio import Audio
 from voicebox.effects import Effects, default_effects, SeriesChain
@@ -31,11 +31,11 @@ class SimpleVoicebox(VoiceboxWithTextSplitter):
     sink: Sink
 
     def __init__(
-            self,
-            tts: TTS = None,
-            effects: Effects = None,
-            sink: Sink = None,
-            text_splitter: Splitter = None,
+        self,
+        tts: TTS = None,
+        effects: Effects = None,
+        sink: Sink = None,
+        text_splitter: Splitter = None,
     ):
         super().__init__(text_splitter)
 

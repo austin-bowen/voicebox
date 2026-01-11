@@ -14,17 +14,19 @@ class SoundDeviceTest(unittest.TestCase):
         self.assertTrue(sink.blocking)
         self.assertEqual(0.1, sink.latency)
 
-    @parameterized.expand([
-        (None, True, 0.1),
-        ('some-device', False, 'low'),
-    ])
-    @patch('voicebox.sinks.sounddevice.sd')
+    @parameterized.expand(
+        [
+            (None, True, 0.1),
+            ("some-device", False, "low"),
+        ]
+    )
+    @patch("voicebox.sinks.sounddevice.sd")
     def test_play(
-            self,
-            device: Device,
-            blocking: bool,
-            latency: Latency,
-            mock_sd,
+        self,
+        device: Device,
+        blocking: bool,
+        latency: Latency,
+        mock_sd,
     ):
         audio = build_audio()
 
@@ -39,6 +41,6 @@ class SoundDeviceTest(unittest.TestCase):
         self.assertEqual(audio.sample_rate, mock_call.args[1])
 
         self.assertEqual(3, len(mock_call.kwargs))
-        self.assertEqual(blocking, mock_call.kwargs['blocking'])
-        self.assertEqual(device, mock_call.kwargs['device'])
-        self.assertEqual(latency, mock_call.kwargs['latency'])
+        self.assertEqual(blocking, mock_call.kwargs["blocking"])
+        self.assertEqual(device, mock_call.kwargs["device"])
+        self.assertEqual(latency, mock_call.kwargs["latency"])

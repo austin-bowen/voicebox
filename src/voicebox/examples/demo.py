@@ -8,10 +8,10 @@ from voicebox.tts import TTS
 
 
 def demo(
-        description: str,
-        tts: TTS,
-        effects: Effects,
-        default_messages: Iterable[str],
+    description: str,
+    tts: TTS,
+    effects: Effects,
+    default_messages: Iterable[str],
 ) -> None:
     args = _parse_args(description)
     messages = _get_messages(args, default_messages)
@@ -28,13 +28,15 @@ def _parse_args(description: str):
     parser = argparse.ArgumentParser(description=description)
 
     parser.add_argument(
-        'message', nargs='?',
-        help='Optional message to speak. If not given, then some demo lines will be spoken.',
+        "message",
+        nargs="?",
+        help="Optional message to speak. If not given, then some demo lines will be spoken.",
     )
 
     parser.add_argument(
-        '--stdin', action='store_true',
-        help='Get message from stdin',
+        "--stdin",
+        action="store_true",
+        help="Get message from stdin",
     )
 
     return parser.parse_args()

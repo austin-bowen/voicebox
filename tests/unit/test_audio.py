@@ -34,25 +34,29 @@ class AudioTest(unittest.TestCase):
 
         other = self.audio.copy()
         self.assertEqual(other, self.audio)
-        other.signal[0] = 1.
+        other.signal[0] = 1.0
         self.assertNotEqual(other, self.audio)
 
     def test_len(self):
         self.assertEqual(100, len(self.audio))
 
-    @parameterized.expand([
-        ([], 1),
-        ([-1., 0., 1.], 2),
-    ])
+    @parameterized.expand(
+        [
+            ([], 1),
+            ([-1.0, 0.0, 1.0], 2),
+        ]
+    )
     def test_check_on_valid_audio_just_returns(self, signal, sample_rate: int):
         audio = Audio(np.float32(signal), sample_rate)
         audio.check()
 
-    @parameterized.expand([
-        ([1.0001], 1),
-        ([0.], 0),
-        ([0.], -1),
-    ])
+    @parameterized.expand(
+        [
+            ([1.0001], 1),
+            ([0.0], 0),
+            ([0.0], -1),
+        ]
+    )
     def test_check_on_invalid_audio_raises_ValueError(self, signal, sample_rate: int):
         audio = Audio(np.float32(signal), sample_rate)
         self.assertRaises(ValueError, audio.check)
@@ -69,7 +73,7 @@ class AudioTest(unittest.TestCase):
         self.assertEqual(copy.sample_rate, self.audio.sample_rate)
 
     def test_copy_with_new_signal(self):
-        signal = np.array([1., 2., 4., 8.])
+        signal = np.array([1.0, 2.0, 4.0, 8.0])
         copy = self.audio.copy(signal=signal)
 
         self.assertIsNot(copy.signal, self.audio.signal)

@@ -8,11 +8,11 @@ from voicebox.sinks.sink import Sink
 try:
     import sounddevice as sd
 except OSError as e:
-    warnings.warn(f'{e.__class__.__name__}: {e}')
+    warnings.warn(f"{e.__class__.__name__}: {e}")
     sd = None
 
 Device = Union[int, str]
-Latency = Union[float, Literal['low', 'high']]
+Latency = Union[float, Literal["low", "high"]]
 
 
 @dataclass
