@@ -58,13 +58,17 @@ Online TTS engine with realistic voices and support for voice cloning.
 - Setup:
   1. `pip install "voicebox-tts[elevenlabs]"`
   2. Install ffmpeg for audio decoding.
-  3. (Optional) Use an [API key](https://elevenlabs.io/docs/api-reference/authentication):
-     ```python
-     from elevenlabs.client import ElevenLabs
-     from voicebox.tts import ElevenLabsTTS
+  3. Get an [API key](https://elevenlabs.io/app/developers/api-keys).
 
-     tts = ElevenLabsTTS(client=ElevenLabs(api_key='your-api-key'))
-     ```
+Minimal example:
+```python
+from voicebox.tts import ElevenLabsTTS
+
+vb = SimpleVoicebox(tts=ElevenLabsTTS(
+    voice_id="JBFqnCBsd6RMkjVDRZzb",
+    api_key="...",
+))
+```
 
 ### eSpeak NG [🌐](https://github.com/espeak-ng/espeak-ng)
 
@@ -129,6 +133,7 @@ Online TTS engine with realistic voices and support for voice cloning.
 Minimal example:
 ```python
 from voicebox.tts import VoiceAiTTS
+
 vb = SimpleVoicebox(tts=VoiceAiTTS(api_key="..."))
 ```
 
