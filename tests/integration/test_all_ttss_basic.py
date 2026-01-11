@@ -1,8 +1,10 @@
 from typing import Type
+import os
 
 import boto3
 from google.cloud.texttospeech import TextToSpeechClient, VoiceSelectionParams
 from parameterized import parameterized
+from dotenv import load_dotenv
 
 from voicebox.tts import *
 
@@ -15,6 +17,7 @@ TTS_CLASSES = (
     ParlerTTS,
     PicoTTS,
     Pyttsx3TTS,
+    VoiceAiTTS,
 )
 
 
@@ -26,6 +29,8 @@ def get_speech_name_func(testcase_func, param_num, param) -> str:
 
 @parameterized.expand(TTS_CLASSES, name_func=get_speech_name_func)
 def test_get_speech(tts_class: Type[TTS]):
+    load_dotenv()
+
     if tts_class is AmazonPolly:
         session = boto3.Session(region_name='us-east-1', profile_name='polly')
         client = session.client('polly')
@@ -39,6 +44,10 @@ def test_get_speech(tts_class: Type[TTS]):
 
     elif tts_class is ParlerTTS:
         tts = ParlerTTS.build()
+
+    elif tts_class is VoiceAiTTS:
+        api_key = os.getenv("VOICE_AI_API_KEY")
+        tts = VoiceAiTTS(api_key)
 
     else:
         tts = tts_class()

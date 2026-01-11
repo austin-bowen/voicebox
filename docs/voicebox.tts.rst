@@ -92,6 +92,14 @@ voicebox.tts.utils module
    :show-inheritance:
    :undoc-members:
 
+voicebox.tts.voiceai module
+---------------------------
+
+.. automodule:: voicebox.tts.voiceai
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Module contents
 ---------------
 

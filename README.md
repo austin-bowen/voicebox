@@ -27,6 +27,8 @@ voicebox = SimpleVoicebox(
 voicebox.say('Hello, world! How are you today?')
 ```
 
+
+---
 ## Setup
 
 1. `pip install voicebox-tts`
@@ -34,6 +36,8 @@ voicebox.say('Hello, world! How are you today?')
    - On Debian/Ubuntu: `sudo apt install libportaudio2`
 3. Install dependencies for whichever TTS engine(s) you want to use (see section below).
 
+
+---
 ## Supported Text-to-Speech Engines
 
 Classes for supported TTS engines are located in the
@@ -48,7 +52,7 @@ Online TTS engine from AWS.
 
 ### ElevenLabs [🌐](https://elevenlabs.io/)
 
-Online TTS engine with very realistic voices and support for voice cloning.
+Online TTS engine with realistic voices and support for voice cloning.
 
 - Class: [`voicebox.tts.ElevenLabsTTS`](voicebox.tts.elevenlabs.ElevenLabsTTS)
 - Setup:
@@ -113,6 +117,22 @@ By default, it will use the most appropriate engine for your platform.
   1. `pip install "voicebox-tts[pyttsx3]"`
   2. On Debian/Ubuntu: `sudo apt install espeak`
 
+### Voice.AI [🌐](https://voice.ai/)
+
+Online TTS engine with realistic voices and support for voice cloning.
+
+- Class: [`voicebox.tts.VoiceAiTTS`](voicebox.tts.voiceai.VoiceAiTTS)
+- Setup:
+  1. `pip install "voicebox-tts[voice-ai]"`
+  2. Get an API key: https://voice.ai/app/dashboard/developers
+
+Minimal example:
+```python
+from voicebox.tts import VoiceAiTTS
+vb = SimpleVoicebox(tts=VoiceAiTTS(api_key="..."))
+```
+
+---
 ## Effects
 
 Built-in effect classes are located in the
@@ -149,6 +169,8 @@ voicebox = SimpleVoicebox(
 )
 ```
 
+
+---
 ## Examples
 
 ### Minimal
